@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { TrendingUp, LayoutList, Sparkles, ChevronLeft, ChevronRight, Database } from 'lucide-react'
+import { TrendingUp, LayoutList, Sparkles, ChevronLeft, ChevronRight, Database, GitCompareArrows } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: '/ai-insights', label: 'AI Insights', icon: Sparkles },
   { href: '/profit-loss', label: 'Profit & Loss', icon: TrendingUp },
   { href: '/balance-sheet', label: 'Balance Sheet', icon: LayoutList },
+  { href: '/reconciliation', label: 'Reconciliation', icon: GitCompareArrows },
 ]
 
 export function Sidebar() {
