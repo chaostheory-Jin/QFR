@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { login } from '@/lib/auth'
+import { checkCredentials, login } from '@/lib/auth'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -14,15 +14,32 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [apiKey, setApiKey] = useState('')
   const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
-    const ok = login(username, password, apiKey)
-    if (ok) {
-      router.push('/link-data')
-    } else {
+    if (!checkCredentials(username, password)) {
       setError('Invalid username or password')
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const response = await fetch('/api/session-key', apiKey.trim() ? {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey: apiKey.trim() }),
+      } : { method: 'DELETE' })
+      const payload = await response.json().catch(() => ({})) as { error?: string }
+      if (!response.ok) throw new Error(payload.error || 'Unable to configure the API key.')
+
+      login(username, password)
+      router.push('/link-data')
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Unable to sign in.')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -66,11 +83,13 @@ export default function LoginPage() {
                 autoComplete="off"
               />
               <p className="text-xs text-muted-foreground">
-                Used only for this browser session by the floating AI assistant.
+                Used by AI Assistant and Reconciliation for this session. Stored in a secure HttpOnly session cookie, never in page storage.
               </p>
             </div>
-            {error && <p role="alert" className="text-sm text-destructive">Invalid username or password</p>}
-            <Button type="submit" size="lg" className="w-full bg-blue-700 hover:bg-blue-600 text-white">Sign in</Button>
+            {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+            <Button type="submit" size="lg" disabled={submitting} className="w-full bg-blue-700 hover:bg-blue-600 text-white">
+              {submitting ? 'Securing API key…' : 'Sign in'}
+            </Button>
           </form>
         </CardContent>
       </Card>

@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { promisify } from 'node:util'
 import { NextResponse } from 'next/server'
+import { openAIApiKey } from '@/lib/openai-key'
 import {
   invoiceSimilarity,
   type BoundingBox,
@@ -321,8 +322,8 @@ export async function POST(request: Request) {
     if (files.some((file) => file.size > MAX_FILE_BYTES)) return NextResponse.json({ error: 'Each file must be 12 MB or smaller.' }, { status: 413 })
     if (files.reduce((sum, file) => sum + file.size, 0) > MAX_REQUEST_BYTES) return NextResponse.json({ error: 'The combined upload must be 40 MB or smaller.' }, { status: 413 })
 
-    const apiKey = process.env.OPENAI_API_KEY_QFR || process.env.OPENAI_API_KEY
-    if (!apiKey) return NextResponse.json({ error: 'OpenAI API key is not configured on the server.' }, { status: 503 })
+    const apiKey = openAIApiKey(request)
+    if (!apiKey) return NextResponse.json({ error: 'No OpenAI API key configured. Add one on login or set OPENAI_API_KEY on Vercel.' }, { status: 503 })
 
     const statementTextPromise = extractStatementText(statement)
     const ocrPromise = locateInvoiceBoxes(invoices)

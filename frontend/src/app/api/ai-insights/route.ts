@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
+import { openAIApiKey } from '@/lib/openai-key'
 
 type AIInsightsRequest = {
   question?: string
   localDraft?: string
   datasetSummary?: string
   sampleRows?: unknown[]
-  apiKey?: string
 }
 
 const OPENAI_URL = 'https://api.openai.com/v1/chat/completions'
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Question and localDraft are required.' }, { status: 400 })
   }
 
-  const apiKey = body.apiKey?.trim() || process.env.OPENAI_API_KEY_QFR || process.env.OPENAI_API_KEY
+  const apiKey = openAIApiKey(request)
   if (!apiKey) {
     return NextResponse.json({ error: 'No API key configured. Add one on login or set OPENAI_API_KEY_QFR.' }, { status: 503 })
   }

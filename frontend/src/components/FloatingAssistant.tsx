@@ -201,7 +201,6 @@ export function FloatingAssistant() {
     setAnswer('Generating answer...')
 
     try {
-      const apiKey = typeof window === 'undefined' ? '' : sessionStorage.getItem('qfr_openai_api_key') || ''
       const response = await fetch('/api/ai-insights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -210,7 +209,6 @@ export function FloatingAssistant() {
           localDraft: draft,
           datasetSummary: datasetSummary(),
           sampleRows: REPORT_DATA.raw_data.slice(0, 120),
-          apiKey,
         }),
       })
 
