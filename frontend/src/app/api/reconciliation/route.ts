@@ -11,14 +11,15 @@ import {
   type InvoiceExtraction,
   type StatementRecord,
 } from '@/lib/reconciliation'
+import { parseStatementFile } from '@/lib/statement-parser'
 
 export const runtime = 'nodejs'
 export const maxDuration = 120
 
 const OPENAI_URL = 'https://api.openai.com/v1/responses'
 const MAX_INVOICES = 12
-const MAX_FILE_BYTES = 12 * 1024 * 1024
-const MAX_REQUEST_BYTES = 40 * 1024 * 1024
+const MAX_FILE_BYTES = 4 * 1024 * 1024
+const MAX_REQUEST_BYTES = 4 * 1024 * 1024
 const ZERO_BOX: BoundingBox = [0, 0, 0, 0]
 const execFileAsync = promisify(execFile)
 
@@ -66,11 +67,6 @@ function parsePrintedAmount(value: string): number | null {
   return Number.isFinite(parsed) ? parsed : null
 }
 
-function validBox(value: unknown): value is BoundingBox {
-  if (!Array.isArray(value) || value.length !== 4 || value.some((coordinate) => typeof coordinate !== 'number' || coordinate < 0 || coordinate > 1000)) return false
-  return value[2] > value[0] && value[3] > value[1]
-}
-
 function finalAmountLabel(value: string): boolean {
   const label = value.trim().toLowerCase().replace(/\s+/g, ' ')
   if (label.includes('net') || label.includes('vat') || label.includes('tax')) return false
@@ -80,7 +76,7 @@ function finalAmountLabel(value: string): boolean {
 function verifyInvoice(document: InvoiceExtraction): InvoiceExtraction {
   const printedAmount = parsePrintedAmount(document.totalAmountText ?? '')
   const recovered = document.recoveredFromStatementLine === true
-  const invoiceNumberVerified = Boolean(document.invoiceNumberText && document.invoiceNumber && validBox(document.invoiceNumberBox))
+  const invoiceNumberVerified = Boolean(document.invoiceNumberText && document.invoiceNumber)
   const arithmeticAvailable = typeof document.netAmount === 'number' && typeof document.taxAmount === 'number'
   const arithmeticVerified = arithmeticAvailable
     ? Math.abs((document.netAmount ?? 0) + (document.taxAmount ?? 0) - document.totalAmount) < 1
@@ -88,90 +84,14 @@ function verifyInvoice(document: InvoiceExtraction): InvoiceExtraction {
   const totalAmountVerified = Boolean(
     (recovered || (printedAmount !== null && Math.abs(printedAmount - document.totalAmount) < 1))
     && finalAmountLabel(document.totalAmountLabel ?? '')
-    && validBox(document.totalAmountBox)
     && (recovered || !arithmeticAvailable || arithmeticVerified),
   )
   const checks = [
-    invoiceNumberVerified ? 'invoice field anchored to the printed INVOICE NO. row' : 'invoice field location could not be anchored',
-    totalAmountVerified ? (recovered ? 'final amount resolved against one unique full statement line' : 'number anchored to the final gross payable row') : 'final gross amount location could not be anchored',
+    invoiceNumberVerified ? 'printed invoice ID was extracted' : 'printed invoice ID could not be extracted',
+    totalAmountVerified ? (recovered ? 'final amount resolved against one unique full statement line' : 'final gross payable amount was extracted and checked') : 'final gross payable amount could not be verified',
     arithmeticAvailable ? (arithmeticVerified ? 'net + tax agrees to gross' : 'net + tax does not agree to gross') : 'invoice arithmetic was not available',
   ]
   return { ...document, fieldVerification: { invoiceNumberVerified, totalAmountVerified, arithmeticVerified, reason: checks.join('; ') } }
-}
-
-function statementDescription(rawText: string): string {
-  if (/sales\s+invoice/i.test(rawText)) return 'Sales invoice'
-  if (/credit\s+note/i.test(rawText)) return 'Credit note'
-  if (/payment/i.test(rawText)) return 'Payment'
-  if (/rebate/i.test(rawText)) return 'Rebate'
-  if (/adjustment/i.test(rawText)) return 'Adjustment'
-  return 'Statement line'
-}
-
-function parseStatementRecords(text: string): StatementRecord[] {
-  const records: StatementRecord[] = []
-  for (const [pageIndex, pageText] of text.split('\f').entries()) {
-    const lines = pageText.split(/\r?\n/)
-    const starts = lines.flatMap((line, index) => /^\s*\d{8}\s+/.test(line) ? [index] : [])
-    for (const [recordIndex, start] of starts.entries()) {
-      const end = starts[recordIndex + 1] ?? lines.length
-      const mainLine = lines[start]
-      const amountMatch = mainLine.match(/(-?(?:\d{1,3}(?: \d{3})+|\d+),\d{2})\s*$/)
-      if (!amountMatch) continue
-      const amount = parsePrintedAmount(amountMatch[1])
-      if (amount === null) continue
-
-      const groupLines = lines.slice(start, end).map((line) => line.trim()).filter(Boolean)
-      const rawText = groupLines.join(' ')
-      const accountNumber = mainLine.match(/^\s*(\d{8})\s+/)?.[1] ?? ''
-      const identifiers = Array.from(rawText.matchAll(/\b(?:[A-Z]{1,3})?\d{8,}(?:-\d+)?\b/g), (match) => match[0])
-        .filter((value, index) => !(index === 0 && value === accountNumber))
-      const uniqueIdentifiers = Array.from(new Set(identifiers))
-      const invoiceNumber = uniqueIdentifiers[0] ?? `LINE${records.length + 1}`
-      const date = rawText.match(/\b\d{2}\.\d{2}\.\d{2}\b/)?.[0] ?? ''
-
-      records.push({
-        invoiceNumber,
-        invoiceNumberText: invoiceNumber,
-        identifiers: uniqueIdentifiers,
-        amount,
-        amountText: amountMatch[1],
-        date,
-        description: statementDescription(rawText),
-        rawText,
-        lineIndex: records.length + 1,
-        page: pageIndex + 1,
-      })
-    }
-  }
-  return records
-}
-
-async function extractStatementText(file: File): Promise<string> {
-  if (file.type === 'text/plain' || file.type === 'text/csv' || /\.(txt|csv)$/i.test(file.name)) return file.text()
-  if (file.type !== 'application/pdf' && !/\.pdf$/i.test(file.name)) throw new Error('Master statement must be PDF, CSV or text.')
-
-  const tempDirectory = await mkdtemp(join(tmpdir(), 'qfr-statement-'))
-  const inputPath = join(tempDirectory, 'statement.pdf')
-  await writeFile(inputPath, Buffer.from(await file.arrayBuffer()))
-  const bundledPath = process.env.HOME
-    ? join(process.env.HOME, '.cache/codex-runtimes/codex-primary-runtime/dependencies/native/poppler/poppler/bin/pdftotext')
-    : ''
-  const candidates = [process.env.PDFTOTEXT_PATH, 'pdftotext', bundledPath].filter(Boolean) as string[]
-  let lastError: unknown
-  try {
-    for (const executable of candidates) {
-      try {
-        const { stdout } = await execFileAsync(executable, ['-layout', inputPath, '-'], { encoding: 'utf8', maxBuffer: 24 * 1024 * 1024, timeout: 45_000 })
-        if (stdout.trim()) return stdout
-      } catch (error) {
-        lastError = error
-      }
-    }
-  } finally {
-    await rm(tempDirectory, { recursive: true, force: true })
-  }
-  throw new Error(`Unable to read all statement lines${lastError instanceof Error ? `: ${lastError.message}` : '.'}`)
 }
 
 function paddedBox(box: BoundingBox, padding = 4): BoundingBox {
@@ -319,13 +239,13 @@ export async function POST(request: Request) {
     if (invoices.length > MAX_INVOICES) return NextResponse.json({ error: `Upload no more than ${MAX_INVOICES} invoices at once.` }, { status: 400 })
 
     const files = [statement, ...invoices]
-    if (files.some((file) => file.size > MAX_FILE_BYTES)) return NextResponse.json({ error: 'Each file must be 12 MB or smaller.' }, { status: 413 })
-    if (files.reduce((sum, file) => sum + file.size, 0) > MAX_REQUEST_BYTES) return NextResponse.json({ error: 'The combined upload must be 40 MB or smaller.' }, { status: 413 })
+    if (files.some((file) => file.size > MAX_FILE_BYTES)) return NextResponse.json({ error: 'Each file must be 4 MB or smaller for the hosted version.' }, { status: 413 })
+    if (files.reduce((sum, file) => sum + file.size, 0) > MAX_REQUEST_BYTES) return NextResponse.json({ error: 'The combined upload must be 4 MB or smaller for the hosted version. Upload fewer invoices at once.' }, { status: 413 })
 
     const apiKey = openAIApiKey(request)
     if (!apiKey) return NextResponse.json({ error: 'No OpenAI API key configured. Add one on login or set OPENAI_API_KEY on Vercel.' }, { status: 503 })
 
-    const statementTextPromise = extractStatementText(statement)
+    const statementRecordsPromise = parseStatementFile(statement)
     const ocrPromise = locateInvoiceBoxes(invoices)
     const invoiceParts = await Promise.all(invoices.map(toInputPart))
     const controller = new AbortController()
@@ -370,8 +290,7 @@ export async function POST(request: Request) {
     const output = responseText(payload)
     if (!output) return NextResponse.json({ error: 'OpenAI returned no extraction data.' }, { status: 502 })
 
-    const [statementText, ocrDocuments] = await Promise.all([statementTextPromise, ocrPromise])
-    const statementRecords = parseStatementRecords(statementText)
+    const [statementRecords, ocrDocuments] = await Promise.all([statementRecordsPromise, ocrPromise])
     if (!statementRecords.length) return NextResponse.json({ error: 'No transaction lines could be read from the master statement.' }, { status: 422 })
     const extraction = validateExtraction(JSON.parse(output), invoices.length)
     const invoiceDocuments = extraction.invoiceDocuments

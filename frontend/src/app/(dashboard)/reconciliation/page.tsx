@@ -42,6 +42,9 @@ const PROCESSING_STEPS = [
   { at: 97, label: 'Write audit result', detail: 'Recording confidence, evidence and review reasons.' },
 ]
 
+const MAX_HOSTED_BODY_BYTES = Math.floor(3.75 * 1024 * 1024)
+const IMAGE_COMPRESSION_THRESHOLD = 900 * 1024
+
 const VERIFIED_FIELDS = {
   invoiceNumberVerified: true,
   totalAmountVerified: true,
@@ -110,6 +113,46 @@ function money(value: number): string {
 
 function delay(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
+
+async function optimiseInvoiceForUpload(file: File): Promise<File> {
+  if (!file.type.startsWith('image/') || file.size <= IMAGE_COMPRESSION_THRESHOLD) return file
+  try {
+    const bitmap = await createImageBitmap(file)
+    const scale = Math.min(1, 2200 / Math.max(bitmap.width, bitmap.height))
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.round(bitmap.width * scale)
+    canvas.height = Math.round(bitmap.height * scale)
+    canvas.getContext('2d')?.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    bitmap.close()
+    const blob = await new Promise<Blob | null>((resolveBlob) => canvas.toBlob(resolveBlob, 'image/jpeg', 0.84))
+    if (!blob || blob.size >= file.size) return file
+    const name = file.name.replace(/\.[^.]+$/, '') || 'invoice'
+    return new File([blob], `${name}.jpg`, { type: 'image/jpeg', lastModified: file.lastModified })
+  } catch {
+    return file
+  }
+}
+
+function createUploadBatches(statement: File, invoices: File[]): Array<Array<{ file: File; originalIndex: number }>> {
+  const batches: Array<Array<{ file: File; originalIndex: number }>> = []
+  let current: Array<{ file: File; originalIndex: number }> = []
+  let currentBytes = statement.size
+
+  invoices.forEach((file, originalIndex) => {
+    if (statement.size + file.size > MAX_HOSTED_BODY_BYTES) {
+      throw new Error(`${file.name} is too large for the hosted upload, even by itself. Use an image under 3 MB or a smaller PDF.`)
+    }
+    if (current.length && currentBytes + file.size > MAX_HOSTED_BODY_BYTES) {
+      batches.push(current)
+      current = []
+      currentBytes = statement.size
+    }
+    current.push({ file, originalIndex })
+    currentBytes += file.size
+  })
+  if (current.length) batches.push(current)
+  return batches
 }
 
 function statementRecordKey(record: StatementRecord): string {
@@ -328,21 +371,35 @@ export default function ReconciliationPage() {
     resetResults()
     setPhase('extracting')
     setProgress(5)
-    const formData = new FormData()
-    formData.append('statement', statementFile)
-    invoiceFiles.forEach((file) => formData.append('invoices', file))
-
     try {
-      const response = await fetch('/api/reconciliation', { method: 'POST', body: formData })
-      const payload = await response.json()
-      if (!response.ok) throw new Error(payload.error || 'Document extraction failed.')
+      const uploadInvoices = await Promise.all(invoiceFiles.map(optimiseInvoiceForUpload))
+      const batches = createUploadBatches(statementFile, uploadInvoices)
+      let loadedRecords: StatementRecord[] = []
+      const loadedExtractions: InvoiceExtraction[] = []
 
-      setStatementRecords(payload.statementRecords)
-      setExtractions(payload.invoiceDocuments)
+      for (const [batchIndex, batch] of batches.entries()) {
+        setProgress(Math.max(5, Math.round((batchIndex / batches.length) * 58)))
+        const formData = new FormData()
+        formData.append('statement', statementFile)
+        batch.forEach(({ file }) => formData.append('invoices', file))
+        const response = await fetch('/api/reconciliation', { method: 'POST', body: formData })
+        const payload = await response.json()
+        if (!response.ok) throw new Error(payload.error || 'Document extraction failed.')
+        if (!loadedRecords.length) loadedRecords = payload.statementRecords
+        loadedExtractions.push(...payload.invoiceDocuments.map((document: InvoiceExtraction, index: number) => ({
+          ...document,
+          documentIndex: batch[index].originalIndex,
+          fileName: invoiceFiles[batch[index].originalIndex].name,
+        })))
+      }
+
+      loadedExtractions.sort((left, right) => left.documentIndex - right.documentIndex)
+      setStatementRecords(loadedRecords)
+      setExtractions(loadedExtractions)
       setPhase('matching')
       setProgress(70)
       await delay(1200)
-      setMatches(reconcileInvoices(payload.invoiceDocuments, payload.statementRecords))
+      setMatches(reconcileInvoices(loadedExtractions, loadedRecords))
       setProgress(100)
       setPhase('complete')
     } catch (caught) {
@@ -372,7 +429,7 @@ export default function ReconciliationPage() {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <CardTitle className="flex items-center gap-2 text-base"><FileImage className="size-4 text-blue-700" />Invoice source</CardTitle>
-                <CardDescription className="mt-1">Upload invoice images or PDFs; up to 12 files.</CardDescription>
+                <CardDescription className="mt-1">Upload invoice images or PDFs; hosted uploads are compressed and safely batched.</CardDescription>
               </div>
               <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-700">Evidence</span>
             </div>
