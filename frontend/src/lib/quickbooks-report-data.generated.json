@@ -2038,112 +2038,144 @@
         "section": "Equity",
         "category": "Equity > Retained Earnings",
         "name": "Retained Earnings",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "33",
         "section": "Liabilities",
         "category": "Liabilities > Current Liabilities > Accounts Payable > Accounts Payable (A/P)",
         "name": "Accounts Payable (A/P)",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "34",
         "section": "Equity",
         "category": "Equity > Opening Balance Equity",
         "name": "Opening Balance Equity",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "35",
         "section": "Assets",
         "category": "Assets > Current Assets > Bank Accounts > Checking",
         "name": "Checking",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "36",
         "section": "Assets",
         "category": "Assets > Current Assets > Bank Accounts > Savings",
         "name": "Savings",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "37",
         "section": "Assets",
         "category": "Assets > Fixed Assets > Truck",
         "name": "Truck",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "38",
         "section": "Assets",
         "category": "Assets > Fixed Assets > Truck > Original Cost",
         "name": "Truck:Original Cost",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "4",
         "section": "Assets",
         "category": "Assets > Current Assets > Other Current Assets > Undeposited Funds",
         "name": "Undeposited Funds",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "41",
         "section": "Liabilities",
         "category": "Liabilities > Current Liabilities > Credit Cards > Mastercard",
         "name": "Mastercard",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "43",
         "section": "Liabilities",
         "category": "Liabilities > Current Liabilities > Other Current Liabilities > Loan Payable",
         "name": "Loan Payable",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "44",
         "section": "Liabilities",
         "category": "Liabilities > Long-Term Liabilities > Notes Payable",
         "name": "Notes Payable",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "81",
         "section": "Assets",
         "category": "Assets > Current Assets > Other Current Assets > Inventory Asset",
         "name": "Inventory Asset",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "84",
         "section": "Assets",
         "category": "Assets > Current Assets > Accounts Receivable > Accounts Receivable (A/R)",
         "name": "Accounts Receivable (A/R)",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "89",
         "section": "Liabilities",
         "category": "Liabilities > Current Liabilities > Other Current Liabilities > Arizona Dept. of Revenue Payable",
         "name": "Arizona Dept. of Revenue Payable",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "90",
         "section": "Liabilities",
         "category": "Liabilities > Current Liabilities > Other Current Liabilities > Board of Equalization Payable",
         "name": "Board of Equalization Payable",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       },
       {
         "key": "__quickbooks_net_income__",
         "section": "Equity",
         "category": "Equity > Net Income",
         "name": "Net Income",
-        "opening": 0.0
+        "opening": 0.0,
+        "confidence": 1.0,
+        "reason": "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
       }
     ],
     "movements": [

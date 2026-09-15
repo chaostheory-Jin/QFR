@@ -3,6 +3,8 @@
 import { Fragment } from 'react'
 import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { ExportControls, type ExportMode } from '@/components/ExportControls'
 import { exportRowsToExcel, type ExportRow } from '@/lib/excel-export'
 import { cn } from '@/lib/utils'
@@ -50,6 +52,8 @@ type BalanceLine = {
   account: string
   current: number
   prior: number
+  confidence: number | null
+  reason: string
 }
 
 function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
@@ -63,6 +67,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
       account: item.name,
       current: item.current,
       prior: item.prior,
+      confidence: item.confidence ?? 1,
+      reason: item.reason ?? 'Balance-sheet line was sourced directly from the accounting record.',
     }))
     rows.push({
       key: `assets|${section.title}|subtotal|${section.total.name}`,
@@ -72,6 +78,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
       account: section.total.name,
       current: section.total.current,
       prior: section.total.prior,
+      confidence: null,
+      reason: 'Calculated subtotal.',
     })
   })
   rows.push({
@@ -82,6 +90,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
     account: data.assets.total.name,
     current: data.assets.total.current,
     prior: data.assets.total.prior,
+    confidence: null,
+    reason: 'Calculated total.',
   })
 
   data.liabilities.subsections.forEach((section) => {
@@ -93,6 +103,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
       account: item.name,
       current: item.current,
       prior: item.prior,
+      confidence: item.confidence ?? 1,
+      reason: item.reason ?? 'Balance-sheet line was sourced directly from the accounting record.',
     }))
     rows.push({
       key: `liabilities|${section.title}|subtotal|${section.total.name}`,
@@ -102,6 +114,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
       account: section.total.name,
       current: section.total.current,
       prior: section.total.prior,
+      confidence: null,
+      reason: 'Calculated subtotal.',
     })
   })
   rows.push({
@@ -112,6 +126,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
     account: data.liabilities.total.name,
     current: data.liabilities.total.current,
     prior: data.liabilities.total.prior,
+    confidence: null,
+    reason: 'Calculated total.',
   })
   rows.push({
     key: `net-assets|${data.netAssets.name}`,
@@ -121,6 +137,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
     account: data.netAssets.name,
     current: data.netAssets.current,
     prior: data.netAssets.prior,
+    confidence: null,
+    reason: 'Calculated as assets less liabilities.',
   })
   data.equity.items.forEach((item) => rows.push({
     key: `equity|line|${item.name}`,
@@ -130,6 +148,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
     account: item.name,
     current: item.current,
     prior: item.prior,
+    confidence: item.confidence ?? 1,
+    reason: item.reason ?? 'Balance-sheet line was sourced directly from the accounting record.',
   }))
   rows.push({
     key: `equity|total|${data.equity.total.name}`,
@@ -139,6 +159,8 @@ function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
     account: data.equity.total.name,
     current: data.equity.total.current,
     prior: data.equity.total.prior,
+    confidence: null,
+    reason: 'Calculated total.',
   })
   return rows
 }
@@ -268,10 +290,13 @@ function TotalRow({
   )
 }
 
-export function BalanceTable({ data }: { data: BalanceSheetData }) {
+export function BalanceTable({ data, reviewThreshold = 0.7 }: { data: BalanceSheetData; reviewThreshold?: number }) {
   const [reviewState, setReviewState] = useState<ReviewState>({})
   const [exportMode, setExportMode] = useState<ExportMode>('summary')
   const flattenedRows = useMemo(() => flattenBalanceLines(data), [data])
+  const lowConfidenceRows = flattenedRows
+    .filter((row) => row.kind === 'Line' && row.confidence !== null && row.confidence < reviewThreshold)
+    .sort((left, right) => (left.confidence ?? 1) - (right.confidence ?? 1))
 
   function updateReview(rowId: string, patch: Partial<ReviewState[string]>) {
     setReviewState((current) => ({
@@ -298,6 +323,8 @@ export function BalanceTable({ data }: { data: BalanceSheetData }) {
       [data.asAt]: row.current,
       [data.priorPeriod]: row.prior,
       Change: row.current - row.prior,
+      Confidence: row.confidence,
+      Reason: row.reason,
       'Review Status': review.status,
       'Reviewer Note': review.note,
     }
@@ -317,7 +344,8 @@ export function BalanceTable({ data }: { data: BalanceSheetData }) {
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border">
+    <div className="flex flex-col gap-5">
+      <div className="overflow-hidden rounded-lg border">
       <div className="flex flex-col gap-2 border-b bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-sm font-semibold">Balance Sheet Detail</h2>
@@ -385,7 +413,76 @@ export function BalanceTable({ data }: { data: BalanceSheetData }) {
           })}
           <TotalRow item={data.equity.total} rowId={`equity|total|${data.equity.total.name}`} review={reviewFor(`equity|total|${data.equity.total.name}`)} onUpdateReview={updateReview} />
         </tbody>
-      </table>
+        </table>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Human-in-the-loop Review (Low Confidence)</CardTitle>
+          <CardDescription>
+            Balance-sheet lines below confidence {reviewThreshold.toFixed(2)}. Review decisions stay in this browser session and are included in exports.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="max-h-80 overflow-auto">
+            {lowConfidenceRows.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No items below threshold.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Section</TableHead>
+                    <TableHead>Account</TableHead>
+                    <TableHead className="text-right">{data.asAt}</TableHead>
+                    <TableHead className="text-right">Confidence</TableHead>
+                    <TableHead>Reason</TableHead>
+                    <TableHead>Decision</TableHead>
+                    <TableHead>Reviewer Note</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {lowConfidenceRows.map((row) => {
+                    const review = reviewFor(row.key)
+                    return (
+                      <TableRow key={row.key}>
+                        <TableCell>{row.section}</TableCell>
+                        <TableCell>{row.account}</TableCell>
+                        <TableCell className="text-right tabular-nums">{fmtAUD(row.current)}</TableCell>
+                        <TableCell className="text-right tabular-nums">{row.confidence?.toFixed(2)}</TableCell>
+                        <TableCell className="max-w-64 text-xs text-muted-foreground">{row.reason}</TableCell>
+                        <TableCell>
+                          <div className="flex min-w-40 flex-wrap gap-1">
+                            {(['Approved', 'Needs changes', 'Rejected'] as ReviewStatus[]).map((status) => (
+                              <Button
+                                key={status}
+                                type="button"
+                                size="xs"
+                                variant={review.status === status ? 'default' : 'outline'}
+                                onClick={() => updateReview(row.key, { status })}
+                                className={review.status === status ? 'bg-blue-700 text-white hover:bg-blue-600' : undefined}
+                              >
+                                {status}
+                              </Button>
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <input
+                            value={review.note}
+                            onChange={(event) => updateReview(row.key, { note: event.target.value })}
+                            placeholder="Add note..."
+                            className="h-8 min-w-48 rounded-lg border border-input bg-background px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                          />
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

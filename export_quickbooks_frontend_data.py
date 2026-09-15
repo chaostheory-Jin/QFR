@@ -130,6 +130,12 @@ def main() -> None:
                     "category": row["BalanceSheetCategory"],
                     "name": row["AccountName"],
                     "opening": as_float(row["OpeningBalance"]),
+                    "confidence": 1.0 if row["Status"] == "Match" else 0.0,
+                    "reason": (
+                        "Opening balance plus every line movement reconciles to the official QuickBooks ending balance."
+                        if row["Status"] == "Match"
+                        else f"Rebuilt ending balance differs from QuickBooks by {as_float(row['AbsDifference']):.2f}."
+                    ),
                 }
                 for row in bs_accounts
             ],

@@ -2,6 +2,8 @@ export interface BSLineItem {
   name: string
   current: number
   prior: number
+  confidence?: number
+  reason?: string
 }
 
 export interface BSSection {

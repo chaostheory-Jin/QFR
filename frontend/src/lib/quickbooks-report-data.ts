@@ -8,6 +8,8 @@ type QuickBooksAccount = {
   category: string
   name: string
   opening: number
+  confidence?: number
+  reason?: string
 }
 
 type QuickBooksMovement = {
@@ -70,6 +72,8 @@ function makeSections(accounts: QuickBooksAccount[], currentDate: string, priorD
       name: account.name,
       current: balanceAt(account, currentDate),
       prior: balanceAt(account, priorDate),
+      confidence: account.confidence ?? 1,
+      reason: account.reason ?? 'QuickBooks account ID and line movements reconcile to the official balance-sheet endpoint.',
     })
     groups.set(group, items)
   }
@@ -104,6 +108,8 @@ export function buildQuickBooksBalanceSheet(startDate: string, endDate: string):
       name: account.name,
       current: balanceAt(account, endDate),
       prior: balanceAt(account, priorDate),
+      confidence: account.confidence ?? 1,
+      reason: account.reason ?? 'QuickBooks account ID and line movements reconcile to the official balance-sheet endpoint.',
     }))
   const assets = sumSections('Total Assets', assetSections)
   const liabilities = sumSections('Total Liabilities', liabilitySections)

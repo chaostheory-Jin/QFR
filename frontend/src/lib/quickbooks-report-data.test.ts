@@ -24,6 +24,12 @@ describe('downloaded QuickBooks frontend data', () => {
     expect(data.liabilities.total.current).toBeCloseTo(31131.33, 2)
     expect(data.equity.total.current).toBeCloseTo(-7695.04, 2)
     expect(data.assets.total.current - data.liabilities.total.current).toBeCloseTo(data.equity.total.current, 2)
+    const lines = [
+      ...data.assets.subsections.flatMap((section) => section.items),
+      ...data.liabilities.subsections.flatMap((section) => section.items),
+      ...data.equity.items,
+    ]
+    expect(lines.every((line) => line.confidence === 1 && line.reason)).toBe(true)
   })
 
   it('provides cash periods and downloaded aging buckets', () => {
