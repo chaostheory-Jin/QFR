@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment } from 'react'
+import { Fragment, createContext, useContext } from 'react'
 import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,161 +9,47 @@ import { ExportControls, type ExportMode } from '@/components/ExportControls'
 import { exportRowsToExcel, type ExportRow } from '@/lib/excel-export'
 import { cn } from '@/lib/utils'
 import type { BalanceSheetData, BSLineItem } from '@/lib/balance-sheet-mock'
+import { flattenBalanceLines, type BalanceLine } from '@/lib/balance-sheet-review'
+import type { ReviewDraft, ReviewMap } from '@/lib/mapping-reviews'
 
-function fmtAUD(value: number): string {
+const CurrencyContext = createContext('AUD')
+
+function fmtAUD(value: number, currency = 'AUD'): string {
   return new Intl.NumberFormat('en-AU', {
     style: 'currency',
-    currency: 'AUD',
+    currency,
     minimumFractionDigits: 2,
   }).format(value)
 }
 
 function AmountCell({ value, className }: { value: number; className?: string }) {
+  const currency = useContext(CurrencyContext)
   return (
     <td className={cn(
       'px-4 py-2 text-right tabular-nums',
       value < 0 ? 'text-red-600' : value > 0 ? 'text-green-600' : 'text-muted-foreground',
       className,
     )}>
-      {fmtAUD(value)}
+      {fmtAUD(value, currency)}
     </td>
   )
 }
 
 function ChangeCell({ current, prior }: { current: number; prior: number }) {
+  const currency = useContext(CurrencyContext)
   const change = current - prior
   return (
     <td className={cn(
       'px-4 py-2 text-right tabular-nums',
       change < 0 ? 'text-red-600' : change > 0 ? 'text-green-600' : 'text-muted-foreground',
     )}>
-      {fmtAUD(change)}
+      {fmtAUD(change, currency)}
     </td>
   )
 }
 
 type ReviewStatus = 'Pending' | 'Approved' | 'Needs changes' | 'Rejected'
 type ReviewState = Record<string, { status: ReviewStatus; note: string }>
-type BalanceLine = {
-  key: string
-  section: string
-  group: string
-  kind: string
-  account: string
-  current: number
-  prior: number
-  confidence: number | null
-  reason: string
-}
-
-function flattenBalanceLines(data: BalanceSheetData): BalanceLine[] {
-  const rows: BalanceLine[] = []
-  data.assets.subsections.forEach((section) => {
-    section.items.forEach((item) => rows.push({
-      key: `assets|${section.title}|line|${item.name}`,
-      section: 'Assets',
-      group: section.title,
-      kind: 'Line',
-      account: item.name,
-      current: item.current,
-      prior: item.prior,
-      confidence: item.confidence ?? 1,
-      reason: item.reason ?? 'Balance-sheet line was sourced directly from the accounting record.',
-    }))
-    rows.push({
-      key: `assets|${section.title}|subtotal|${section.total.name}`,
-      section: 'Assets',
-      group: section.title,
-      kind: 'Subtotal',
-      account: section.total.name,
-      current: section.total.current,
-      prior: section.total.prior,
-      confidence: null,
-      reason: 'Calculated subtotal.',
-    })
-  })
-  rows.push({
-    key: `assets|total|${data.assets.total.name}`,
-    section: 'Assets',
-    group: 'Assets',
-    kind: 'Total',
-    account: data.assets.total.name,
-    current: data.assets.total.current,
-    prior: data.assets.total.prior,
-    confidence: null,
-    reason: 'Calculated total.',
-  })
-
-  data.liabilities.subsections.forEach((section) => {
-    section.items.forEach((item) => rows.push({
-      key: `liabilities|${section.title}|line|${item.name}`,
-      section: 'Liabilities',
-      group: section.title,
-      kind: 'Line',
-      account: item.name,
-      current: item.current,
-      prior: item.prior,
-      confidence: item.confidence ?? 1,
-      reason: item.reason ?? 'Balance-sheet line was sourced directly from the accounting record.',
-    }))
-    rows.push({
-      key: `liabilities|${section.title}|subtotal|${section.total.name}`,
-      section: 'Liabilities',
-      group: section.title,
-      kind: 'Subtotal',
-      account: section.total.name,
-      current: section.total.current,
-      prior: section.total.prior,
-      confidence: null,
-      reason: 'Calculated subtotal.',
-    })
-  })
-  rows.push({
-    key: `liabilities|total|${data.liabilities.total.name}`,
-    section: 'Liabilities',
-    group: 'Liabilities',
-    kind: 'Total',
-    account: data.liabilities.total.name,
-    current: data.liabilities.total.current,
-    prior: data.liabilities.total.prior,
-    confidence: null,
-    reason: 'Calculated total.',
-  })
-  rows.push({
-    key: `net-assets|${data.netAssets.name}`,
-    section: 'Net Assets',
-    group: 'Net Assets',
-    kind: 'Total',
-    account: data.netAssets.name,
-    current: data.netAssets.current,
-    prior: data.netAssets.prior,
-    confidence: null,
-    reason: 'Calculated as assets less liabilities.',
-  })
-  data.equity.items.forEach((item) => rows.push({
-    key: `equity|line|${item.name}`,
-    section: 'Equity',
-    group: 'Equity',
-    kind: 'Line',
-    account: item.name,
-    current: item.current,
-    prior: item.prior,
-    confidence: item.confidence ?? 1,
-    reason: item.reason ?? 'Balance-sheet line was sourced directly from the accounting record.',
-  }))
-  rows.push({
-    key: `equity|total|${data.equity.total.name}`,
-    section: 'Equity',
-    group: 'Equity',
-    kind: 'Total',
-    account: data.equity.total.name,
-    current: data.equity.total.current,
-    prior: data.equity.total.prior,
-    confidence: null,
-    reason: 'Calculated total.',
-  })
-  return rows
-}
 
 function ReviewCell({
   rowId,
@@ -178,7 +64,7 @@ function ReviewCell({
     <td className="min-w-72 px-4 py-2">
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-1">
-          {(['Approved', 'Needs changes', 'Rejected'] as ReviewStatus[]).map((status) => (
+          {(['Pending', 'Approved', 'Needs changes', 'Rejected'] as ReviewStatus[]).map((status) => (
             <Button
               key={status}
               type="button"
@@ -290,32 +176,47 @@ function TotalRow({
   )
 }
 
-export function BalanceTable({ data, reviewThreshold = 0.7 }: { data: BalanceSheetData; reviewThreshold?: number }) {
+export function BalanceTable({ data, reviewThreshold = 0.7, reviews, onSaveReview, reviewReady, saving }: {
+  data: BalanceSheetData; reviewThreshold?: number; reviews: ReviewMap;
+  onSaveReview: (lineId: string, draft: ReviewDraft) => Promise<void>; reviewReady: boolean; saving: boolean;
+}) {
   const [reviewState, setReviewState] = useState<ReviewState>({})
   const [exportMode, setExportMode] = useState<ExportMode>('summary')
   const flattenedRows = useMemo(() => flattenBalanceLines(data), [data])
   const lowConfidenceRows = flattenedRows
-    .filter((row) => row.kind === 'Line' && row.confidence !== null && row.confidence < reviewThreshold)
+    .filter((row) => row.kind === 'Line' && row.confidence !== null && row.confidence <= reviewThreshold)
     .sort((left, right) => (left.confidence ?? 1) - (right.confidence ?? 1))
 
   function updateReview(rowId: string, patch: Partial<ReviewState[string]>) {
+    const base = reviewFor(rowId)
     setReviewState((current) => ({
       ...current,
       [rowId]: {
-        status: current[rowId]?.status ?? 'Pending',
-        note: current[rowId]?.note ?? '',
+        ...base,
         ...patch,
       },
     }))
   }
 
   function reviewFor(rowId: string): ReviewState[string] {
-    return reviewState[rowId] ?? { status: 'Pending', note: '' }
+    return reviewState[rowId] ?? reviews[rowId] ?? { status: 'Pending', note: '' }
+  }
+
+  async function saveAllReviews() {
+    for (const [lineId, draft] of Object.entries(reviewState)) {
+      const row = flattenedRows.find(line => line.key === lineId)
+      if (!row) continue
+      try {
+        await onSaveReview(lineId, { ...draft, category: row.account })
+        setReviewState(current => { const next = { ...current }; delete next[lineId]; return next })
+      } catch { break }
+    }
   }
 
   function lineToExport(row: BalanceLine): ExportRow {
-    const review = reviewFor(row.key)
+    const review = reviews[row.key] ?? { status: 'Pending', note: '' }
     return {
+      'Line ID': row.key,
       Section: row.section,
       Group: row.group,
       Type: row.kind,
@@ -325,8 +226,12 @@ export function BalanceTable({ data, reviewThreshold = 0.7 }: { data: BalanceShe
       Change: row.current - row.prior,
       Confidence: row.confidence,
       Reason: row.reason,
+      'Review Required': row.confidence !== null && row.confidence <= reviewThreshold,
+      'Review Reason': row.confidence !== null && row.confidence <= reviewThreshold ? row.reason : '',
       'Review Status': review.status,
       'Reviewer Note': review.note,
+      'Reviewed At': reviews[row.key]?.updatedAt,
+      'Review Revision': reviews[row.key]?.revision,
     }
   }
 
@@ -344,14 +249,18 @@ export function BalanceTable({ data, reviewThreshold = 0.7 }: { data: BalanceShe
   }
 
   return (
+    <CurrencyContext.Provider value={data.currency ?? 'AUD'}>
     <div className="flex flex-col gap-5">
       <div className="overflow-hidden rounded-lg border">
       <div className="flex flex-col gap-2 border-b bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-sm font-semibold">Balance Sheet Detail</h2>
-          <p className="text-xs text-muted-foreground">Review each balance sheet line and export summary or by-line Excel.</p>
+          <p className="text-xs text-muted-foreground">Save decisions before exporting. Balance reviews are audit-only and do not change ledger amounts.</p>
         </div>
-        <ExportControls mode={exportMode} onModeChange={setExportMode} onExport={handleExport} />
+        <div className="flex items-center gap-3">
+          <Button size="sm" disabled={!reviewReady || saving || !Object.keys(reviewState).length} onClick={() => void saveAllReviews()}>Save reviews ({Object.keys(reviewState).length})</Button>
+          <ExportControls mode={exportMode} onModeChange={setExportMode} onExport={handleExport} disabled={!reviewReady || saving} />
+        </div>
       </div>
       <table className="w-full">
         <thead>
@@ -420,7 +329,7 @@ export function BalanceTable({ data, reviewThreshold = 0.7 }: { data: BalanceShe
         <CardHeader>
           <CardTitle>Human-in-the-loop Review (Low Confidence)</CardTitle>
           <CardDescription>
-            Balance-sheet lines below confidence {reviewThreshold.toFixed(2)}. Review decisions stay in this browser session and are included in exports.
+            Balance-sheet lines at or below confidence {reviewThreshold.toFixed(2)}. Save reviews to persist decisions and include them in exports.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -447,7 +356,7 @@ export function BalanceTable({ data, reviewThreshold = 0.7 }: { data: BalanceShe
                       <TableRow key={row.key}>
                         <TableCell>{row.section}</TableCell>
                         <TableCell>{row.account}</TableCell>
-                        <TableCell className="text-right tabular-nums">{fmtAUD(row.current)}</TableCell>
+                        <TableCell className="text-right tabular-nums">{fmtAUD(row.current, data.currency)}</TableCell>
                         <TableCell className="text-right tabular-nums">{row.confidence?.toFixed(2)}</TableCell>
                         <TableCell className="max-w-64 text-xs text-muted-foreground">{row.reason}</TableCell>
                         <TableCell>
@@ -484,5 +393,6 @@ export function BalanceTable({ data, reviewThreshold = 0.7 }: { data: BalanceShe
         </CardContent>
       </Card>
     </div>
+    </CurrencyContext.Provider>
   )
 }

@@ -42,8 +42,9 @@ const defaultFilters: FilterState = {
 }
 
 describe('isIncomeRow', () => {
-  it('returns true for account code starting with 2', () => {
-    expect(isIncomeRow(row({ AccountCode: '200' }), [])).toBe(true)
+  it('does not infer income from a provider-specific account ID', () => {
+    expect(isIncomeRow(row({ AccountCode: '29', MappedCategory: 'Expenses > Equipment Rental' }), [])).toBe(false)
+    expect(isIncomeRow(row({ AccountCode: '200' }), [])).toBe(false)
   })
   it('returns true when category is in income list', () => {
     expect(isIncomeRow(row({ AccountCode: '453', MappedCategory: 'Sales' }), ['Sales'])).toBe(true)

@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { REPORT_DATA } from '@/lib/report-data-mock'
 import { BALANCE_SHEET_DATA } from '@/lib/balance-sheet-mock'
+import { liquidityMetrics } from '@/lib/balance-sheet-metrics'
+import { requiresReview } from '@/lib/report-utils'
 import type { RawRow } from '@/lib/report-data'
 import { cn } from '@/lib/utils'
 
@@ -90,9 +92,7 @@ function balanceSheetDraft(): string {
   const assets = BALANCE_SHEET_DATA.assets.total.current
   const liabilities = BALANCE_SHEET_DATA.liabilities.total.current
   const equity = BALANCE_SHEET_DATA.equity.total.current
-  const workingCapital = BALANCE_SHEET_DATA.assets.subsections.reduce((sum, section) => sum + section.total.current, 0)
-    + BALANCE_SHEET_DATA.liabilities.subsections.reduce((sum, section) => sum + section.total.current, 0)
-  const currentRatio = Math.abs(liabilities) === 0 ? null : Math.abs(assets) / Math.abs(liabilities)
+  const { workingCapital, currentRatio } = liquidityMetrics(BALANCE_SHEET_DATA)
 
   return [
     `Total assets: ${money(assets)}`,
@@ -102,8 +102,8 @@ function balanceSheetDraft(): string {
     `Current ratio: ${currentRatio === null ? 'n/a' : `${currentRatio.toFixed(2)}x`}`,
     '',
     'Initial view:',
-    '- Presentation convention: assets and equity are positive; liabilities are negative.',
-    '- Working capital is calculated as current assets plus displayed current liabilities.',
+    '- Liabilities use the natural credit-positive reporting convention.',
+    '- Working capital is current assets minus current liabilities, excluding non-current items.',
   ].join('\n')
 }
 
@@ -116,7 +116,7 @@ function localDraft(question: string): string {
     return balanceSheetDraft()
   }
 
-  const lowConfidence = REPORT_DATA.raw_data.filter((row) => row.Confidence < REPORT_DATA.review_threshold)
+  const lowConfidence = REPORT_DATA.raw_data.filter((row) => requiresReview(row, REPORT_DATA.review_threshold))
   let text = 'P&L snapshot from mapped report data:\n\nTop category totals:\n'
   categoryTotals().slice(0, 8).forEach(([category, value]) => {
     text += `- ${category}: ${money(value)}\n`

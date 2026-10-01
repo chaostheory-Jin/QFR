@@ -33,6 +33,24 @@ def as_float(value: str | int | float | None) -> float:
     return float(value)
 
 
+def review_fields(line: dict[str, str], threshold: float) -> dict:
+    """Keep backend review gates, including ambiguity unrelated to confidence."""
+    if 'ReviewRequired' not in line:
+        required = True
+        reason = 'Legacy mapping export lacks review metadata; regenerate or review manually.'
+    else:
+        required = line['ReviewRequired'].strip().lower() in {'true', '1', 'yes'}
+        required = required or as_float(line.get('Confidence')) <= threshold or line.get('MappedCategory') == 'Unmapped'
+        reason = line.get('ReviewReason', '')
+    return {
+        'LineID': f"quickbooks-pl-{line['LineNumber']}",
+        'LineRole': line.get('InferredRole') or 'unknown',
+        'ReviewRequired': required,
+        'ReviewReason': reason,
+        'AutoAcceptedCategory': '' if required else line.get('AutoAcceptedCategory', line.get('MappedCategory', '')),
+    }
+
+
 def quickbooks_account_name(report_path: str) -> str:
     """Convert report hierarchy (`Expenses > Rent`) to QBO FQN (`Rent`)."""
     parts = [part.strip() for part in report_path.split(" > ")]
@@ -66,11 +84,13 @@ def main() -> None:
     }
 
     pl_lines = read_csv(QB / "ai_rebuild" / "quickbooks_pl_blind_line_mapping.csv")
+    review_threshold = pl_summary['classification'].get('review_threshold', 0.70)
     raw_data = []
     for line in pl_lines:
         source_account = line["SourceAccountForAudit"]
         raw_data.append(
             {
+                **review_fields(line, review_threshold),
                 "Type": line["TransactionType"],
                 "InvoiceNumber": line["DocumentNumber"] or line["LineNumber"],
                 "Date": line["Date"],
@@ -88,12 +108,15 @@ def main() -> None:
             }
         )
 
-    allowed_categories = sorted({row["MappedCategory"] for row in raw_data})
+    from run_quickbooks import extract_official_accounts
+
+    official_accounts = extract_official_accounts(read_json(QB / 'reports' / 'profit_and_loss.json'))
+    allowed_categories = sorted({'Unmapped', *(account.category for account in official_accounts)})
     income_categories = sorted(
         {
-            line["MappedCategory"]
-            for line in pl_lines
-            if line["InferredRole"] == "income" and line["MappedCategory"]
+            account.category
+            for account in official_accounts
+            if account.section in {'Income', 'Other Income'}
         }
     )
 
@@ -117,7 +140,7 @@ def main() -> None:
             "balance_sheet_summary": [],
             "income_categories": income_categories,
             "allowed_categories": allowed_categories,
-            "review_threshold": pl_summary["classification"]["review_threshold"],
+            "review_threshold": review_threshold,
         },
         "balanceSheet": {
             "openingDate": bs_summary["report"]["opening_date"],

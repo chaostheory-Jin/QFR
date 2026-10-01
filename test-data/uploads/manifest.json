@@ -1,0 +1,904 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "generatorVersion": 1,
+  "period": "2026-01-01..2026-09-30 (explicit date boundary exceptions in edge cases)",
+  "categories": [
+    "Sales",
+    "Purchases",
+    "Rent",
+    "Office Expenses",
+    "Bank Fees",
+    "Subscriptions",
+    "Travel - National",
+    "Interest Income"
+  ],
+  "fixtures": [
+    {
+      "file": "01_valid_ledger_100.csv",
+      "bytes": 14282,
+      "sha256": "bd363d1bddad76b0917e10f036954d2aec2e2a0b6af8e25b01a486bf9b75372c",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Starter: 100 valid AUD transaction lines.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 100,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 100,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 26065.96,
+              "Purchases": 27228.88,
+              "Rent": 27254.84,
+              "Office Expenses": 29287.82,
+              "Bank Fees": 22396.98,
+              "Subscriptions": 23926.52,
+              "Travel - National": 16613.02,
+              "Interest Income": 21206.04
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "02_valid_ledger_1000.csv",
+      "bytes": 144059,
+      "sha256": "0075e33bd723b30023700c006aff1c0807b1b4c608e2f4b676885d59b7a82c5b",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Normal volume: 1,000 valid AUD transaction lines.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 1000,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 1000,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 265002.71,
+              "Purchases": 279698.88,
+              "Rent": 277827.37,
+              "Office Expenses": 273751.88,
+              "Bank Fees": 287996.32,
+              "Subscriptions": 266880.12,
+              "Travel - National": 268189.06,
+              "Interest Income": 282000.26
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "03_valid_ledger_10000.csv",
+      "bytes": 1459644,
+      "sha256": "7faab07d3237db5b0b83503d50d9df71bb86952bca29cab28b423626b1a82846",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Maximum supported row count: 10,000 data rows; file remains under 3 MB.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 10000,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 10000,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 2757124.7,
+              "Purchases": 2784830.24,
+              "Rent": 2784900.82,
+              "Office Expenses": 2783325.18,
+              "Bank Fees": 2787726.94,
+              "Subscriptions": 2783639.6,
+              "Travel - National": 2752027.7,
+              "Interest Income": 2780742.4
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "04_valid_invoices_150.csv",
+      "bytes": 22117,
+      "sha256": "a0a842efa75993060539c8272acf23ff10989b7136ef005c5defe449720c150e",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "invoice",
+        "sample": true
+      },
+      "note": "Separate invoice evidence, not extra ledger revenue.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 150,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 150,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Purchases": 53761.46,
+              "Rent": 46473.92,
+              "Office Expenses": 49166.38,
+              "Bank Fees": 51858.84,
+              "Subscriptions": 49561.3,
+              "Travel - National": 52067.36
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "05_valid_bank_300.csv",
+      "bytes": 42296,
+      "sha256": "df01e8eae695f7a09d3bfe6a4d79bf8e38f950037b5390e0cd44eff8765a873a",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "bank",
+        "sample": true
+      },
+      "note": "Separate bank movements, not extra ledger revenue.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 300,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 300,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 77959.7,
+              "Purchases": 83555.2,
+              "Rent": 94007.25,
+              "Office Expenses": 78306.54,
+              "Bank Fees": 78490.88,
+              "Subscriptions": 82526.48,
+              "Travel - National": 68111.84,
+              "Interest Income": 77137.44
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "06_valid_usd_200.csv",
+      "bytes": 28392,
+      "sha256": "f682d321c4c257ca6ed7560d06400bd2702083c965907a48a428539c3e250cbc",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "USD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Select USD for the batch; do not combine with AUD.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 200,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 200,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 49079.98,
+              "Purchases": 50032.32,
+              "Rent": 59454.9,
+              "Office Expenses": 56100.9,
+              "Bank Fees": 54859.82,
+              "Subscriptions": 54302.4,
+              "Travel - National": 48018.37,
+              "Interest Income": 49707.32
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "07_valid_dates_dmy_30.csv",
+      "bytes": 4295,
+      "sha256": "34e2b13df5fa0b3b32773c3842c29d8fd0195f856662e1155d5f21e4baa42920",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Choose DMY; ISO should reject all 30 dates.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 30,
+          "options": {
+            "dateFormat": "DMY",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 30,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 4201.47,
+              "Purchases": 4651.68,
+              "Rent": 4968.44,
+              "Office Expenses": 5285.2,
+              "Bank Fees": 5601.96,
+              "Subscriptions": 5918.72,
+              "Travel - National": 3726.33,
+              "Interest Income": 54.26
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "07_valid_dates_mdy_30.csv",
+      "bytes": 4295,
+      "sha256": "f8267277d8797f5c812d31e87df4b46d2a6d247ab17d79de2d95e19b9f352693",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Choose MDY; ISO should reject all 30 dates.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 30,
+          "options": {
+            "dateFormat": "MDY",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 30,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 4201.47,
+              "Purchases": 4651.68,
+              "Rent": 4968.44,
+              "Office Expenses": 5285.2,
+              "Bank Fees": 5601.96,
+              "Subscriptions": 5918.72,
+              "Travel - National": 3726.33,
+              "Interest Income": 54.26
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "08_manual_column_mapping_30.csv",
+      "bytes": 4385,
+      "sha256": "b7450f1cc8ae42f897dd47f6107caa5dcee4ca22c71528050043ae1da1a0addf",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Map the Chinese headers manually using the mapping in this manifest.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 30,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "mapping": {
+            "date": "记账日期",
+            "amount": "金额",
+            "currency": "币种",
+            "account": "科目",
+            "description": "摘要",
+            "recordId": "原始行号",
+            "invoice": "发票号",
+            "contact": "往来方",
+            "category": "分类",
+            "role": "行类型",
+            "tax": "税额",
+            "department": "部门"
+          },
+          "expected": {
+            "records": 30,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 4201.47,
+              "Purchases": 4651.68,
+              "Rent": 4968.44,
+              "Office Expenses": 5285.2,
+              "Bank Fees": 5601.96,
+              "Subscriptions": 5918.72,
+              "Travel - National": 3726.33,
+              "Interest Income": 54.26
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "09_valid_edge_cases_6.csv",
+      "bytes": 938,
+      "sha256": "e0e6e8ef9328245851f1d80ebd4e5a5c63dce77c18b6a782c9159079be6748d1",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Zero, credit/refund, grouped amount, UTF-8, escaped quotes/newline, leading-zero ID, leap day and year end.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 6,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 6,
+            "errors": {},
+            "warnings": {}
+          }
+        }
+      ]
+    },
+    {
+      "file": "10_invalid_fields_12.csv",
+      "bytes": 1693,
+      "sha256": "d634b9585933ca2616b67902c11da900875286871a6753acfcf9795bbae21a1f",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Intentionally blocked: 12 field errors. Fix errors before commit.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 12,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 12,
+            "errors": {
+              "date": 2,
+              "amount": 6,
+              "account": 1,
+              "description": 1,
+              "tax": 1,
+              "role": 1
+            },
+            "warnings": {}
+          }
+        }
+      ]
+    },
+    {
+      "file": "11_invalid_currencies_4.csv",
+      "bytes": 654,
+      "sha256": "dc19abd49a7a39d0ac171d4a40862e00bd53605c4d9b65fc216491c3e2cdaf8c",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Intentionally blocked: mixed, unsupported and missing currencies.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 4,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 4,
+            "errors": {
+              "currency": 3,
+              "amount": 2,
+              "tax": 2
+            },
+            "warnings": {}
+          }
+        }
+      ]
+    },
+    {
+      "file": "12_duplicate_rows_3.csv",
+      "bytes": 487,
+      "sha256": "fc621c18c84df597930bb02b625356ceda719f2dd3c1fc64da418d9a2bf93fbc",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Default blocks; Exclude keeps 2 records and archives the repeated original row.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 3,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 3,
+            "errors": {
+              "duplicate": 1
+            },
+            "warnings": {}
+          },
+          "alternatives": [
+            {
+              "options": {
+                "dateFormat": "ISO",
+                "duplicates": "exclude"
+              },
+              "expected": {
+                "records": 2,
+                "errors": {},
+                "warnings": {
+                  "duplicate": 1
+                },
+                "excludedRows": [
+                  4
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "13_duplicates_without_ids_3.csv",
+      "bytes": 457,
+      "sha256": "30add5eacbba7e51b4bca2247963af14fb960eb78725168124a983ece5157d38",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Default blocks; Keep is permitted only when source IDs are absent.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 3,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 3,
+            "errors": {
+              "duplicate": 1
+            },
+            "warnings": {}
+          },
+          "alternatives": [
+            {
+              "options": {
+                "dateFormat": "ISO",
+                "duplicates": "keep"
+              },
+              "expected": {
+                "records": 3,
+                "errors": {},
+                "warnings": {
+                  "duplicate": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "14_conflicting_ids_3.csv",
+      "bytes": 507,
+      "sha256": "e5d7353acfe6d3ba58ad809984bacaacc17d471e1841c84688c543f48bd63e98",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Same ID with changed amount: both Block and Exclude must reject.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 3,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 3,
+            "errors": {
+              "duplicate": 1
+            },
+            "warnings": {}
+          },
+          "alternatives": [
+            {
+              "options": {
+                "dateFormat": "ISO",
+                "duplicates": "exclude"
+              },
+              "expected": {
+                "records": 3,
+                "errors": {
+                  "duplicate": 1
+                },
+                "warnings": {}
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "15_category_review_5.csv",
+      "bytes": 826,
+      "sha256": "1ed953ccca4805614486619038633b1dcd0449e2ebb0cd6e611f979533921f7f",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "No blocking errors; 5 review warnings; unknown categories become Unmapped, roles unknown.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 5,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 5,
+            "errors": {},
+            "warnings": {
+              "category": 5
+            },
+            "category": "Unmapped",
+            "role": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "file": "16_cross_batch_a_20.csv",
+      "bytes": 2925,
+      "sha256": "c2d0e6c5aaf5b39b977f3b274b110fcddcefe36c47da2cdf305c4c76ba9c66cb",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Commit A first, then preview B under identical source/company/kind/currency.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 20,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 20,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 2167.46,
+              "Purchases": 2538.48,
+              "Rent": 2776.05,
+              "Office Expenses": 3013.62,
+              "Bank Fees": 1533.94,
+              "Subscriptions": 1692.32,
+              "Travel - National": 1850.7,
+              "Interest Income": 2009.08
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "17_cross_batch_b_20.csv",
+      "bytes": 2955,
+      "sha256": "9fe49d9dfe48d9e4bbc0476410b80b94b74134213f8f463fea187b8a9e42f92a",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Valid alone. After A is committed, 5 source IDs must be blocked across files.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 20,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 20,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 2167.46,
+              "Purchases": 2538.48,
+              "Rent": 2776.05,
+              "Office Expenses": 3013.62,
+              "Bank Fees": 1533.94,
+              "Subscriptions": 1692.32,
+              "Travel - National": 1850.7,
+              "Interest Income": 2009.08
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "18_invalid_row_limit_10001.csv",
+      "bytes": 1439773,
+      "sha256": "0cbded7561af757cfcbe4e7efb5ca706adc962fe830a88dc8c2ce1a7f474ce7e",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Intentionally rejected before preview: exceeds 10,000 data rows.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 10001,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": null
+        }
+      ],
+      "readError": "Maximum 10,000 rows"
+    },
+    {
+      "file": "19_invalid_duplicate_headers.csv",
+      "bytes": 39,
+      "sha256": "cef40d0b8466881de704e2f239f0cd2971867fbe5ccb668f021127ceca52a65b",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Intentionally rejected before preview: duplicate header.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 1,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": null
+        }
+      ],
+      "readError": "nonempty and unique"
+    },
+    {
+      "file": "20_invalid_missing_header.csv",
+      "bytes": 33,
+      "sha256": "dec803b222359408a26e9ccd6d0e444444890954626a302ecea717012616eb8e",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Intentionally rejected before preview: blank header.",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "rows": 1,
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": null
+        }
+      ],
+      "readError": "nonempty and unique"
+    },
+    {
+      "file": "outputs/upload-qa-v1/21_valid_multi_sheet.xlsx",
+      "bytes": 39193,
+      "sha256": "2c5e208ab4de63c6e57f88c5a41a0924149cb45839739720a6b76b6571cd8d7b",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "500 rows across 3 sheets. Import only the intended sheet and select the corresponding document kind; do not combine sources as revenue.",
+      "sheets": [
+        {
+          "name": "Ledger",
+          "rows": 250,
+          "kind": "ledger",
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 250,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 69394.05,
+              "Purchases": 70900.72,
+              "Rent": 75916.68,
+              "Office Expenses": 73037.82,
+              "Bank Fees": 72271.88,
+              "Subscriptions": 72189.6,
+              "Travel - National": 56882.78,
+              "Interest Income": 65433.24
+            }
+          }
+        },
+        {
+          "name": "Invoices",
+          "rows": 100,
+          "kind": "invoice",
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 100,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Purchases": 36814.24,
+              "Rent": 35230.44,
+              "Office Expenses": 28788.78,
+              "Bank Fees": 34781.26,
+              "Subscriptions": 26727.78,
+              "Travel - National": 31637.56
+            }
+          }
+        },
+        {
+          "name": "Bank",
+          "rows": 150,
+          "kind": "bank",
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 150,
+            "errors": {},
+            "warnings": {},
+            "categoryTotals": {
+              "Sales": 40874.02,
+              "Purchases": 42512.08,
+              "Rent": 40849.84,
+              "Office Expenses": 37020.7,
+              "Bank Fees": 40294.48,
+              "Subscriptions": 39261.92,
+              "Travel - National": 30470.8,
+              "Interest Income": 31605.42
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "outputs/upload-qa-v1/22_invalid_formula_amount.xlsx",
+      "bytes": 4355,
+      "sha256": "d92c31e01def3040d4dc945274917f8698d5d2a25cc63b2ca397b146be977395",
+      "metadata": {
+        "source": "Synthetic Upload QA v1",
+        "company": "SYNTHETIC Upload QA",
+        "currency": "AUD",
+        "kind": "ledger",
+        "sample": true
+      },
+      "note": "Intentionally blocked: B2 contains a calculated amount. Upload source values instead of cached formulas.",
+      "sheets": [
+        {
+          "name": "Ledger",
+          "rows": 5,
+          "kind": "ledger",
+          "options": {
+            "dateFormat": "ISO",
+            "duplicates": "block"
+          },
+          "expected": {
+            "records": 5,
+            "errors": {
+              "amount": 1
+            },
+            "warnings": {}
+          }
+        }
+      ]
+    }
+  ]
+}

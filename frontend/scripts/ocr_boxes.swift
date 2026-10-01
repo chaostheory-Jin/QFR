@@ -38,10 +38,10 @@ let documents: [OCRDocument] = try imagePaths.map { imagePath in
             text: candidate.string,
             confidence: candidate.confidence,
             box: [
-                bounds.minX * 1000,
-                (1 - bounds.maxY) * 1000,
-                bounds.maxX * 1000,
-                (1 - bounds.minY) * 1000,
+                Double(bounds.minX) * 1000,
+                (1 - Double(bounds.maxY)) * 1000,
+                Double(bounds.maxX) * 1000,
+                (1 - Double(bounds.minY)) * 1000,
             ]
         )
     }

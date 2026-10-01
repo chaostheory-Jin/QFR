@@ -1,0 +1,4 @@
+﻿Date,Amount,Currency,Account,Description,LineID,InvoiceNumber,Contact,Category,Role,TaxAmount,Department
+2026-01-01,0,AUD,Sales,Synthetic ledger item 1,CONFLICT-000001,SYN-INV-000001,Synthetic Party 1,Sales,income,0,Operations
+2026-01-02,212.64,AUD,Purchases,Synthetic ledger item 2,CONFLICT-000002,SYN-INV-000002,Synthetic Party 2,Purchases,cost_of_goods_sold,21.26,Sales
+2026-01-01,123.45,AUD,Sales,Synthetic ledger item 1,CONFLICT-000001,SYN-INV-000001,Synthetic Party 1,Sales,income,0,Operations

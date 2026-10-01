@@ -1,0 +1,18 @@
+{
+  "basis": "Visual transcription of original invoice scans, before the live API test; never statement-derived. Currency UGX, face values incl. tax. null means gross total is outside the scanned page, not zero.",
+  "documents": [
+    {"file": "Cola_Reconciliation/20260805113702_003.jpg", "invoiceNumber": "DI1000045981", "totalAmount": 25108709, "currency": "UGX"},
+    {"file": "Cola_Reconciliation/20260805113702_004.jpg", "invoiceNumber": "DI1000045612", "totalAmount": 22896008, "currency": "UGX"},
+    {"file": "Cola_Reconciliation/20260805113702_005.jpg", "invoiceNumber": "DI1000045476", "totalAmount": 23256141, "currency": "UGX"},
+    {"file": "Cola_Reconciliation/20260805114055_001.jpg", "invoiceNumber": "DI1000045324", "totalAmount": 23264888, "currency": "UGX"},
+    {"file": "Cola_Reconciliation/20260805114055_002.jpg", "invoiceNumber": "DI1000045073", "totalAmount": 20820729, "currency": "UGX"},
+    {"file": "Cola_Reconciliation/20260805114055_005.jpg", "invoiceNumber": "DI1000044882", "totalAmount": null, "currency": "UGX", "note": "Gross total is missing from the scanned page. Must not invent a statement-derived amount."},
+    {"file": "Cola_Reconciliation/20260805115819_001.jpg", "invoiceNumber": "DI1000042315", "totalAmount": 19948604, "currency": "UGX"},
+    {"file": "Cola_Reconciliation/20260805115819_002.jpg", "invoiceNumber": "DI1000042485", "totalAmount": 19948604, "currency": "UGX"},
+    {"file": "Cola_Reconciliation/20260805115819_003.jpg", "invoiceNumber": "DI1000042221", "totalAmount": 22592916, "currency": "UGX"},
+    {"file": "Cola_Reconciliation/20260805115819_004.jpg", "invoiceNumber": "DI1000042612", "totalAmount": 19180704, "currency": "UGX"},
+    {"file": "invoices/Sales Yarra Transport.png", "invoiceNumber": "ORC1009", "totalAmount": 550, "currency": "AUD", "note": "Invoice screenshot; Total 550, not the paid balance Amount due 0. No compatible AUD statement supplied."},
+    {"file": "invoices/Rent and GST.png", "invoiceNumber": null, "totalAmount": null, "currency": "AUD", "nonInvoice": true, "note": "Spend Money transaction screenshot, not an invoice."},
+    {"file": "invoices/Sales overall.png", "invoiceNumber": null, "totalAmount": null, "currency": "UNKNOWN", "nonInvoice": true, "note": "Sales transactions report, not an invoice."}
+  ]
+}

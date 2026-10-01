@@ -1,0 +1,151 @@
+﻿Date,Amount,Currency,Account,Description,LineID,InvoiceNumber,Contact,Category,Role,TaxAmount,Department
+2026-01-01,0,AUD,Purchases,Synthetic invoice item 1,INVOICE-000001,SYN-INV-000001,Synthetic Party 1,Purchases,cost_of_goods_sold,0,Operations
+2026-01-02,212.64,AUD,Rent,Synthetic invoice item 2,INVOICE-000002,SYN-INV-000002,Synthetic Party 2,Rent,expense,21.26,Sales
+2026-01-03,291.83,AUD,Office Expenses,Synthetic invoice item 3,INVOICE-000003,SYN-INV-000003,Synthetic Party 3,Office Expenses,expense,29.18,Admin
+2026-01-04,371.02,AUD,Bank Fees,Synthetic invoice item 4,INVOICE-000004,SYN-INV-000004,Synthetic Party 4,Bank Fees,expense,37.1,Operations
+2026-01-05,450.21,AUD,Subscriptions,Synthetic invoice item 5,INVOICE-000005,SYN-INV-000005,Synthetic Party 5,Subscriptions,expense,45.02,Sales
+2026-01-06,529.4,AUD,Travel - National,Synthetic invoice item 6,INVOICE-000006,SYN-INV-000006,Synthetic Party 6,Travel - National,expense,52.94,Admin
+2026-01-07,608.59,AUD,Purchases,Synthetic invoice item 7,INVOICE-000007,SYN-INV-000007,Synthetic Party 7,Purchases,cost_of_goods_sold,60.86,Operations
+2026-01-08,687.78,AUD,Rent,Synthetic invoice item 8,INVOICE-000008,SYN-INV-000008,Synthetic Party 8,Rent,expense,68.78,Sales
+2026-01-09,766.97,AUD,Office Expenses,Synthetic invoice item 9,INVOICE-000009,SYN-INV-000009,Synthetic Party 9,Office Expenses,expense,76.7,Admin
+2026-01-10,846.16,AUD,Bank Fees,Synthetic invoice item 10,INVOICE-000010,SYN-INV-000010,Synthetic Party 10,Bank Fees,expense,84.62,Operations
+2026-01-11,925.35,AUD,Subscriptions,Synthetic invoice item 11,INVOICE-000011,SYN-INV-000011,Synthetic Party 11,Subscriptions,expense,92.54,Sales
+2026-01-12,1004.54,AUD,Travel - National,Synthetic invoice item 12,INVOICE-000012,SYN-INV-000012,Synthetic Party 12,Travel - National,expense,100.45,Admin
+2026-01-13,1083.73,AUD,Purchases,Synthetic invoice item 13,INVOICE-000013,SYN-INV-000013,Synthetic Party 13,Purchases,cost_of_goods_sold,108.37,Operations
+2026-01-14,1162.92,AUD,Rent,Synthetic invoice item 14,INVOICE-000014,SYN-INV-000014,Synthetic Party 14,Rent,expense,116.29,Sales
+2026-01-15,1242.11,AUD,Office Expenses,Synthetic invoice item 15,INVOICE-000015,SYN-INV-000015,Synthetic Party 15,Office Expenses,expense,124.21,Admin
+2026-01-16,1321.3,AUD,Bank Fees,Synthetic invoice item 16,INVOICE-000016,SYN-INV-000016,Synthetic Party 16,Bank Fees,expense,132.13,Operations
+2026-01-17,1400.49,AUD,Subscriptions,Synthetic invoice item 17,INVOICE-000017,SYN-INV-000017,Synthetic Party 17,Subscriptions,expense,140.05,Sales
+2026-01-18,1479.68,AUD,Travel - National,Synthetic invoice item 18,INVOICE-000018,SYN-INV-000018,Synthetic Party 18,Travel - National,expense,147.97,Admin
+2026-01-19,1558.87,AUD,Purchases,Synthetic invoice item 19,INVOICE-000019,SYN-INV-000019,Synthetic Party 19,Purchases,cost_of_goods_sold,155.89,Operations
+2026-01-20,1638.06,AUD,Rent,Synthetic invoice item 20,INVOICE-000020,SYN-INV-000020,Synthetic Party 20,Rent,expense,163.81,Sales
+2026-01-21,1717.25,AUD,Office Expenses,Synthetic invoice item 21,INVOICE-000021,SYN-INV-000021,Synthetic Party 21,Office Expenses,expense,171.73,Admin
+2026-01-22,1796.44,AUD,Bank Fees,Synthetic invoice item 22,INVOICE-000022,SYN-INV-000022,Synthetic Party 22,Bank Fees,expense,179.64,Operations
+2026-01-23,1875.63,AUD,Subscriptions,Synthetic invoice item 23,INVOICE-000023,SYN-INV-000023,Synthetic Party 23,Subscriptions,expense,187.56,Sales
+2026-01-24,-1954.82,AUD,Travel - National,Synthetic invoice item 24,INVOICE-000024,SYN-INV-000024,Synthetic Party 24,Travel - National,expense,-195.48,Admin
+2026-01-25,2034.01,AUD,Purchases,Synthetic invoice item 25,INVOICE-000025,SYN-INV-000025,Synthetic Party 25,Purchases,cost_of_goods_sold,203.4,Operations
+2026-01-26,2113.2,AUD,Rent,Synthetic invoice item 26,INVOICE-000026,SYN-INV-000026,Synthetic Party 1,Rent,expense,211.32,Sales
+2026-01-27,2192.39,AUD,Office Expenses,Synthetic invoice item 27,INVOICE-000027,SYN-INV-000027,Synthetic Party 2,Office Expenses,expense,219.24,Admin
+2026-01-28,2271.58,AUD,Bank Fees,Synthetic invoice item 28,INVOICE-000028,SYN-INV-000028,Synthetic Party 3,Bank Fees,expense,227.16,Operations
+2026-01-29,2350.77,AUD,Subscriptions,Synthetic invoice item 29,INVOICE-000029,SYN-INV-000029,Synthetic Party 4,Subscriptions,expense,235.08,Sales
+2026-01-30,2429.96,AUD,Travel - National,Synthetic invoice item 30,INVOICE-000030,SYN-INV-000030,Synthetic Party 5,Travel - National,expense,243,Admin
+2026-01-31,2509.15,AUD,Purchases,Synthetic invoice item 31,INVOICE-000031,SYN-INV-000031,Synthetic Party 6,Purchases,cost_of_goods_sold,250.92,Operations
+2026-02-01,2588.34,AUD,Rent,Synthetic invoice item 32,INVOICE-000032,SYN-INV-000032,Synthetic Party 7,Rent,expense,258.83,Sales
+2026-02-02,2667.53,AUD,Office Expenses,Synthetic invoice item 33,INVOICE-000033,SYN-INV-000033,Synthetic Party 8,Office Expenses,expense,266.75,Admin
+2026-02-03,2746.72,AUD,Bank Fees,Synthetic invoice item 34,INVOICE-000034,SYN-INV-000034,Synthetic Party 9,Bank Fees,expense,274.67,Operations
+2026-02-04,2825.91,AUD,Subscriptions,Synthetic invoice item 35,INVOICE-000035,SYN-INV-000035,Synthetic Party 10,Subscriptions,expense,282.59,Sales
+2026-02-05,2905.1,AUD,Travel - National,Synthetic invoice item 36,INVOICE-000036,SYN-INV-000036,Synthetic Party 11,Travel - National,expense,290.51,Admin
+2026-02-06,2984.29,AUD,Purchases,Synthetic invoice item 37,INVOICE-000037,SYN-INV-000037,Synthetic Party 12,Purchases,cost_of_goods_sold,298.43,Operations
+2026-02-07,0,AUD,Rent,Synthetic invoice item 38,INVOICE-000038,SYN-INV-000038,Synthetic Party 13,Rent,expense,0,Sales
+2026-02-08,3142.67,AUD,Office Expenses,Synthetic invoice item 39,INVOICE-000039,SYN-INV-000039,Synthetic Party 14,Office Expenses,expense,314.27,Admin
+2026-02-09,3221.86,AUD,Bank Fees,Synthetic invoice item 40,INVOICE-000040,SYN-INV-000040,Synthetic Party 15,Bank Fees,expense,322.19,Operations
+2026-02-10,3301.05,AUD,Subscriptions,Synthetic invoice item 41,INVOICE-000041,SYN-INV-000041,Synthetic Party 16,Subscriptions,expense,330.11,Sales
+2026-02-11,3380.24,AUD,Travel - National,Synthetic invoice item 42,INVOICE-000042,SYN-INV-000042,Synthetic Party 17,Travel - National,expense,338.02,Admin
+2026-02-12,3459.43,AUD,Purchases,Synthetic invoice item 43,INVOICE-000043,SYN-INV-000043,Synthetic Party 18,Purchases,cost_of_goods_sold,345.94,Operations
+2026-02-13,3538.62,AUD,Rent,Synthetic invoice item 44,INVOICE-000044,SYN-INV-000044,Synthetic Party 19,Rent,expense,353.86,Sales
+2026-02-14,3617.81,AUD,Office Expenses,Synthetic invoice item 45,INVOICE-000045,SYN-INV-000045,Synthetic Party 20,Office Expenses,expense,361.78,Admin
+2026-02-15,3697,AUD,Bank Fees,Synthetic invoice item 46,INVOICE-000046,SYN-INV-000046,Synthetic Party 21,Bank Fees,expense,369.7,Operations
+2026-02-16,-3776.19,AUD,Subscriptions,Synthetic invoice item 47,INVOICE-000047,SYN-INV-000047,Synthetic Party 22,Subscriptions,expense,-377.62,Sales
+2026-02-17,3855.38,AUD,Travel - National,Synthetic invoice item 48,INVOICE-000048,SYN-INV-000048,Synthetic Party 23,Travel - National,expense,385.54,Admin
+2026-02-18,3934.57,AUD,Purchases,Synthetic invoice item 49,INVOICE-000049,SYN-INV-000049,Synthetic Party 24,Purchases,cost_of_goods_sold,393.46,Operations
+2026-02-19,4013.76,AUD,Rent,Synthetic invoice item 50,INVOICE-000050,SYN-INV-000050,Synthetic Party 25,Rent,expense,401.38,Sales
+2026-02-20,4092.95,AUD,Office Expenses,Synthetic invoice item 51,INVOICE-000051,SYN-INV-000051,Synthetic Party 1,Office Expenses,expense,409.3,Admin
+2026-02-21,4172.14,AUD,Bank Fees,Synthetic invoice item 52,INVOICE-000052,SYN-INV-000052,Synthetic Party 2,Bank Fees,expense,417.21,Operations
+2026-02-22,4251.33,AUD,Subscriptions,Synthetic invoice item 53,INVOICE-000053,SYN-INV-000053,Synthetic Party 3,Subscriptions,expense,425.13,Sales
+2026-02-23,4330.52,AUD,Travel - National,Synthetic invoice item 54,INVOICE-000054,SYN-INV-000054,Synthetic Party 4,Travel - National,expense,433.05,Admin
+2026-02-24,4409.71,AUD,Purchases,Synthetic invoice item 55,INVOICE-000055,SYN-INV-000055,Synthetic Party 5,Purchases,cost_of_goods_sold,440.97,Operations
+2026-02-25,4488.9,AUD,Rent,Synthetic invoice item 56,INVOICE-000056,SYN-INV-000056,Synthetic Party 6,Rent,expense,448.89,Sales
+2026-02-26,4568.09,AUD,Office Expenses,Synthetic invoice item 57,INVOICE-000057,SYN-INV-000057,Synthetic Party 7,Office Expenses,expense,456.81,Admin
+2026-02-27,4647.28,AUD,Bank Fees,Synthetic invoice item 58,INVOICE-000058,SYN-INV-000058,Synthetic Party 8,Bank Fees,expense,464.73,Operations
+2026-02-28,4726.47,AUD,Subscriptions,Synthetic invoice item 59,INVOICE-000059,SYN-INV-000059,Synthetic Party 9,Subscriptions,expense,472.65,Sales
+2026-03-01,4805.66,AUD,Travel - National,Synthetic invoice item 60,INVOICE-000060,SYN-INV-000060,Synthetic Party 10,Travel - National,expense,480.57,Admin
+2026-03-02,4884.85,AUD,Purchases,Synthetic invoice item 61,INVOICE-000061,SYN-INV-000061,Synthetic Party 11,Purchases,cost_of_goods_sold,488.49,Operations
+2026-03-03,4964.04,AUD,Rent,Synthetic invoice item 62,INVOICE-000062,SYN-INV-000062,Synthetic Party 12,Rent,expense,496.4,Sales
+2026-03-04,53.23,AUD,Office Expenses,Synthetic invoice item 63,INVOICE-000063,SYN-INV-000063,Synthetic Party 13,Office Expenses,expense,5.32,Admin
+2026-03-05,132.42,AUD,Bank Fees,Synthetic invoice item 64,INVOICE-000064,SYN-INV-000064,Synthetic Party 14,Bank Fees,expense,13.24,Operations
+2026-03-06,211.61,AUD,Subscriptions,Synthetic invoice item 65,INVOICE-000065,SYN-INV-000065,Synthetic Party 15,Subscriptions,expense,21.16,Sales
+2026-03-07,290.8,AUD,Travel - National,Synthetic invoice item 66,INVOICE-000066,SYN-INV-000066,Synthetic Party 16,Travel - National,expense,29.08,Admin
+2026-03-08,369.99,AUD,Purchases,Synthetic invoice item 67,INVOICE-000067,SYN-INV-000067,Synthetic Party 17,Purchases,cost_of_goods_sold,37,Operations
+2026-03-09,449.18,AUD,Rent,Synthetic invoice item 68,INVOICE-000068,SYN-INV-000068,Synthetic Party 18,Rent,expense,44.92,Sales
+2026-03-10,528.37,AUD,Office Expenses,Synthetic invoice item 69,INVOICE-000069,SYN-INV-000069,Synthetic Party 19,Office Expenses,expense,52.84,Admin
+2026-03-11,-607.56,AUD,Bank Fees,Synthetic invoice item 70,INVOICE-000070,SYN-INV-000070,Synthetic Party 20,Bank Fees,expense,-60.76,Operations
+2026-03-12,686.75,AUD,Subscriptions,Synthetic invoice item 71,INVOICE-000071,SYN-INV-000071,Synthetic Party 21,Subscriptions,expense,68.68,Sales
+2026-03-13,765.94,AUD,Travel - National,Synthetic invoice item 72,INVOICE-000072,SYN-INV-000072,Synthetic Party 22,Travel - National,expense,76.59,Admin
+2026-03-14,845.13,AUD,Purchases,Synthetic invoice item 73,INVOICE-000073,SYN-INV-000073,Synthetic Party 23,Purchases,cost_of_goods_sold,84.51,Operations
+2026-03-15,924.32,AUD,Rent,Synthetic invoice item 74,INVOICE-000074,SYN-INV-000074,Synthetic Party 24,Rent,expense,92.43,Sales
+2026-03-16,0,AUD,Office Expenses,Synthetic invoice item 75,INVOICE-000075,SYN-INV-000075,Synthetic Party 25,Office Expenses,expense,0,Admin
+2026-03-17,1082.7,AUD,Bank Fees,Synthetic invoice item 76,INVOICE-000076,SYN-INV-000076,Synthetic Party 1,Bank Fees,expense,108.27,Operations
+2026-03-18,1161.89,AUD,Subscriptions,Synthetic invoice item 77,INVOICE-000077,SYN-INV-000077,Synthetic Party 2,Subscriptions,expense,116.19,Sales
+2026-03-19,1241.08,AUD,Travel - National,Synthetic invoice item 78,INVOICE-000078,SYN-INV-000078,Synthetic Party 3,Travel - National,expense,124.11,Admin
+2026-03-20,1320.27,AUD,Purchases,Synthetic invoice item 79,INVOICE-000079,SYN-INV-000079,Synthetic Party 4,Purchases,cost_of_goods_sold,132.03,Operations
+2026-03-21,1399.46,AUD,Rent,Synthetic invoice item 80,INVOICE-000080,SYN-INV-000080,Synthetic Party 5,Rent,expense,139.95,Sales
+2026-03-22,1478.65,AUD,Office Expenses,Synthetic invoice item 81,INVOICE-000081,SYN-INV-000081,Synthetic Party 6,Office Expenses,expense,147.87,Admin
+2026-03-23,1557.84,AUD,Bank Fees,Synthetic invoice item 82,INVOICE-000082,SYN-INV-000082,Synthetic Party 7,Bank Fees,expense,155.78,Operations
+2026-03-24,1637.03,AUD,Subscriptions,Synthetic invoice item 83,INVOICE-000083,SYN-INV-000083,Synthetic Party 8,Subscriptions,expense,163.7,Sales
+2026-03-25,1716.22,AUD,Travel - National,Synthetic invoice item 84,INVOICE-000084,SYN-INV-000084,Synthetic Party 9,Travel - National,expense,171.62,Admin
+2026-03-26,1795.41,AUD,Purchases,Synthetic invoice item 85,INVOICE-000085,SYN-INV-000085,Synthetic Party 10,Purchases,cost_of_goods_sold,179.54,Operations
+2026-03-27,1874.6,AUD,Rent,Synthetic invoice item 86,INVOICE-000086,SYN-INV-000086,Synthetic Party 11,Rent,expense,187.46,Sales
+2026-03-28,1953.79,AUD,Office Expenses,Synthetic invoice item 87,INVOICE-000087,SYN-INV-000087,Synthetic Party 12,Office Expenses,expense,195.38,Admin
+2026-03-29,2032.98,AUD,Bank Fees,Synthetic invoice item 88,INVOICE-000088,SYN-INV-000088,Synthetic Party 13,Bank Fees,expense,203.3,Operations
+2026-03-30,2112.17,AUD,Subscriptions,Synthetic invoice item 89,INVOICE-000089,SYN-INV-000089,Synthetic Party 14,Subscriptions,expense,211.22,Sales
+2026-03-31,2191.36,AUD,Travel - National,Synthetic invoice item 90,INVOICE-000090,SYN-INV-000090,Synthetic Party 15,Travel - National,expense,219.14,Admin
+2026-04-01,2270.55,AUD,Purchases,Synthetic invoice item 91,INVOICE-000091,SYN-INV-000091,Synthetic Party 16,Purchases,cost_of_goods_sold,227.06,Operations
+2026-04-02,2349.74,AUD,Rent,Synthetic invoice item 92,INVOICE-000092,SYN-INV-000092,Synthetic Party 17,Rent,expense,234.97,Sales
+2026-04-03,-2428.93,AUD,Office Expenses,Synthetic invoice item 93,INVOICE-000093,SYN-INV-000093,Synthetic Party 18,Office Expenses,expense,-242.89,Admin
+2026-04-04,2508.12,AUD,Bank Fees,Synthetic invoice item 94,INVOICE-000094,SYN-INV-000094,Synthetic Party 19,Bank Fees,expense,250.81,Operations
+2026-04-05,2587.31,AUD,Subscriptions,Synthetic invoice item 95,INVOICE-000095,SYN-INV-000095,Synthetic Party 20,Subscriptions,expense,258.73,Sales
+2026-04-06,2666.5,AUD,Travel - National,Synthetic invoice item 96,INVOICE-000096,SYN-INV-000096,Synthetic Party 21,Travel - National,expense,266.65,Admin
+2026-04-07,2745.69,AUD,Purchases,Synthetic invoice item 97,INVOICE-000097,SYN-INV-000097,Synthetic Party 22,Purchases,cost_of_goods_sold,274.57,Operations
+2026-04-08,2824.88,AUD,Rent,Synthetic invoice item 98,INVOICE-000098,SYN-INV-000098,Synthetic Party 23,Rent,expense,282.49,Sales
+2026-04-09,2904.07,AUD,Office Expenses,Synthetic invoice item 99,INVOICE-000099,SYN-INV-000099,Synthetic Party 24,Office Expenses,expense,290.41,Admin
+2026-04-10,2983.26,AUD,Bank Fees,Synthetic invoice item 100,INVOICE-000100,SYN-INV-000100,Synthetic Party 25,Bank Fees,expense,298.33,Operations
+2026-04-11,3062.45,AUD,Subscriptions,Synthetic invoice item 101,INVOICE-000101,SYN-INV-000101,Synthetic Party 1,Subscriptions,expense,306.25,Sales
+2026-04-12,3141.64,AUD,Travel - National,Synthetic invoice item 102,INVOICE-000102,SYN-INV-000102,Synthetic Party 2,Travel - National,expense,314.16,Admin
+2026-04-13,3220.83,AUD,Purchases,Synthetic invoice item 103,INVOICE-000103,SYN-INV-000103,Synthetic Party 3,Purchases,cost_of_goods_sold,322.08,Operations
+2026-04-14,3300.02,AUD,Rent,Synthetic invoice item 104,INVOICE-000104,SYN-INV-000104,Synthetic Party 4,Rent,expense,330,Sales
+2026-04-15,3379.21,AUD,Office Expenses,Synthetic invoice item 105,INVOICE-000105,SYN-INV-000105,Synthetic Party 5,Office Expenses,expense,337.92,Admin
+2026-04-16,3458.4,AUD,Bank Fees,Synthetic invoice item 106,INVOICE-000106,SYN-INV-000106,Synthetic Party 6,Bank Fees,expense,345.84,Operations
+2026-04-17,3537.59,AUD,Subscriptions,Synthetic invoice item 107,INVOICE-000107,SYN-INV-000107,Synthetic Party 7,Subscriptions,expense,353.76,Sales
+2026-04-18,3616.78,AUD,Travel - National,Synthetic invoice item 108,INVOICE-000108,SYN-INV-000108,Synthetic Party 8,Travel - National,expense,361.68,Admin
+2026-04-19,3695.97,AUD,Purchases,Synthetic invoice item 109,INVOICE-000109,SYN-INV-000109,Synthetic Party 9,Purchases,cost_of_goods_sold,369.6,Operations
+2026-04-20,3775.16,AUD,Rent,Synthetic invoice item 110,INVOICE-000110,SYN-INV-000110,Synthetic Party 10,Rent,expense,377.52,Sales
+2026-04-21,3854.35,AUD,Office Expenses,Synthetic invoice item 111,INVOICE-000111,SYN-INV-000111,Synthetic Party 11,Office Expenses,expense,385.44,Admin
+2026-04-22,0,AUD,Bank Fees,Synthetic invoice item 112,INVOICE-000112,SYN-INV-000112,Synthetic Party 12,Bank Fees,expense,0,Operations
+2026-04-23,4012.73,AUD,Subscriptions,Synthetic invoice item 113,INVOICE-000113,SYN-INV-000113,Synthetic Party 13,Subscriptions,expense,401.27,Sales
+2026-04-24,4091.92,AUD,Travel - National,Synthetic invoice item 114,INVOICE-000114,SYN-INV-000114,Synthetic Party 14,Travel - National,expense,409.19,Admin
+2026-04-25,4171.11,AUD,Purchases,Synthetic invoice item 115,INVOICE-000115,SYN-INV-000115,Synthetic Party 15,Purchases,cost_of_goods_sold,417.11,Operations
+2026-04-26,-4250.3,AUD,Rent,Synthetic invoice item 116,INVOICE-000116,SYN-INV-000116,Synthetic Party 16,Rent,expense,-425.03,Sales
+2026-04-27,4329.49,AUD,Office Expenses,Synthetic invoice item 117,INVOICE-000117,SYN-INV-000117,Synthetic Party 17,Office Expenses,expense,432.95,Admin
+2026-04-28,4408.68,AUD,Bank Fees,Synthetic invoice item 118,INVOICE-000118,SYN-INV-000118,Synthetic Party 18,Bank Fees,expense,440.87,Operations
+2026-04-29,4487.87,AUD,Subscriptions,Synthetic invoice item 119,INVOICE-000119,SYN-INV-000119,Synthetic Party 19,Subscriptions,expense,448.79,Sales
+2026-04-30,4567.06,AUD,Travel - National,Synthetic invoice item 120,INVOICE-000120,SYN-INV-000120,Synthetic Party 20,Travel - National,expense,456.71,Admin
+2026-05-01,4646.25,AUD,Purchases,Synthetic invoice item 121,INVOICE-000121,SYN-INV-000121,Synthetic Party 21,Purchases,cost_of_goods_sold,464.63,Operations
+2026-05-02,4725.44,AUD,Rent,Synthetic invoice item 122,INVOICE-000122,SYN-INV-000122,Synthetic Party 22,Rent,expense,472.54,Sales
+2026-05-03,4804.63,AUD,Office Expenses,Synthetic invoice item 123,INVOICE-000123,SYN-INV-000123,Synthetic Party 23,Office Expenses,expense,480.46,Admin
+2026-05-04,4883.82,AUD,Bank Fees,Synthetic invoice item 124,INVOICE-000124,SYN-INV-000124,Synthetic Party 24,Bank Fees,expense,488.38,Operations
+2026-05-05,4963.01,AUD,Subscriptions,Synthetic invoice item 125,INVOICE-000125,SYN-INV-000125,Synthetic Party 25,Subscriptions,expense,496.3,Sales
+2026-05-06,52.2,AUD,Travel - National,Synthetic invoice item 126,INVOICE-000126,SYN-INV-000126,Synthetic Party 1,Travel - National,expense,5.22,Admin
+2026-05-07,131.39,AUD,Purchases,Synthetic invoice item 127,INVOICE-000127,SYN-INV-000127,Synthetic Party 2,Purchases,cost_of_goods_sold,13.14,Operations
+2026-05-08,210.58,AUD,Rent,Synthetic invoice item 128,INVOICE-000128,SYN-INV-000128,Synthetic Party 3,Rent,expense,21.06,Sales
+2026-05-09,289.77,AUD,Office Expenses,Synthetic invoice item 129,INVOICE-000129,SYN-INV-000129,Synthetic Party 4,Office Expenses,expense,28.98,Admin
+2026-05-10,368.96,AUD,Bank Fees,Synthetic invoice item 130,INVOICE-000130,SYN-INV-000130,Synthetic Party 5,Bank Fees,expense,36.9,Operations
+2026-05-11,448.15,AUD,Subscriptions,Synthetic invoice item 131,INVOICE-000131,SYN-INV-000131,Synthetic Party 6,Subscriptions,expense,44.82,Sales
+2026-05-12,527.34,AUD,Travel - National,Synthetic invoice item 132,INVOICE-000132,SYN-INV-000132,Synthetic Party 7,Travel - National,expense,52.73,Admin
+2026-05-13,606.53,AUD,Purchases,Synthetic invoice item 133,INVOICE-000133,SYN-INV-000133,Synthetic Party 8,Purchases,cost_of_goods_sold,60.65,Operations
+2026-05-14,685.72,AUD,Rent,Synthetic invoice item 134,INVOICE-000134,SYN-INV-000134,Synthetic Party 9,Rent,expense,68.57,Sales
+2026-05-15,764.91,AUD,Office Expenses,Synthetic invoice item 135,INVOICE-000135,SYN-INV-000135,Synthetic Party 10,Office Expenses,expense,76.49,Admin
+2026-05-16,844.1,AUD,Bank Fees,Synthetic invoice item 136,INVOICE-000136,SYN-INV-000136,Synthetic Party 11,Bank Fees,expense,84.41,Operations
+2026-05-17,923.29,AUD,Subscriptions,Synthetic invoice item 137,INVOICE-000137,SYN-INV-000137,Synthetic Party 12,Subscriptions,expense,92.33,Sales
+2026-05-18,1002.48,AUD,Travel - National,Synthetic invoice item 138,INVOICE-000138,SYN-INV-000138,Synthetic Party 13,Travel - National,expense,100.25,Admin
+2026-05-19,-1081.67,AUD,Purchases,Synthetic invoice item 139,INVOICE-000139,SYN-INV-000139,Synthetic Party 14,Purchases,cost_of_goods_sold,-108.17,Operations
+2026-05-20,1160.86,AUD,Rent,Synthetic invoice item 140,INVOICE-000140,SYN-INV-000140,Synthetic Party 15,Rent,expense,116.09,Sales
+2026-05-21,1240.05,AUD,Office Expenses,Synthetic invoice item 141,INVOICE-000141,SYN-INV-000141,Synthetic Party 16,Office Expenses,expense,124.01,Admin
+2026-05-22,1319.24,AUD,Bank Fees,Synthetic invoice item 142,INVOICE-000142,SYN-INV-000142,Synthetic Party 17,Bank Fees,expense,131.92,Operations
+2026-05-23,1398.43,AUD,Subscriptions,Synthetic invoice item 143,INVOICE-000143,SYN-INV-000143,Synthetic Party 18,Subscriptions,expense,139.84,Sales
+2026-05-24,1477.62,AUD,Travel - National,Synthetic invoice item 144,INVOICE-000144,SYN-INV-000144,Synthetic Party 19,Travel - National,expense,147.76,Admin
+2026-05-25,1556.81,AUD,Purchases,Synthetic invoice item 145,INVOICE-000145,SYN-INV-000145,Synthetic Party 20,Purchases,cost_of_goods_sold,155.68,Operations
+2026-05-26,1636,AUD,Rent,Synthetic invoice item 146,INVOICE-000146,SYN-INV-000146,Synthetic Party 21,Rent,expense,163.6,Sales
+2026-05-27,1715.19,AUD,Office Expenses,Synthetic invoice item 147,INVOICE-000147,SYN-INV-000147,Synthetic Party 22,Office Expenses,expense,171.52,Admin
+2026-05-28,1794.38,AUD,Bank Fees,Synthetic invoice item 148,INVOICE-000148,SYN-INV-000148,Synthetic Party 23,Bank Fees,expense,179.44,Operations
+2026-05-29,0,AUD,Subscriptions,Synthetic invoice item 149,INVOICE-000149,SYN-INV-000149,Synthetic Party 24,Subscriptions,expense,0,Sales
+2026-05-30,1952.76,AUD,Travel - National,Synthetic invoice item 150,INVOICE-000150,SYN-INV-000150,Synthetic Party 25,Travel - National,expense,195.28,Admin

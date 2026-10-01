@@ -11,6 +11,9 @@ import { DataSourceSelect } from '@/components/DataSourceSelect'
 import { QUICKBOOKS_DATA, QUICKBOOKS_REPORT_DATA } from '@/lib/quickbooks-report-data'
 import { useReportSource } from '@/lib/report-source'
 import type { ReportData } from '@/lib/report-data'
+import { useMappingReviews } from '@/lib/use-mapping-reviews'
+import { TraceLink } from '@/components/trace/TraceLink'
+import { traceHref } from '@/lib/trace-navigation'
 
 function defaultFilters(data: ReportData): FilterState {
   return {
@@ -28,6 +31,7 @@ function defaultFilters(data: ReportData): FilterState {
 export default function ProfitLossPage() {
   const [source, setSource] = useReportSource()
   const reportData = source === 'quickbooks' ? QUICKBOOKS_REPORT_DATA : REPORT_DATA
+  const review = useMappingReviews(source, reportData)
   const [filtersBySource, setFiltersBySource] = useState<Record<typeof source, FilterState>>(() => ({
     xero: defaultFilters(REPORT_DATA),
     quickbooks: defaultFilters(QUICKBOOKS_REPORT_DATA),
@@ -38,7 +42,7 @@ export default function ProfitLossPage() {
   }
   const allTypes = useMemo(() => Array.from(new Set(reportData.raw_data.map((row) => row.Type))).sort(), [reportData])
   const allAccounts = useMemo(() => Array.from(new Set(reportData.raw_data.map((row) => row.AccountName))).sort(), [reportData])
-  const filteredRows = useMemo(() => getFilteredRows(reportData.raw_data, filters), [reportData, filters])
+  const filteredRows = useMemo(() => getFilteredRows(review.rows, filters, reportData.review_threshold), [review.rows, reportData.review_threshold, filters])
   const metrics = useMemo(() => computeMetrics(filteredRows), [filteredRows])
 
   function changeSource(nextSource: typeof source) {
@@ -60,10 +64,12 @@ export default function ProfitLossPage() {
         <DataSourceSelect value={source} onChange={changeSource} />
       </div>
       <div className="flex flex-col gap-5">
+        {review.error && <p role="alert" className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800">{review.error}</p>}
         <FilterPanel filters={filters} allTypes={allTypes} allAccounts={allAccounts} onChange={setFilters} onReset={() => setFilters(defaultFilters(reportData))} />
         <MetricCards metrics={metrics} />
+        <TraceLink href={traceHref('profit-loss', source, filters)} />
         <ChartsSection rows={filteredRows} topN={filters.topN} incomeCategories={reportData.income_categories} />
-        <DataTables rows={filteredRows} reviewThreshold={reportData.review_threshold} />
+        <DataTables key={`tables-${source}`} rows={filteredRows} reviewThreshold={reportData.review_threshold} categories={reportData.allowed_categories} reviews={review.reviews} onSaveReview={review.save} reviewReady={review.ready} saving={review.saving} />
       </div>
     </main>
   )

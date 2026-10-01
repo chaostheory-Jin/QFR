@@ -166,8 +166,8 @@ export default function LinkDataPage() {
           </CardHeader>
           <CardContent>
             <div className="mb-4 text-xs text-muted-foreground">Excel and CSV support</div>
-            <Button type="button" variant="outline" className="w-full" disabled>
-              Coming soon
+            <Button type="button" variant="outline" className="w-full" onClick={() => router.push('/imports')}>
+              Upload CSV / Excel
             </Button>
           </CardContent>
         </Card>

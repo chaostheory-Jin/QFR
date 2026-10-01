@@ -1,0 +1,8 @@
+﻿Date,Amount,Currency,Account,Description,LineID,InvoiceNumber,Contact,Category,Role,TaxAmount,Department
+2026-01-01,0,AUD,Sales,Synthetic ledger item 1,EDGE-000001,SYN-INV-000001,Synthetic Party 1,Sales,income,0,Operations
+2026-01-02,-125.5,AUD,Purchases,Synthetic ledger item 2,EDGE-000002,SYN-INV-000002,Synthetic Party 2,Purchases,cost_of_goods_sold,-12.55,Sales
+2026-01-03,"1,250.50",AUD,Rent,Synthetic ledger item 3,EDGE-000003,SYN-INV-000003,Synthetic Party 3,Rent,expense,125.05,Admin
+2026-01-04,371.02,AUD,Office Expenses,"Synthetic café, ""meeting""
+第二行摘要",00000042,SYN-INV-000004,Synthetic Party 4,Office Expenses,expense,37.1,Operations
+2024-02-29,450.21,AUD,Bank Fees,Synthetic ledger item 5,EDGE-000005,SYN-INV-000005,Synthetic Party 5,Bank Fees,expense,45.02,Sales
+2026-12-31,529.4,AUD,Subscriptions,Synthetic ledger item 6,EDGE-000006,SYN-INV-000006,Synthetic Party 6,Subscriptions,expense,52.94,Admin

@@ -14,6 +14,15 @@ export type RawRow = {
   OriginalMappedCategory: string
   NormalizationRule: string | null
   Budget?: number
+  LineID?: string
+  LineRole?: 'income' | 'other_income' | 'expense' | 'other_expense' | 'cost_of_goods_sold' | 'unknown'
+  ReviewRequired?: boolean
+  ReviewReason?: string
+  AutoAcceptedCategory?: string
+  ProposedCategory?: string
+  ReviewStatus?: 'Pending' | 'Approved' | 'Needs changes' | 'Rejected'
+  ReviewerNote?: string
+  ReviewedAt?: string
 }
 
 export type BalanceSheetRow = {

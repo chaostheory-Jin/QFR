@@ -9,10 +9,12 @@ export function ExportControls({
   mode,
   onModeChange,
   onExport,
+  disabled = false,
 }: {
   mode: ExportMode
   onModeChange: (mode: ExportMode) => void
   onExport: () => void
+  disabled?: boolean
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -25,7 +27,7 @@ export function ExportControls({
         <option value="summary">Summary</option>
         <option value="byLine">By line</option>
       </select>
-      <Button type="button" size="sm" variant="outline" onClick={onExport}>
+      <Button type="button" size="sm" variant="outline" onClick={onExport} disabled={disabled}>
         <Download className="size-3.5" />
         Export Excel
       </Button>

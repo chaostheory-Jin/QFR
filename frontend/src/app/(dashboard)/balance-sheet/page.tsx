@@ -11,6 +11,10 @@ import { AgingAnalysis } from '@/components/balance-sheet/AgingAnalysis'
 import { periodForDate, buildBalanceSheet } from '@/lib/balance-sheet-periods'
 import { DataSourceSelect } from '@/components/DataSourceSelect'
 import { useReportSource } from '@/lib/report-source'
+import { balanceReviewReport } from '@/lib/balance-sheet-review'
+import { useMappingReviews } from '@/lib/use-mapping-reviews'
+import { TraceLink } from '@/components/trace/TraceLink'
+import { traceHref } from '@/lib/trace-navigation'
 import {
   buildQuickBooksBalanceSheet,
   buildQuickBooksCashPeriods,
@@ -45,6 +49,8 @@ export default function BalanceSheetPage() {
     [source, filters.startDate, filters.endDate, period],
   )
   const data = useMemo(() => filterBalanceSheet(baseData, filters), [baseData, filters])
+  const reviewData = useMemo(() => balanceReviewReport(baseData, filters.startDate, filters.endDate), [baseData, filters.startDate, filters.endDate])
+  const review = useMappingReviews(source, reviewData, { reportKind: 'balance-sheet', startDate: filters.startDate, endDate: filters.endDate })
   const quickBooksCashPeriods = useMemo(() => buildQuickBooksCashPeriods(), [])
 
   function changeSource(nextSource: typeof source) {
@@ -77,6 +83,7 @@ export default function BalanceSheetPage() {
           isIllustrative={source === 'xero'}
         />
         <SummaryCards data={data} />
+        <TraceLink href={traceHref('balance-sheet', source, filters)} />
         <BalanceSheetFigures data={data} />
         <FinancialAnalysisTables data={data} />
         <AgingAnalysis
@@ -85,7 +92,8 @@ export default function BalanceSheetPage() {
           buckets={source === 'quickbooks' ? QUICKBOOKS_AGING : undefined}
           currency={baseData.currency}
         />
-        <BalanceTable data={data} />
+        {review.error && <p role="alert" className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800">{review.error}</p>}
+        <BalanceTable key={`${source}-${filters.startDate}-${filters.endDate}`} data={data} reviews={review.reviews} onSaveReview={review.save} reviewReady={review.ready} saving={review.saving} />
       </div>
     </main>
   )

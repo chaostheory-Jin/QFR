@@ -140,7 +140,7 @@ export function FilterPanel({ filters, allTypes, allAccounts, onChange, onReset 
             </label>
             <label className="flex items-center gap-1.5 text-sm cursor-pointer">
               <Checkbox checked={filters.onlyLowConf} onCheckedChange={(c) => set({ onlyLowConf: !!c })} />
-              Low confidence
+              Review required
             </label>
           </div>
         </div>

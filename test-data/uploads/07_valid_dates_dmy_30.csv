@@ -1,0 +1,31 @@
+﻿Date,Amount,Currency,Account,Description,LineID,InvoiceNumber,Contact,Category,Role,TaxAmount,Department
+01/01/2026,0,AUD,Sales,Synthetic ledger item 1,DMY-000001,SYN-INV-000001,Synthetic Party 1,Sales,income,0,Operations
+02/01/2026,212.64,AUD,Purchases,Synthetic ledger item 2,DMY-000002,SYN-INV-000002,Synthetic Party 2,Purchases,cost_of_goods_sold,21.26,Sales
+03/01/2026,291.83,AUD,Rent,Synthetic ledger item 3,DMY-000003,SYN-INV-000003,Synthetic Party 3,Rent,expense,29.18,Admin
+04/01/2026,371.02,AUD,Office Expenses,Synthetic ledger item 4,DMY-000004,SYN-INV-000004,Synthetic Party 4,Office Expenses,expense,37.1,Operations
+05/01/2026,450.21,AUD,Bank Fees,Synthetic ledger item 5,DMY-000005,SYN-INV-000005,Synthetic Party 5,Bank Fees,expense,45.02,Sales
+06/01/2026,529.4,AUD,Subscriptions,Synthetic ledger item 6,DMY-000006,SYN-INV-000006,Synthetic Party 6,Subscriptions,expense,52.94,Admin
+07/01/2026,608.59,AUD,Travel - National,Synthetic ledger item 7,DMY-000007,SYN-INV-000007,Synthetic Party 7,Travel - National,expense,60.86,Operations
+08/01/2026,687.78,AUD,Interest Income,Synthetic ledger item 8,DMY-000008,SYN-INV-000008,Synthetic Party 8,Interest Income,other_income,68.78,Sales
+09/01/2026,766.97,AUD,Sales,Synthetic ledger item 9,DMY-000009,SYN-INV-000009,Synthetic Party 9,Sales,income,76.7,Admin
+10/01/2026,846.16,AUD,Purchases,Synthetic ledger item 10,DMY-000010,SYN-INV-000010,Synthetic Party 10,Purchases,cost_of_goods_sold,84.62,Operations
+11/01/2026,925.35,AUD,Rent,Synthetic ledger item 11,DMY-000011,SYN-INV-000011,Synthetic Party 11,Rent,expense,92.54,Sales
+12/01/2026,1004.54,AUD,Office Expenses,Synthetic ledger item 12,DMY-000012,SYN-INV-000012,Synthetic Party 12,Office Expenses,expense,100.45,Admin
+13/01/2026,1083.73,AUD,Bank Fees,Synthetic ledger item 13,DMY-000013,SYN-INV-000013,Synthetic Party 13,Bank Fees,expense,108.37,Operations
+14/01/2026,1162.92,AUD,Subscriptions,Synthetic ledger item 14,DMY-000014,SYN-INV-000014,Synthetic Party 14,Subscriptions,expense,116.29,Sales
+15/01/2026,1242.11,AUD,Travel - National,Synthetic ledger item 15,DMY-000015,SYN-INV-000015,Synthetic Party 15,Travel - National,expense,124.21,Admin
+16/01/2026,1321.3,AUD,Interest Income,Synthetic ledger item 16,DMY-000016,SYN-INV-000016,Synthetic Party 16,Interest Income,other_income,132.13,Operations
+17/01/2026,1400.49,AUD,Sales,Synthetic ledger item 17,DMY-000017,SYN-INV-000017,Synthetic Party 17,Sales,income,140.05,Sales
+18/01/2026,1479.68,AUD,Purchases,Synthetic ledger item 18,DMY-000018,SYN-INV-000018,Synthetic Party 18,Purchases,cost_of_goods_sold,147.97,Admin
+19/01/2026,1558.87,AUD,Rent,Synthetic ledger item 19,DMY-000019,SYN-INV-000019,Synthetic Party 19,Rent,expense,155.89,Operations
+20/01/2026,1638.06,AUD,Office Expenses,Synthetic ledger item 20,DMY-000020,SYN-INV-000020,Synthetic Party 20,Office Expenses,expense,163.81,Sales
+21/01/2026,1717.25,AUD,Bank Fees,Synthetic ledger item 21,DMY-000021,SYN-INV-000021,Synthetic Party 21,Bank Fees,expense,171.73,Admin
+22/01/2026,1796.44,AUD,Subscriptions,Synthetic ledger item 22,DMY-000022,SYN-INV-000022,Synthetic Party 22,Subscriptions,expense,179.64,Operations
+23/01/2026,1875.63,AUD,Travel - National,Synthetic ledger item 23,DMY-000023,SYN-INV-000023,Synthetic Party 23,Travel - National,expense,187.56,Sales
+24/01/2026,-1954.82,AUD,Interest Income,Synthetic ledger item 24,DMY-000024,SYN-INV-000024,Synthetic Party 24,Interest Income,other_income,-195.48,Admin
+25/01/2026,2034.01,AUD,Sales,Synthetic ledger item 25,DMY-000025,SYN-INV-000025,Synthetic Party 25,Sales,income,203.4,Operations
+26/01/2026,2113.2,AUD,Purchases,Synthetic ledger item 26,DMY-000026,SYN-INV-000026,Synthetic Party 1,Purchases,cost_of_goods_sold,211.32,Sales
+27/01/2026,2192.39,AUD,Rent,Synthetic ledger item 27,DMY-000027,SYN-INV-000027,Synthetic Party 2,Rent,expense,219.24,Admin
+28/01/2026,2271.58,AUD,Office Expenses,Synthetic ledger item 28,DMY-000028,SYN-INV-000028,Synthetic Party 3,Office Expenses,expense,227.16,Operations
+29/01/2026,2350.77,AUD,Bank Fees,Synthetic ledger item 29,DMY-000029,SYN-INV-000029,Synthetic Party 4,Bank Fees,expense,235.08,Sales
+30/01/2026,2429.96,AUD,Subscriptions,Synthetic ledger item 30,DMY-000030,SYN-INV-000030,Synthetic Party 5,Subscriptions,expense,243,Admin

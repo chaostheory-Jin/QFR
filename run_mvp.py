@@ -4384,6 +4384,8 @@ def _map_profit_loss_row(
         "Confidence": mapped["confidence"],
         "Reason": mapped["reason"],
         "RuleID": mapped.get("rule_id"),
+        "ReviewRequired": mapped['confidence'] <= REVIEW_CONFIDENCE_THRESHOLD or mapped['category'] == category_defs['fallback'],
+        "ReviewReason": mapped['reason'] if mapped['confidence'] <= REVIEW_CONFIDENCE_THRESHOLD or mapped['category'] == category_defs['fallback'] else '',
     }
     return mapped_row, mapped
 

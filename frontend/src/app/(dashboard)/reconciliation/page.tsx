@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertCircle,
   ArrowRight,
@@ -28,6 +28,8 @@ import {
   type StatementRecord,
 } from '@/lib/reconciliation'
 import { cn } from '@/lib/utils'
+import { ReconciliationReviewPanel } from '@/components/ReconciliationReviewPanel'
+import { reviewedResults, type ReconciliationRun } from '@/lib/reconciliation-review'
 
 type Phase = 'idle' | 'extracting' | 'matching' | 'complete' | 'error'
 
@@ -36,14 +38,13 @@ const PROCESSING_STEPS = [
   { at: 12, label: 'Read master statement', detail: 'Finding candidate Sales invoice rows and inclusive amounts.' },
   { at: 28, label: 'Locate invoice ID', detail: 'Reading the printed identifier and its exact position.' },
   { at: 44, label: 'Verify final gross amount', detail: 'Rejecting net, VAT, line-item and handwritten amounts.' },
-  { at: 62, label: 'Normalise unclear characters', detail: 'Testing OCR confusions such as O/0, I/1 and S/5.' },
-  { at: 76, label: 'Match ID and amount', detail: 'Applying exact, unique-amount and guarded fuzzy rules.' },
+  { at: 62, label: 'Preserve invoice evidence', detail: 'Keeping original values; OCR conflicts require review.' },
+  { at: 76, label: 'Match ID and amount', detail: 'Only exact ID + amount can match automatically; weak similarities are candidates.' },
   { at: 88, label: 'Check one-to-one assignment', detail: 'Preventing two invoices from consuming the same statement row.' },
-  { at: 97, label: 'Write audit result', detail: 'Recording confidence, evidence and review reasons.' },
+  { at: 97, label: 'Write audit result', detail: 'Recording original evidence, differences and review reasons.' },
 ]
 
 const MAX_HOSTED_BODY_BYTES = Math.floor(3.75 * 1024 * 1024)
-const IMAGE_COMPRESSION_THRESHOLD = 900 * 1024
 
 const VERIFIED_FIELDS = {
   invoiceNumberVerified: true,
@@ -63,6 +64,7 @@ const DEMO_STATEMENT: StatementRecord[] = [
 const DEMO_INVOICES: InvoiceExtraction[] = [
   {
     documentIndex: 0,
+    currency: 'UGX', documentType: 'invoice',
     fileName: '20260805113702_003.jpg',
     invoiceNumber: 'DI1000045981',
     totalAmount: 25108709,
@@ -77,6 +79,7 @@ const DEMO_INVOICES: InvoiceExtraction[] = [
   },
   {
     documentIndex: 1,
+    currency: 'UGX', documentType: 'invoice',
     fileName: '20260805113702_004.jpg',
     invoiceNumber: 'I100006424O',
     totalAmount: 25108709,
@@ -91,6 +94,7 @@ const DEMO_INVOICES: InvoiceExtraction[] = [
   },
   {
     documentIndex: 2,
+    currency: 'UGX', documentType: 'invoice',
     fileName: '20260805114055_001.jpg',
     invoiceNumber: 'DI1000000165',
     totalAmount: 29004637,
@@ -105,33 +109,14 @@ const DEMO_INVOICES: InvoiceExtraction[] = [
   },
 ]
 
-function money(value: number): string {
+function money(value: number, currency = 'UGX'): string {
   return new Intl.NumberFormat('en-UG', {
-    style: 'currency', currency: 'UGX', maximumFractionDigits: 0,
+    style: 'currency', currency,
   }).format(value)
 }
 
 function delay(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds))
-}
-
-async function optimiseInvoiceForUpload(file: File): Promise<File> {
-  if (!file.type.startsWith('image/') || file.size <= IMAGE_COMPRESSION_THRESHOLD) return file
-  try {
-    const bitmap = await createImageBitmap(file)
-    const scale = Math.min(1, 2200 / Math.max(bitmap.width, bitmap.height))
-    const canvas = document.createElement('canvas')
-    canvas.width = Math.round(bitmap.width * scale)
-    canvas.height = Math.round(bitmap.height * scale)
-    canvas.getContext('2d')?.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
-    bitmap.close()
-    const blob = await new Promise<Blob | null>((resolveBlob) => canvas.toBlob(resolveBlob, 'image/jpeg', 0.84))
-    if (!blob || blob.size >= file.size) return file
-    const name = file.name.replace(/\.[^.]+$/, '') || 'invoice'
-    return new File([blob], `${name}.jpg`, { type: 'image/jpeg', lastModified: file.lastModified })
-  } catch {
-    return file
-  }
 }
 
 function createUploadBatches(statement: File, invoices: File[]): Array<Array<{ file: File; originalIndex: number }>> {
@@ -280,6 +265,7 @@ function DemoInvoice({ scanning, extraction }: { scanning: boolean; extraction: 
 export default function ReconciliationPage() {
   const [invoiceFiles, setInvoiceFiles] = useState<File[]>([])
   const [statementFile, setStatementFile] = useState<File | null>(null)
+  const [statementCurrency, setStatementCurrency] = useState('UGX')
   const [phase, setPhase] = useState<Phase>('idle')
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
@@ -287,13 +273,15 @@ export default function ReconciliationPage() {
   const [extractions, setExtractions] = useState<InvoiceExtraction[]>(DEMO_INVOICES)
   const [matches, setMatches] = useState<ReconciliationMatch[]>([])
   const [activeDocument, setActiveDocument] = useState(0)
+  const [savedRun, setSavedRun] = useState<ReconciliationRun | null>(null)
+  const [materiality, setMateriality] = useState('')
   const [previewUrls, setPreviewUrls] = useState<Array<string | null>>([])
   const statementScrollRef = useRef<HTMLDivElement>(null)
 
   const working = phase === 'extracting' || phase === 'matching'
   const selectedExtraction = extractions[activeDocument] ?? DEMO_INVOICES[0]
   const previewUrl = previewUrls[activeDocument] ?? null
-  const matchedCount = matches.filter((match) => match.matched).length
+  const matchedCount = savedRun ? reviewedResults(savedRun).filter(result => result.matched).length : matches.filter((match) => match.matched).length
   const selectedVerified = selectedExtraction.fieldVerification
   const activeProcessStepIndex = PROCESSING_STEPS.reduce(
     (active, step, index) => progress >= step.at ? index : active,
@@ -328,6 +316,8 @@ export default function ReconciliationPage() {
   }, [matchedRows, phase])
 
   function resetResults() {
+    window.history.replaceState(null, '', '/reconciliation')
+    setSavedRun(null)
     setPhase('idle')
     setProgress(0)
     setError('')
@@ -335,6 +325,7 @@ export default function ReconciliationPage() {
   }
 
   function selectInvoiceFiles(files: File[]) {
+    if (files.length > 12) { setError('Select at most 12 invoices per run; no files were silently dropped.'); return }
     const selected = files.slice(0, 12)
     setInvoiceFiles(selected)
     setPreviewUrls(selected.map((file) => file.type.startsWith('image/') ? URL.createObjectURL(file) : null))
@@ -346,6 +337,8 @@ export default function ReconciliationPage() {
     resetResults()
     setInvoiceFiles([])
     setStatementFile(null)
+    setStatementCurrency('UGX')
+    setMateriality('26000000')
     setPreviewUrls([])
     setActiveDocument(0)
     setStatementRecords(DEMO_STATEMENT)
@@ -357,6 +350,7 @@ export default function ReconciliationPage() {
     setProgress(68)
     await delay(1300)
     setMatches(reconcileInvoices(DEMO_INVOICES, DEMO_STATEMENT))
+    try { await persistRun(DEMO_INVOICES, DEMO_STATEMENT, 'UGX', true) } catch (error) { setError((error as Error).message) }
     setProgress(100)
     setPhase('complete')
   }
@@ -372,8 +366,10 @@ export default function ReconciliationPage() {
     setPhase('extracting')
     setProgress(5)
     try {
-      const uploadInvoices = await Promise.all(invoiceFiles.map(optimiseInvoiceForUpload))
-      const batches = createUploadBatches(statementFile, uploadInvoices)
+      if (materiality.trim() === '' || !Number.isFinite(Number(materiality)) || Number(materiality) < 0) throw new Error('Set the materiality threshold in statement currency before reconciling.')
+      // OCR must receive the same bytes the user inspected. Lossy JPEG conversion
+      // and downsampling erase faint dot-matrix characters before server extraction.
+      const batches = createUploadBatches(statementFile, invoiceFiles)
       let loadedRecords: StatementRecord[] = []
       const loadedExtractions: InvoiceExtraction[] = []
 
@@ -381,16 +377,20 @@ export default function ReconciliationPage() {
         setProgress(Math.max(5, Math.round((batchIndex / batches.length) * 58)))
         const formData = new FormData()
         formData.append('statement', statementFile)
+        formData.append('statementCurrency', statementCurrency)
         batch.forEach(({ file }) => formData.append('invoices', file))
         const response = await fetch('/api/reconciliation', { method: 'POST', body: formData })
         const payload = await response.json()
         if (!response.ok) throw new Error(payload.error || 'Document extraction failed.')
         if (!loadedRecords.length) loadedRecords = payload.statementRecords
-        loadedExtractions.push(...payload.invoiceDocuments.map((document: InvoiceExtraction, index: number) => ({
-          ...document,
-          documentIndex: batch[index].originalIndex,
-          fileName: invoiceFiles[batch[index].originalIndex].name,
-        })))
+        const seen = new Set<number>()
+        if (!Array.isArray(payload.invoiceDocuments) || payload.invoiceDocuments.length !== batch.length) throw new Error('Invalid extraction count.')
+        loadedExtractions.push(...payload.invoiceDocuments.map((document: InvoiceExtraction) => {
+          const index = document.documentIndex
+          if (!Number.isInteger(index) || index < 0 || index >= batch.length || seen.has(index)) throw new Error('Invalid extraction document index.')
+          seen.add(index)
+          return { ...document, documentIndex: batch[index].originalIndex, fileName: invoiceFiles[batch[index].originalIndex].name }
+        }))
       }
 
       loadedExtractions.sort((left, right) => left.documentIndex - right.documentIndex)
@@ -399,7 +399,8 @@ export default function ReconciliationPage() {
       setPhase('matching')
       setProgress(70)
       await delay(1200)
-      setMatches(reconcileInvoices(loadedExtractions, loadedRecords))
+      setMatches(reconcileInvoices(loadedExtractions, loadedRecords, { currency: statementCurrency }))
+      await persistRun(loadedExtractions, loadedRecords, statementCurrency, false)
       setProgress(100)
       setPhase('complete')
     } catch (caught) {
@@ -407,6 +408,55 @@ export default function ReconciliationPage() {
       setPhase('error')
     }
   }
+
+  function exportAudit() {
+    const blob = new Blob([JSON.stringify({ schemaVersion: 2, exportedAt: new Date().toISOString(), statementCurrency,
+      invoiceDocuments: extractions, statementRecords, matches, savedRun, reviewedResults: savedRun ? reviewedResults(savedRun) : null }, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'reconciliation-audit.json'
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  async function persistRun(invoices: InvoiceExtraction[], statements: StatementRecord[], currency: string, sample: boolean) {
+    const sources = sample ? [] : [{ file: statementFile!, index: -1 }, ...invoiceFiles.map((file, index) => ({ file, index }))]
+    const files = await Promise.all(sources.map(async ({ file, index }) => ({ index, name: file.name, mime: file.type,
+      sha256: Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', await file.arrayBuffer()))).map(byte => byte.toString(16).padStart(2, '0')).join(''), archived: false })))
+    const response = await fetch('/api/reconciliation-reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ invoices, statements, currency, sample, files, materiality: sample ? 26000000 : Number(materiality) }) })
+    let run = await response.json()
+    if (!response.ok) throw new Error(run.error || 'Unable to save reconciliation snapshot.')
+    setSavedRun(run)
+    window.history.replaceState(null, '', `/reconciliation#${run.id}`)
+    for (const { file, index } of sources) {
+      const form = new FormData(); form.append('id', run.id); form.append('index', String(index)); form.append('file', file)
+      const archived = await fetch('/api/reconciliation-reviews', { method: 'POST', body: form })
+      run = await archived.json()
+      if (!archived.ok) throw new Error(run.error || 'Original archive failed. Review remains blocked.')
+      setSavedRun(run)
+    }
+  }
+
+  const restoreRun = useCallback((run: ReconciliationRun) => {
+    setSavedRun(run); setStatementRecords(run.statements); setExtractions(run.invoices); setStatementCurrency(run.currency); setMateriality(String(run.materiality))
+    setInvoiceFiles([]); setStatementFile(null); setPreviewUrls([]); setActiveDocument(0)
+    setMatches(reconcileInvoices(run.invoices, run.statements, { currency: run.currency })); setPhase('complete'); setProgress(100); setError('')
+    window.history.replaceState(null, '', `/reconciliation#${run.id}`)
+  }, [])
+
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (!id) return
+    const controller = new AbortController()
+    void fetch(`/api/reconciliation-reviews?id=${id}`, { signal: controller.signal }).then(async response => {
+      const run = await response.json()
+      if (!response.ok) throw new Error(run.error || 'Unable to restore saved reconciliation.')
+      if (!controller.signal.aborted) restoreRun(run)
+    }).catch(error => { if (!controller.signal.aborted) setError(error.message) })
+    return () => controller.abort()
+  }, [restoreRun])
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6">
@@ -429,7 +479,7 @@ export default function ReconciliationPage() {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <CardTitle className="flex items-center gap-2 text-base"><FileImage className="size-4 text-blue-700" />Invoice source</CardTitle>
-                <CardDescription className="mt-1">Upload invoice images or PDFs; hosted uploads are compressed and safely batched.</CardDescription>
+                <CardDescription className="mt-1">Upload invoice images or PDFs; original bytes are preserved and requests are safely batched.</CardDescription>
               </div>
               <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-700">Evidence</span>
             </div>
@@ -471,15 +521,22 @@ export default function ReconciliationPage() {
                   </>}
                   {working && <div className="reconciliation-scan-line absolute inset-x-0 top-0 h-12 border-b-2 border-blue-500 bg-blue-400/15" />}
                 </div>
+              ) : (savedRun && !savedRun.sample) || invoiceFiles.length > 0 ? (
+                <div className="mx-auto flex min-h-64 max-w-[390px] flex-col items-center justify-center gap-3 rounded-md border bg-white p-6 text-center text-sm">
+                  <FileSearch className="size-10 text-blue-700" />
+                  <p>{invoiceFiles[activeDocument]?.name ?? selectedExtraction.fileName}</p>
+                  <p className="text-xs text-muted-foreground">No synthetic invoice preview is used for uploaded documents. Inspect the original document before reviewing extracted fields.</p>
+                  {savedRun?.files.find(file => file.index === selectedExtraction.documentIndex)?.archived && <a className="text-blue-700 underline" href={`/api/reconciliation-reviews?id=${savedRun.id}&original=${selectedExtraction.documentIndex}`}>Download archived original</a>}
+                </div>
               ) : (
                 <DemoInvoice scanning={working} extraction={selectedExtraction} />
               )}
             </div>
             <div className="mt-3 flex items-center justify-between rounded-lg bg-white px-3 py-2 text-xs ring-1 ring-slate-200">
-              <span className="truncate font-medium">{selectedExtraction.fileName}</span>
+              <span className="truncate font-medium">{invoiceFiles[activeDocument]?.name ?? selectedExtraction.fileName}</span>
               <span className={cn('ml-3 shrink-0', working ? 'text-blue-700' : selectedVerified?.invoiceNumberVerified && selectedVerified?.totalAmountVerified ? 'text-emerald-700' : 'text-amber-700')}>
-                {working ? 'Locating fields…' : selectedVerified?.invoiceNumberVerified && selectedVerified?.totalAmountVerified
-                  ? `${selectedExtraction.invoiceNumber} · ${money(selectedExtraction.totalAmount)}`
+                {working ? 'Locating fields…' : phase === 'idle' && invoiceFiles.length ? 'Not extracted yet' : selectedVerified?.invoiceNumberVerified && selectedVerified?.totalAmountVerified
+                  ? `${selectedExtraction.invoiceNumber} · ${money(selectedExtraction.totalAmount, selectedExtraction.currency === 'UNKNOWN' ? statementCurrency : selectedExtraction.currency)}`
                   : 'Extracted fields need review'}
               </span>
             </div>
@@ -493,7 +550,7 @@ export default function ReconciliationPage() {
                 </span>
                 <span className={cn('rounded-md px-2 py-1.5', selectedVerified?.arithmeticVerified ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500')}>
                   {selectedVerified?.arithmeticVerified ? <Check className="mr-1 inline size-3" /> : null}
-                  {selectedVerified?.arithmeticVerified ? 'Net + tax verified' : 'Arithmetic unavailable'}
+                  {selectedVerified?.arithmeticVerified ? 'Net + tax verified' : selectedVerified?.arithmeticAvailable ? 'Net + tax mismatch' : 'Arithmetic unavailable'}
                 </span>
               </div>
             )}
@@ -525,6 +582,13 @@ export default function ReconciliationPage() {
               files={statementFile ? [statementFile] : []}
               onFiles={(files) => { setStatementFile(files[0] ?? null); resetResults() }}
             />
+            <label className="mt-2 flex items-center gap-2 text-xs text-slate-700">
+              Statement currency
+              <select aria-label="Statement currency" disabled={working} value={statementCurrency} onChange={event => { setStatementCurrency(event.target.value); setMateriality(''); resetResults() }} className="rounded border bg-white px-2 py-1">
+                {['UGX', 'AUD', 'USD', 'EUR', 'GBP', 'KES'].map(currency => <option key={currency}>{currency}</option>)}
+              </select>
+            </label>
+            <label className="mt-2 flex items-center gap-2 text-xs text-slate-700">Manager approval threshold ({statementCurrency})<input aria-label="Materiality threshold" type="number" min="0" step="any" placeholder="Required for uploads" disabled={working} value={materiality} onChange={event => setMateriality(event.target.value)} className="w-40 rounded border px-2 py-1" /></label>
           </CardHeader>
           <CardContent className="relative p-0">
             <div className="flex items-center justify-between border-b px-4 py-3 text-xs">
@@ -557,7 +621,7 @@ export default function ReconciliationPage() {
                           {matched && <span className="mt-1 inline-flex rounded bg-emerald-600 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-wide text-white">Target line</span>}
                         </td>
                         <td className="px-3 py-3 text-muted-foreground">{record.description ?? 'Statement line'}</td>
-                        <td className="px-4 py-3 text-right font-medium tabular-nums">{money(record.amount)}</td>
+                        <td className="px-4 py-3 text-right font-medium tabular-nums">{money(record.amount, statementCurrency)}</td>
                       </tr>
                     )
                   })}
@@ -634,9 +698,10 @@ export default function ReconciliationPage() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <CardTitle className="text-base">Match results</CardTitle>
-                <CardDescription className="mt-1">Every master row can be assigned once; unresolved evidence stays visible for review.</CardDescription>
+                <CardDescription className="mt-1">Original automated results below remain unchanged. Saved human decisions and manager gates are shown in the review panel.</CardDescription>
               </div>
               <div className="flex items-center gap-2 text-xs">
+                <Button variant="outline" size="sm" onClick={exportAudit}>Export audit JSON</Button>
                 <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700">{matchedCount} matched</span>
                 <span className="rounded-full bg-rose-50 px-2.5 py-1 font-semibold text-rose-700">{matches.length - matchedCount} review</span>
               </div>
@@ -658,8 +723,12 @@ export default function ReconciliationPage() {
                   {matches.map((match, index) => (
                     <tr key={`${match.invoice.fileName}-${index}`} className="border-t">
                       <td className="max-w-48 truncate px-4 py-3 font-medium">{match.invoice.fileName}</td>
-                      <td className="px-3 py-3"><span className="font-mono font-semibold">{match.invoice.invoiceNumber}</span><span className="ml-2 text-muted-foreground">{money(match.invoice.totalAmount)}</span></td>
-                      <td className="px-3 py-3">{match.statementRecord ? <><span className="font-mono font-semibold">{statementIdentifiers(match.statementRecord).join(' · ')}</span><span className="ml-2 text-muted-foreground">{money(match.statementRecord.amount)}</span></> : '—'}</td>
+                      <td className="px-3 py-3"><span className="font-mono font-semibold">{match.invoice.invoiceNumber || 'Missing ID'}</span><span className="ml-2 text-muted-foreground">{match.invoice.currency === 'UNKNOWN' ? `${match.invoice.totalAmount} (unknown currency)` : money(match.invoice.totalAmount, match.invoice.currency)}</span></td>
+                      <td className="px-3 py-3">
+                        {match.statementRecord ? <><span className="font-mono font-semibold">{statementIdentifiers(match.statementRecord).join(' · ')}</span><span className="ml-2 text-muted-foreground">{money(match.statementRecord.amount, statementCurrency)}</span></> : '—'}
+                        {match.amountDifference !== null && match.amountDifference !== 0 && <p className="mt-1 text-rose-700">Difference: {money(match.amountDifference, statementCurrency)}</p>}
+                        {match.candidates.length > 0 && <details className="mt-1 text-muted-foreground"><summary>{match.candidates.length} candidate(s), not verified</summary>{match.candidates.map((candidate, i) => <p key={i}>Line {candidate.statementRecord.lineIndex ?? '?'}: {statementIdentifiers(candidate.statementRecord).join(' · ')} · {money(candidate.statementRecord.amount, statementCurrency)} · Δ {money(candidate.amountDifference, statementCurrency)}</p>)}</details>}
+                      </td>
                       <td className="px-3 py-3">
                         <span className={cn('rounded-full px-2 py-1 font-medium', match.matched ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700')}>
                           {RECONCILIATION_METHOD_LABELS[match.method]}
@@ -670,7 +739,7 @@ export default function ReconciliationPage() {
                           {match.matched ? <CheckCircle2 className="size-4" /> : <AlertCircle className="size-4" />}
                           {match.matched ? 'Matched' : 'Review'}
                         </span>
-                        {match.matched && <span className="ml-2 text-[10px] font-semibold text-slate-500">{Math.round(match.confidence * 100)}% confidence</span>}
+                        {match.matched && <span className="ml-2 text-[10px] font-semibold text-slate-500">Exact ID + amount</span>}
                         <p className="mt-1 max-w-xs text-[11px] font-normal text-muted-foreground">{match.reason}</p>
                       </td>
                     </tr>
@@ -681,6 +750,7 @@ export default function ReconciliationPage() {
           </CardContent>
         </Card>
       )}
+      <ReconciliationReviewPanel key={savedRun?.id ?? 'no-run'} run={savedRun} onRun={setSavedRun} onRestore={restoreRun} />
     </main>
   )
 }

@@ -20,10 +20,18 @@ export type Metrics = {
 }
 
 export function isIncomeRow(row: RawRow, incomeCategories: string[]): boolean {
-  return row.AccountCode.startsWith('2') || incomeCategories.includes(row.MappedCategory)
+  if (row.ReviewStatus === 'Approved') return incomeCategories.includes(row.MappedCategory)
+  if (incomeCategories.includes(row.MappedCategory)) return true
+  if (row.MappedCategory !== 'Unmapped') return false
+  return row.LineRole === 'income' || row.LineRole === 'other_income'
 }
 
-export function getFilteredRows(rows: RawRow[], filters: FilterState): RawRow[] {
+export function requiresReview(row: RawRow, threshold: number): boolean {
+  return row.ReviewRequired === true || row.Confidence <= threshold || row.MappedCategory === 'Unmapped'
+    || row.ReviewStatus === 'Needs changes' || row.ReviewStatus === 'Rejected'
+}
+
+export function getFilteredRows(rows: RawRow[], filters: FilterState, reviewThreshold = 0.7): RawRow[] {
   return rows.filter((row) => {
     if (filters.startDate && filters.endDate) {
       if (row.Date < filters.startDate || row.Date > filters.endDate) return false
@@ -31,7 +39,7 @@ export function getFilteredRows(rows: RawRow[], filters: FilterState): RawRow[] 
     if (filters.selectedTypes.size > 0 && !filters.selectedTypes.has(row.Type)) return false
     if (filters.selectedAccounts.size > 0 && !filters.selectedAccounts.has(row.AccountName)) return false
     if (filters.onlyUnmapped && row.MappedCategory !== 'Unmapped') return false
-    if (filters.onlyLowConf && row.Confidence >= 0.7) return false
+    if (filters.onlyLowConf && (!requiresReview(row, reviewThreshold) || row.ReviewStatus === 'Approved')) return false
     if (filters.search) {
       const hay = [row.Contact, row.Description, row.MappedCategory, row.AccountCode, row.AccountName]
         .filter(Boolean)

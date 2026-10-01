@@ -1,0 +1,1001 @@
+﻿Date,Amount,Currency,Account,Description,LineID,InvoiceNumber,Contact,Category,Role,TaxAmount,Department
+2026-01-01,0,AUD,Sales,Synthetic ledger item 1,L1000-000001,SYN-INV-000001,Synthetic Party 1,Sales,income,0,Operations
+2026-01-02,212.64,AUD,Purchases,Synthetic ledger item 2,L1000-000002,SYN-INV-000002,Synthetic Party 2,Purchases,cost_of_goods_sold,21.26,Sales
+2026-01-03,291.83,AUD,Rent,Synthetic ledger item 3,L1000-000003,SYN-INV-000003,Synthetic Party 3,Rent,expense,29.18,Admin
+2026-01-04,371.02,AUD,Office Expenses,Synthetic ledger item 4,L1000-000004,SYN-INV-000004,Synthetic Party 4,Office Expenses,expense,37.1,Operations
+2026-01-05,450.21,AUD,Bank Fees,Synthetic ledger item 5,L1000-000005,SYN-INV-000005,Synthetic Party 5,Bank Fees,expense,45.02,Sales
+2026-01-06,529.4,AUD,Subscriptions,Synthetic ledger item 6,L1000-000006,SYN-INV-000006,Synthetic Party 6,Subscriptions,expense,52.94,Admin
+2026-01-07,608.59,AUD,Travel - National,Synthetic ledger item 7,L1000-000007,SYN-INV-000007,Synthetic Party 7,Travel - National,expense,60.86,Operations
+2026-01-08,687.78,AUD,Interest Income,Synthetic ledger item 8,L1000-000008,SYN-INV-000008,Synthetic Party 8,Interest Income,other_income,68.78,Sales
+2026-01-09,766.97,AUD,Sales,Synthetic ledger item 9,L1000-000009,SYN-INV-000009,Synthetic Party 9,Sales,income,76.7,Admin
+2026-01-10,846.16,AUD,Purchases,Synthetic ledger item 10,L1000-000010,SYN-INV-000010,Synthetic Party 10,Purchases,cost_of_goods_sold,84.62,Operations
+2026-01-11,925.35,AUD,Rent,Synthetic ledger item 11,L1000-000011,SYN-INV-000011,Synthetic Party 11,Rent,expense,92.54,Sales
+2026-01-12,1004.54,AUD,Office Expenses,Synthetic ledger item 12,L1000-000012,SYN-INV-000012,Synthetic Party 12,Office Expenses,expense,100.45,Admin
+2026-01-13,1083.73,AUD,Bank Fees,Synthetic ledger item 13,L1000-000013,SYN-INV-000013,Synthetic Party 13,Bank Fees,expense,108.37,Operations
+2026-01-14,1162.92,AUD,Subscriptions,Synthetic ledger item 14,L1000-000014,SYN-INV-000014,Synthetic Party 14,Subscriptions,expense,116.29,Sales
+2026-01-15,1242.11,AUD,Travel - National,Synthetic ledger item 15,L1000-000015,SYN-INV-000015,Synthetic Party 15,Travel - National,expense,124.21,Admin
+2026-01-16,1321.3,AUD,Interest Income,Synthetic ledger item 16,L1000-000016,SYN-INV-000016,Synthetic Party 16,Interest Income,other_income,132.13,Operations
+2026-01-17,1400.49,AUD,Sales,Synthetic ledger item 17,L1000-000017,SYN-INV-000017,Synthetic Party 17,Sales,income,140.05,Sales
+2026-01-18,1479.68,AUD,Purchases,Synthetic ledger item 18,L1000-000018,SYN-INV-000018,Synthetic Party 18,Purchases,cost_of_goods_sold,147.97,Admin
+2026-01-19,1558.87,AUD,Rent,Synthetic ledger item 19,L1000-000019,SYN-INV-000019,Synthetic Party 19,Rent,expense,155.89,Operations
+2026-01-20,1638.06,AUD,Office Expenses,Synthetic ledger item 20,L1000-000020,SYN-INV-000020,Synthetic Party 20,Office Expenses,expense,163.81,Sales
+2026-01-21,1717.25,AUD,Bank Fees,Synthetic ledger item 21,L1000-000021,SYN-INV-000021,Synthetic Party 21,Bank Fees,expense,171.73,Admin
+2026-01-22,1796.44,AUD,Subscriptions,Synthetic ledger item 22,L1000-000022,SYN-INV-000022,Synthetic Party 22,Subscriptions,expense,179.64,Operations
+2026-01-23,1875.63,AUD,Travel - National,Synthetic ledger item 23,L1000-000023,SYN-INV-000023,Synthetic Party 23,Travel - National,expense,187.56,Sales
+2026-01-24,-1954.82,AUD,Interest Income,Synthetic ledger item 24,L1000-000024,SYN-INV-000024,Synthetic Party 24,Interest Income,other_income,-195.48,Admin
+2026-01-25,2034.01,AUD,Sales,Synthetic ledger item 25,L1000-000025,SYN-INV-000025,Synthetic Party 25,Sales,income,203.4,Operations
+2026-01-26,2113.2,AUD,Purchases,Synthetic ledger item 26,L1000-000026,SYN-INV-000026,Synthetic Party 1,Purchases,cost_of_goods_sold,211.32,Sales
+2026-01-27,2192.39,AUD,Rent,Synthetic ledger item 27,L1000-000027,SYN-INV-000027,Synthetic Party 2,Rent,expense,219.24,Admin
+2026-01-28,2271.58,AUD,Office Expenses,Synthetic ledger item 28,L1000-000028,SYN-INV-000028,Synthetic Party 3,Office Expenses,expense,227.16,Operations
+2026-01-29,2350.77,AUD,Bank Fees,Synthetic ledger item 29,L1000-000029,SYN-INV-000029,Synthetic Party 4,Bank Fees,expense,235.08,Sales
+2026-01-30,2429.96,AUD,Subscriptions,Synthetic ledger item 30,L1000-000030,SYN-INV-000030,Synthetic Party 5,Subscriptions,expense,243,Admin
+2026-01-31,2509.15,AUD,Travel - National,Synthetic ledger item 31,L1000-000031,SYN-INV-000031,Synthetic Party 6,Travel - National,expense,250.92,Operations
+2026-02-01,2588.34,AUD,Interest Income,Synthetic ledger item 32,L1000-000032,SYN-INV-000032,Synthetic Party 7,Interest Income,other_income,258.83,Sales
+2026-02-02,2667.53,AUD,Sales,Synthetic ledger item 33,L1000-000033,SYN-INV-000033,Synthetic Party 8,Sales,income,266.75,Admin
+2026-02-03,2746.72,AUD,Purchases,Synthetic ledger item 34,L1000-000034,SYN-INV-000034,Synthetic Party 9,Purchases,cost_of_goods_sold,274.67,Operations
+2026-02-04,2825.91,AUD,Rent,Synthetic ledger item 35,L1000-000035,SYN-INV-000035,Synthetic Party 10,Rent,expense,282.59,Sales
+2026-02-05,2905.1,AUD,Office Expenses,Synthetic ledger item 36,L1000-000036,SYN-INV-000036,Synthetic Party 11,Office Expenses,expense,290.51,Admin
+2026-02-06,2984.29,AUD,Bank Fees,Synthetic ledger item 37,L1000-000037,SYN-INV-000037,Synthetic Party 12,Bank Fees,expense,298.43,Operations
+2026-02-07,0,AUD,Subscriptions,Synthetic ledger item 38,L1000-000038,SYN-INV-000038,Synthetic Party 13,Subscriptions,expense,0,Sales
+2026-02-08,3142.67,AUD,Travel - National,Synthetic ledger item 39,L1000-000039,SYN-INV-000039,Synthetic Party 14,Travel - National,expense,314.27,Admin
+2026-02-09,3221.86,AUD,Interest Income,Synthetic ledger item 40,L1000-000040,SYN-INV-000040,Synthetic Party 15,Interest Income,other_income,322.19,Operations
+2026-02-10,3301.05,AUD,Sales,Synthetic ledger item 41,L1000-000041,SYN-INV-000041,Synthetic Party 16,Sales,income,330.11,Sales
+2026-02-11,3380.24,AUD,Purchases,Synthetic ledger item 42,L1000-000042,SYN-INV-000042,Synthetic Party 17,Purchases,cost_of_goods_sold,338.02,Admin
+2026-02-12,3459.43,AUD,Rent,Synthetic ledger item 43,L1000-000043,SYN-INV-000043,Synthetic Party 18,Rent,expense,345.94,Operations
+2026-02-13,3538.62,AUD,Office Expenses,Synthetic ledger item 44,L1000-000044,SYN-INV-000044,Synthetic Party 19,Office Expenses,expense,353.86,Sales
+2026-02-14,3617.81,AUD,Bank Fees,Synthetic ledger item 45,L1000-000045,SYN-INV-000045,Synthetic Party 20,Bank Fees,expense,361.78,Admin
+2026-02-15,3697,AUD,Subscriptions,Synthetic ledger item 46,L1000-000046,SYN-INV-000046,Synthetic Party 21,Subscriptions,expense,369.7,Operations
+2026-02-16,-3776.19,AUD,Travel - National,Synthetic ledger item 47,L1000-000047,SYN-INV-000047,Synthetic Party 22,Travel - National,expense,-377.62,Sales
+2026-02-17,3855.38,AUD,Interest Income,Synthetic ledger item 48,L1000-000048,SYN-INV-000048,Synthetic Party 23,Interest Income,other_income,385.54,Admin
+2026-02-18,3934.57,AUD,Sales,Synthetic ledger item 49,L1000-000049,SYN-INV-000049,Synthetic Party 24,Sales,income,393.46,Operations
+2026-02-19,4013.76,AUD,Purchases,Synthetic ledger item 50,L1000-000050,SYN-INV-000050,Synthetic Party 25,Purchases,cost_of_goods_sold,401.38,Sales
+2026-02-20,4092.95,AUD,Rent,Synthetic ledger item 51,L1000-000051,SYN-INV-000051,Synthetic Party 1,Rent,expense,409.3,Admin
+2026-02-21,4172.14,AUD,Office Expenses,Synthetic ledger item 52,L1000-000052,SYN-INV-000052,Synthetic Party 2,Office Expenses,expense,417.21,Operations
+2026-02-22,4251.33,AUD,Bank Fees,Synthetic ledger item 53,L1000-000053,SYN-INV-000053,Synthetic Party 3,Bank Fees,expense,425.13,Sales
+2026-02-23,4330.52,AUD,Subscriptions,Synthetic ledger item 54,L1000-000054,SYN-INV-000054,Synthetic Party 4,Subscriptions,expense,433.05,Admin
+2026-02-24,4409.71,AUD,Travel - National,Synthetic ledger item 55,L1000-000055,SYN-INV-000055,Synthetic Party 5,Travel - National,expense,440.97,Operations
+2026-02-25,4488.9,AUD,Interest Income,Synthetic ledger item 56,L1000-000056,SYN-INV-000056,Synthetic Party 6,Interest Income,other_income,448.89,Sales
+2026-02-26,4568.09,AUD,Sales,Synthetic ledger item 57,L1000-000057,SYN-INV-000057,Synthetic Party 7,Sales,income,456.81,Admin
+2026-02-27,4647.28,AUD,Purchases,Synthetic ledger item 58,L1000-000058,SYN-INV-000058,Synthetic Party 8,Purchases,cost_of_goods_sold,464.73,Operations
+2026-02-28,4726.47,AUD,Rent,Synthetic ledger item 59,L1000-000059,SYN-INV-000059,Synthetic Party 9,Rent,expense,472.65,Sales
+2026-03-01,4805.66,AUD,Office Expenses,Synthetic ledger item 60,L1000-000060,SYN-INV-000060,Synthetic Party 10,Office Expenses,expense,480.57,Admin
+2026-03-02,4884.85,AUD,Bank Fees,Synthetic ledger item 61,L1000-000061,SYN-INV-000061,Synthetic Party 11,Bank Fees,expense,488.49,Operations
+2026-03-03,4964.04,AUD,Subscriptions,Synthetic ledger item 62,L1000-000062,SYN-INV-000062,Synthetic Party 12,Subscriptions,expense,496.4,Sales
+2026-03-04,53.23,AUD,Travel - National,Synthetic ledger item 63,L1000-000063,SYN-INV-000063,Synthetic Party 13,Travel - National,expense,5.32,Admin
+2026-03-05,132.42,AUD,Interest Income,Synthetic ledger item 64,L1000-000064,SYN-INV-000064,Synthetic Party 14,Interest Income,other_income,13.24,Operations
+2026-03-06,211.61,AUD,Sales,Synthetic ledger item 65,L1000-000065,SYN-INV-000065,Synthetic Party 15,Sales,income,21.16,Sales
+2026-03-07,290.8,AUD,Purchases,Synthetic ledger item 66,L1000-000066,SYN-INV-000066,Synthetic Party 16,Purchases,cost_of_goods_sold,29.08,Admin
+2026-03-08,369.99,AUD,Rent,Synthetic ledger item 67,L1000-000067,SYN-INV-000067,Synthetic Party 17,Rent,expense,37,Operations
+2026-03-09,449.18,AUD,Office Expenses,Synthetic ledger item 68,L1000-000068,SYN-INV-000068,Synthetic Party 18,Office Expenses,expense,44.92,Sales
+2026-03-10,528.37,AUD,Bank Fees,Synthetic ledger item 69,L1000-000069,SYN-INV-000069,Synthetic Party 19,Bank Fees,expense,52.84,Admin
+2026-03-11,-607.56,AUD,Subscriptions,Synthetic ledger item 70,L1000-000070,SYN-INV-000070,Synthetic Party 20,Subscriptions,expense,-60.76,Operations
+2026-03-12,686.75,AUD,Travel - National,Synthetic ledger item 71,L1000-000071,SYN-INV-000071,Synthetic Party 21,Travel - National,expense,68.68,Sales
+2026-03-13,765.94,AUD,Interest Income,Synthetic ledger item 72,L1000-000072,SYN-INV-000072,Synthetic Party 22,Interest Income,other_income,76.59,Admin
+2026-03-14,845.13,AUD,Sales,Synthetic ledger item 73,L1000-000073,SYN-INV-000073,Synthetic Party 23,Sales,income,84.51,Operations
+2026-03-15,924.32,AUD,Purchases,Synthetic ledger item 74,L1000-000074,SYN-INV-000074,Synthetic Party 24,Purchases,cost_of_goods_sold,92.43,Sales
+2026-03-16,0,AUD,Rent,Synthetic ledger item 75,L1000-000075,SYN-INV-000075,Synthetic Party 25,Rent,expense,0,Admin
+2026-03-17,1082.7,AUD,Office Expenses,Synthetic ledger item 76,L1000-000076,SYN-INV-000076,Synthetic Party 1,Office Expenses,expense,108.27,Operations
+2026-03-18,1161.89,AUD,Bank Fees,Synthetic ledger item 77,L1000-000077,SYN-INV-000077,Synthetic Party 2,Bank Fees,expense,116.19,Sales
+2026-03-19,1241.08,AUD,Subscriptions,Synthetic ledger item 78,L1000-000078,SYN-INV-000078,Synthetic Party 3,Subscriptions,expense,124.11,Admin
+2026-03-20,1320.27,AUD,Travel - National,Synthetic ledger item 79,L1000-000079,SYN-INV-000079,Synthetic Party 4,Travel - National,expense,132.03,Operations
+2026-03-21,1399.46,AUD,Interest Income,Synthetic ledger item 80,L1000-000080,SYN-INV-000080,Synthetic Party 5,Interest Income,other_income,139.95,Sales
+2026-03-22,1478.65,AUD,Sales,Synthetic ledger item 81,L1000-000081,SYN-INV-000081,Synthetic Party 6,Sales,income,147.87,Admin
+2026-03-23,1557.84,AUD,Purchases,Synthetic ledger item 82,L1000-000082,SYN-INV-000082,Synthetic Party 7,Purchases,cost_of_goods_sold,155.78,Operations
+2026-03-24,1637.03,AUD,Rent,Synthetic ledger item 83,L1000-000083,SYN-INV-000083,Synthetic Party 8,Rent,expense,163.7,Sales
+2026-03-25,1716.22,AUD,Office Expenses,Synthetic ledger item 84,L1000-000084,SYN-INV-000084,Synthetic Party 9,Office Expenses,expense,171.62,Admin
+2026-03-26,1795.41,AUD,Bank Fees,Synthetic ledger item 85,L1000-000085,SYN-INV-000085,Synthetic Party 10,Bank Fees,expense,179.54,Operations
+2026-03-27,1874.6,AUD,Subscriptions,Synthetic ledger item 86,L1000-000086,SYN-INV-000086,Synthetic Party 11,Subscriptions,expense,187.46,Sales
+2026-03-28,1953.79,AUD,Travel - National,Synthetic ledger item 87,L1000-000087,SYN-INV-000087,Synthetic Party 12,Travel - National,expense,195.38,Admin
+2026-03-29,2032.98,AUD,Interest Income,Synthetic ledger item 88,L1000-000088,SYN-INV-000088,Synthetic Party 13,Interest Income,other_income,203.3,Operations
+2026-03-30,2112.17,AUD,Sales,Synthetic ledger item 89,L1000-000089,SYN-INV-000089,Synthetic Party 14,Sales,income,211.22,Sales
+2026-03-31,2191.36,AUD,Purchases,Synthetic ledger item 90,L1000-000090,SYN-INV-000090,Synthetic Party 15,Purchases,cost_of_goods_sold,219.14,Admin
+2026-04-01,2270.55,AUD,Rent,Synthetic ledger item 91,L1000-000091,SYN-INV-000091,Synthetic Party 16,Rent,expense,227.06,Operations
+2026-04-02,2349.74,AUD,Office Expenses,Synthetic ledger item 92,L1000-000092,SYN-INV-000092,Synthetic Party 17,Office Expenses,expense,234.97,Sales
+2026-04-03,-2428.93,AUD,Bank Fees,Synthetic ledger item 93,L1000-000093,SYN-INV-000093,Synthetic Party 18,Bank Fees,expense,-242.89,Admin
+2026-04-04,2508.12,AUD,Subscriptions,Synthetic ledger item 94,L1000-000094,SYN-INV-000094,Synthetic Party 19,Subscriptions,expense,250.81,Operations
+2026-04-05,2587.31,AUD,Travel - National,Synthetic ledger item 95,L1000-000095,SYN-INV-000095,Synthetic Party 20,Travel - National,expense,258.73,Sales
+2026-04-06,2666.5,AUD,Interest Income,Synthetic ledger item 96,L1000-000096,SYN-INV-000096,Synthetic Party 21,Interest Income,other_income,266.65,Admin
+2026-04-07,2745.69,AUD,Sales,Synthetic ledger item 97,L1000-000097,SYN-INV-000097,Synthetic Party 22,Sales,income,274.57,Operations
+2026-04-08,2824.88,AUD,Purchases,Synthetic ledger item 98,L1000-000098,SYN-INV-000098,Synthetic Party 23,Purchases,cost_of_goods_sold,282.49,Sales
+2026-04-09,2904.07,AUD,Rent,Synthetic ledger item 99,L1000-000099,SYN-INV-000099,Synthetic Party 24,Rent,expense,290.41,Admin
+2026-04-10,2983.26,AUD,Office Expenses,Synthetic ledger item 100,L1000-000100,SYN-INV-000100,Synthetic Party 25,Office Expenses,expense,298.33,Operations
+2026-04-11,3062.45,AUD,Bank Fees,Synthetic ledger item 101,L1000-000101,SYN-INV-000101,Synthetic Party 1,Bank Fees,expense,306.25,Sales
+2026-04-12,3141.64,AUD,Subscriptions,Synthetic ledger item 102,L1000-000102,SYN-INV-000102,Synthetic Party 2,Subscriptions,expense,314.16,Admin
+2026-04-13,3220.83,AUD,Travel - National,Synthetic ledger item 103,L1000-000103,SYN-INV-000103,Synthetic Party 3,Travel - National,expense,322.08,Operations
+2026-04-14,3300.02,AUD,Interest Income,Synthetic ledger item 104,L1000-000104,SYN-INV-000104,Synthetic Party 4,Interest Income,other_income,330,Sales
+2026-04-15,3379.21,AUD,Sales,Synthetic ledger item 105,L1000-000105,SYN-INV-000105,Synthetic Party 5,Sales,income,337.92,Admin
+2026-04-16,3458.4,AUD,Purchases,Synthetic ledger item 106,L1000-000106,SYN-INV-000106,Synthetic Party 6,Purchases,cost_of_goods_sold,345.84,Operations
+2026-04-17,3537.59,AUD,Rent,Synthetic ledger item 107,L1000-000107,SYN-INV-000107,Synthetic Party 7,Rent,expense,353.76,Sales
+2026-04-18,3616.78,AUD,Office Expenses,Synthetic ledger item 108,L1000-000108,SYN-INV-000108,Synthetic Party 8,Office Expenses,expense,361.68,Admin
+2026-04-19,3695.97,AUD,Bank Fees,Synthetic ledger item 109,L1000-000109,SYN-INV-000109,Synthetic Party 9,Bank Fees,expense,369.6,Operations
+2026-04-20,3775.16,AUD,Subscriptions,Synthetic ledger item 110,L1000-000110,SYN-INV-000110,Synthetic Party 10,Subscriptions,expense,377.52,Sales
+2026-04-21,3854.35,AUD,Travel - National,Synthetic ledger item 111,L1000-000111,SYN-INV-000111,Synthetic Party 11,Travel - National,expense,385.44,Admin
+2026-04-22,0,AUD,Interest Income,Synthetic ledger item 112,L1000-000112,SYN-INV-000112,Synthetic Party 12,Interest Income,other_income,0,Operations
+2026-04-23,4012.73,AUD,Sales,Synthetic ledger item 113,L1000-000113,SYN-INV-000113,Synthetic Party 13,Sales,income,401.27,Sales
+2026-04-24,4091.92,AUD,Purchases,Synthetic ledger item 114,L1000-000114,SYN-INV-000114,Synthetic Party 14,Purchases,cost_of_goods_sold,409.19,Admin
+2026-04-25,4171.11,AUD,Rent,Synthetic ledger item 115,L1000-000115,SYN-INV-000115,Synthetic Party 15,Rent,expense,417.11,Operations
+2026-04-26,-4250.3,AUD,Office Expenses,Synthetic ledger item 116,L1000-000116,SYN-INV-000116,Synthetic Party 16,Office Expenses,expense,-425.03,Sales
+2026-04-27,4329.49,AUD,Bank Fees,Synthetic ledger item 117,L1000-000117,SYN-INV-000117,Synthetic Party 17,Bank Fees,expense,432.95,Admin
+2026-04-28,4408.68,AUD,Subscriptions,Synthetic ledger item 118,L1000-000118,SYN-INV-000118,Synthetic Party 18,Subscriptions,expense,440.87,Operations
+2026-04-29,4487.87,AUD,Travel - National,Synthetic ledger item 119,L1000-000119,SYN-INV-000119,Synthetic Party 19,Travel - National,expense,448.79,Sales
+2026-04-30,4567.06,AUD,Interest Income,Synthetic ledger item 120,L1000-000120,SYN-INV-000120,Synthetic Party 20,Interest Income,other_income,456.71,Admin
+2026-05-01,4646.25,AUD,Sales,Synthetic ledger item 121,L1000-000121,SYN-INV-000121,Synthetic Party 21,Sales,income,464.63,Operations
+2026-05-02,4725.44,AUD,Purchases,Synthetic ledger item 122,L1000-000122,SYN-INV-000122,Synthetic Party 22,Purchases,cost_of_goods_sold,472.54,Sales
+2026-05-03,4804.63,AUD,Rent,Synthetic ledger item 123,L1000-000123,SYN-INV-000123,Synthetic Party 23,Rent,expense,480.46,Admin
+2026-05-04,4883.82,AUD,Office Expenses,Synthetic ledger item 124,L1000-000124,SYN-INV-000124,Synthetic Party 24,Office Expenses,expense,488.38,Operations
+2026-05-05,4963.01,AUD,Bank Fees,Synthetic ledger item 125,L1000-000125,SYN-INV-000125,Synthetic Party 25,Bank Fees,expense,496.3,Sales
+2026-05-06,52.2,AUD,Subscriptions,Synthetic ledger item 126,L1000-000126,SYN-INV-000126,Synthetic Party 1,Subscriptions,expense,5.22,Admin
+2026-05-07,131.39,AUD,Travel - National,Synthetic ledger item 127,L1000-000127,SYN-INV-000127,Synthetic Party 2,Travel - National,expense,13.14,Operations
+2026-05-08,210.58,AUD,Interest Income,Synthetic ledger item 128,L1000-000128,SYN-INV-000128,Synthetic Party 3,Interest Income,other_income,21.06,Sales
+2026-05-09,289.77,AUD,Sales,Synthetic ledger item 129,L1000-000129,SYN-INV-000129,Synthetic Party 4,Sales,income,28.98,Admin
+2026-05-10,368.96,AUD,Purchases,Synthetic ledger item 130,L1000-000130,SYN-INV-000130,Synthetic Party 5,Purchases,cost_of_goods_sold,36.9,Operations
+2026-05-11,448.15,AUD,Rent,Synthetic ledger item 131,L1000-000131,SYN-INV-000131,Synthetic Party 6,Rent,expense,44.82,Sales
+2026-05-12,527.34,AUD,Office Expenses,Synthetic ledger item 132,L1000-000132,SYN-INV-000132,Synthetic Party 7,Office Expenses,expense,52.73,Admin
+2026-05-13,606.53,AUD,Bank Fees,Synthetic ledger item 133,L1000-000133,SYN-INV-000133,Synthetic Party 8,Bank Fees,expense,60.65,Operations
+2026-05-14,685.72,AUD,Subscriptions,Synthetic ledger item 134,L1000-000134,SYN-INV-000134,Synthetic Party 9,Subscriptions,expense,68.57,Sales
+2026-05-15,764.91,AUD,Travel - National,Synthetic ledger item 135,L1000-000135,SYN-INV-000135,Synthetic Party 10,Travel - National,expense,76.49,Admin
+2026-05-16,844.1,AUD,Interest Income,Synthetic ledger item 136,L1000-000136,SYN-INV-000136,Synthetic Party 11,Interest Income,other_income,84.41,Operations
+2026-05-17,923.29,AUD,Sales,Synthetic ledger item 137,L1000-000137,SYN-INV-000137,Synthetic Party 12,Sales,income,92.33,Sales
+2026-05-18,1002.48,AUD,Purchases,Synthetic ledger item 138,L1000-000138,SYN-INV-000138,Synthetic Party 13,Purchases,cost_of_goods_sold,100.25,Admin
+2026-05-19,-1081.67,AUD,Rent,Synthetic ledger item 139,L1000-000139,SYN-INV-000139,Synthetic Party 14,Rent,expense,-108.17,Operations
+2026-05-20,1160.86,AUD,Office Expenses,Synthetic ledger item 140,L1000-000140,SYN-INV-000140,Synthetic Party 15,Office Expenses,expense,116.09,Sales
+2026-05-21,1240.05,AUD,Bank Fees,Synthetic ledger item 141,L1000-000141,SYN-INV-000141,Synthetic Party 16,Bank Fees,expense,124.01,Admin
+2026-05-22,1319.24,AUD,Subscriptions,Synthetic ledger item 142,L1000-000142,SYN-INV-000142,Synthetic Party 17,Subscriptions,expense,131.92,Operations
+2026-05-23,1398.43,AUD,Travel - National,Synthetic ledger item 143,L1000-000143,SYN-INV-000143,Synthetic Party 18,Travel - National,expense,139.84,Sales
+2026-05-24,1477.62,AUD,Interest Income,Synthetic ledger item 144,L1000-000144,SYN-INV-000144,Synthetic Party 19,Interest Income,other_income,147.76,Admin
+2026-05-25,1556.81,AUD,Sales,Synthetic ledger item 145,L1000-000145,SYN-INV-000145,Synthetic Party 20,Sales,income,155.68,Operations
+2026-05-26,1636,AUD,Purchases,Synthetic ledger item 146,L1000-000146,SYN-INV-000146,Synthetic Party 21,Purchases,cost_of_goods_sold,163.6,Sales
+2026-05-27,1715.19,AUD,Rent,Synthetic ledger item 147,L1000-000147,SYN-INV-000147,Synthetic Party 22,Rent,expense,171.52,Admin
+2026-05-28,1794.38,AUD,Office Expenses,Synthetic ledger item 148,L1000-000148,SYN-INV-000148,Synthetic Party 23,Office Expenses,expense,179.44,Operations
+2026-05-29,0,AUD,Bank Fees,Synthetic ledger item 149,L1000-000149,SYN-INV-000149,Synthetic Party 24,Bank Fees,expense,0,Sales
+2026-05-30,1952.76,AUD,Subscriptions,Synthetic ledger item 150,L1000-000150,SYN-INV-000150,Synthetic Party 25,Subscriptions,expense,195.28,Admin
+2026-05-31,2031.95,AUD,Travel - National,Synthetic ledger item 151,L1000-000151,SYN-INV-000151,Synthetic Party 1,Travel - National,expense,203.2,Operations
+2026-06-01,2111.14,AUD,Interest Income,Synthetic ledger item 152,L1000-000152,SYN-INV-000152,Synthetic Party 2,Interest Income,other_income,211.11,Sales
+2026-06-02,2190.33,AUD,Sales,Synthetic ledger item 153,L1000-000153,SYN-INV-000153,Synthetic Party 3,Sales,income,219.03,Admin
+2026-06-03,2269.52,AUD,Purchases,Synthetic ledger item 154,L1000-000154,SYN-INV-000154,Synthetic Party 4,Purchases,cost_of_goods_sold,226.95,Operations
+2026-06-04,2348.71,AUD,Rent,Synthetic ledger item 155,L1000-000155,SYN-INV-000155,Synthetic Party 5,Rent,expense,234.87,Sales
+2026-06-05,2427.9,AUD,Office Expenses,Synthetic ledger item 156,L1000-000156,SYN-INV-000156,Synthetic Party 6,Office Expenses,expense,242.79,Admin
+2026-06-06,2507.09,AUD,Bank Fees,Synthetic ledger item 157,L1000-000157,SYN-INV-000157,Synthetic Party 7,Bank Fees,expense,250.71,Operations
+2026-06-07,2586.28,AUD,Subscriptions,Synthetic ledger item 158,L1000-000158,SYN-INV-000158,Synthetic Party 8,Subscriptions,expense,258.63,Sales
+2026-06-08,2665.47,AUD,Travel - National,Synthetic ledger item 159,L1000-000159,SYN-INV-000159,Synthetic Party 9,Travel - National,expense,266.55,Admin
+2026-06-09,2744.66,AUD,Interest Income,Synthetic ledger item 160,L1000-000160,SYN-INV-000160,Synthetic Party 10,Interest Income,other_income,274.47,Operations
+2026-06-10,2823.85,AUD,Sales,Synthetic ledger item 161,L1000-000161,SYN-INV-000161,Synthetic Party 11,Sales,income,282.39,Sales
+2026-06-11,-2903.04,AUD,Purchases,Synthetic ledger item 162,L1000-000162,SYN-INV-000162,Synthetic Party 12,Purchases,cost_of_goods_sold,-290.3,Admin
+2026-06-12,2982.23,AUD,Rent,Synthetic ledger item 163,L1000-000163,SYN-INV-000163,Synthetic Party 13,Rent,expense,298.22,Operations
+2026-06-13,3061.42,AUD,Office Expenses,Synthetic ledger item 164,L1000-000164,SYN-INV-000164,Synthetic Party 14,Office Expenses,expense,306.14,Sales
+2026-06-14,3140.61,AUD,Bank Fees,Synthetic ledger item 165,L1000-000165,SYN-INV-000165,Synthetic Party 15,Bank Fees,expense,314.06,Admin
+2026-06-15,3219.8,AUD,Subscriptions,Synthetic ledger item 166,L1000-000166,SYN-INV-000166,Synthetic Party 16,Subscriptions,expense,321.98,Operations
+2026-06-16,3298.99,AUD,Travel - National,Synthetic ledger item 167,L1000-000167,SYN-INV-000167,Synthetic Party 17,Travel - National,expense,329.9,Sales
+2026-06-17,3378.18,AUD,Interest Income,Synthetic ledger item 168,L1000-000168,SYN-INV-000168,Synthetic Party 18,Interest Income,other_income,337.82,Admin
+2026-06-18,3457.37,AUD,Sales,Synthetic ledger item 169,L1000-000169,SYN-INV-000169,Synthetic Party 19,Sales,income,345.74,Operations
+2026-06-19,3536.56,AUD,Purchases,Synthetic ledger item 170,L1000-000170,SYN-INV-000170,Synthetic Party 20,Purchases,cost_of_goods_sold,353.66,Sales
+2026-06-20,3615.75,AUD,Rent,Synthetic ledger item 171,L1000-000171,SYN-INV-000171,Synthetic Party 21,Rent,expense,361.58,Admin
+2026-06-21,3694.94,AUD,Office Expenses,Synthetic ledger item 172,L1000-000172,SYN-INV-000172,Synthetic Party 22,Office Expenses,expense,369.49,Operations
+2026-06-22,3774.13,AUD,Bank Fees,Synthetic ledger item 173,L1000-000173,SYN-INV-000173,Synthetic Party 23,Bank Fees,expense,377.41,Sales
+2026-06-23,3853.32,AUD,Subscriptions,Synthetic ledger item 174,L1000-000174,SYN-INV-000174,Synthetic Party 24,Subscriptions,expense,385.33,Admin
+2026-06-24,3932.51,AUD,Travel - National,Synthetic ledger item 175,L1000-000175,SYN-INV-000175,Synthetic Party 25,Travel - National,expense,393.25,Operations
+2026-06-25,4011.7,AUD,Interest Income,Synthetic ledger item 176,L1000-000176,SYN-INV-000176,Synthetic Party 1,Interest Income,other_income,401.17,Sales
+2026-06-26,4090.89,AUD,Sales,Synthetic ledger item 177,L1000-000177,SYN-INV-000177,Synthetic Party 2,Sales,income,409.09,Admin
+2026-06-27,4170.08,AUD,Purchases,Synthetic ledger item 178,L1000-000178,SYN-INV-000178,Synthetic Party 3,Purchases,cost_of_goods_sold,417.01,Operations
+2026-06-28,4249.27,AUD,Rent,Synthetic ledger item 179,L1000-000179,SYN-INV-000179,Synthetic Party 4,Rent,expense,424.93,Sales
+2026-06-29,4328.46,AUD,Office Expenses,Synthetic ledger item 180,L1000-000180,SYN-INV-000180,Synthetic Party 5,Office Expenses,expense,432.85,Admin
+2026-06-30,4407.65,AUD,Bank Fees,Synthetic ledger item 181,L1000-000181,SYN-INV-000181,Synthetic Party 6,Bank Fees,expense,440.77,Operations
+2026-07-01,4486.84,AUD,Subscriptions,Synthetic ledger item 182,L1000-000182,SYN-INV-000182,Synthetic Party 7,Subscriptions,expense,448.68,Sales
+2026-07-02,4566.03,AUD,Travel - National,Synthetic ledger item 183,L1000-000183,SYN-INV-000183,Synthetic Party 8,Travel - National,expense,456.6,Admin
+2026-07-03,4645.22,AUD,Interest Income,Synthetic ledger item 184,L1000-000184,SYN-INV-000184,Synthetic Party 9,Interest Income,other_income,464.52,Operations
+2026-07-04,-4724.41,AUD,Sales,Synthetic ledger item 185,L1000-000185,SYN-INV-000185,Synthetic Party 10,Sales,income,-472.44,Sales
+2026-07-05,0,AUD,Purchases,Synthetic ledger item 186,L1000-000186,SYN-INV-000186,Synthetic Party 11,Purchases,cost_of_goods_sold,0,Admin
+2026-07-06,4882.79,AUD,Rent,Synthetic ledger item 187,L1000-000187,SYN-INV-000187,Synthetic Party 12,Rent,expense,488.28,Operations
+2026-07-07,4961.98,AUD,Office Expenses,Synthetic ledger item 188,L1000-000188,SYN-INV-000188,Synthetic Party 13,Office Expenses,expense,496.2,Sales
+2026-07-08,51.17,AUD,Bank Fees,Synthetic ledger item 189,L1000-000189,SYN-INV-000189,Synthetic Party 14,Bank Fees,expense,5.12,Admin
+2026-07-09,130.36,AUD,Subscriptions,Synthetic ledger item 190,L1000-000190,SYN-INV-000190,Synthetic Party 15,Subscriptions,expense,13.04,Operations
+2026-07-10,209.55,AUD,Travel - National,Synthetic ledger item 191,L1000-000191,SYN-INV-000191,Synthetic Party 16,Travel - National,expense,20.96,Sales
+2026-07-11,288.74,AUD,Interest Income,Synthetic ledger item 192,L1000-000192,SYN-INV-000192,Synthetic Party 17,Interest Income,other_income,28.87,Admin
+2026-07-12,367.93,AUD,Sales,Synthetic ledger item 193,L1000-000193,SYN-INV-000193,Synthetic Party 18,Sales,income,36.79,Operations
+2026-07-13,447.12,AUD,Purchases,Synthetic ledger item 194,L1000-000194,SYN-INV-000194,Synthetic Party 19,Purchases,cost_of_goods_sold,44.71,Sales
+2026-07-14,526.31,AUD,Rent,Synthetic ledger item 195,L1000-000195,SYN-INV-000195,Synthetic Party 20,Rent,expense,52.63,Admin
+2026-07-15,605.5,AUD,Office Expenses,Synthetic ledger item 196,L1000-000196,SYN-INV-000196,Synthetic Party 21,Office Expenses,expense,60.55,Operations
+2026-07-16,684.69,AUD,Bank Fees,Synthetic ledger item 197,L1000-000197,SYN-INV-000197,Synthetic Party 22,Bank Fees,expense,68.47,Sales
+2026-07-17,763.88,AUD,Subscriptions,Synthetic ledger item 198,L1000-000198,SYN-INV-000198,Synthetic Party 23,Subscriptions,expense,76.39,Admin
+2026-07-18,843.07,AUD,Travel - National,Synthetic ledger item 199,L1000-000199,SYN-INV-000199,Synthetic Party 24,Travel - National,expense,84.31,Operations
+2026-07-19,922.26,AUD,Interest Income,Synthetic ledger item 200,L1000-000200,SYN-INV-000200,Synthetic Party 25,Interest Income,other_income,92.23,Sales
+2026-07-20,1001.45,AUD,Sales,Synthetic ledger item 201,L1000-000201,SYN-INV-000201,Synthetic Party 1,Sales,income,100.15,Admin
+2026-07-21,1080.64,AUD,Purchases,Synthetic ledger item 202,L1000-000202,SYN-INV-000202,Synthetic Party 2,Purchases,cost_of_goods_sold,108.06,Operations
+2026-07-22,1159.83,AUD,Rent,Synthetic ledger item 203,L1000-000203,SYN-INV-000203,Synthetic Party 3,Rent,expense,115.98,Sales
+2026-07-23,1239.02,AUD,Office Expenses,Synthetic ledger item 204,L1000-000204,SYN-INV-000204,Synthetic Party 4,Office Expenses,expense,123.9,Admin
+2026-07-24,1318.21,AUD,Bank Fees,Synthetic ledger item 205,L1000-000205,SYN-INV-000205,Synthetic Party 5,Bank Fees,expense,131.82,Operations
+2026-07-25,1397.4,AUD,Subscriptions,Synthetic ledger item 206,L1000-000206,SYN-INV-000206,Synthetic Party 6,Subscriptions,expense,139.74,Sales
+2026-07-26,1476.59,AUD,Travel - National,Synthetic ledger item 207,L1000-000207,SYN-INV-000207,Synthetic Party 7,Travel - National,expense,147.66,Admin
+2026-07-27,-1555.78,AUD,Interest Income,Synthetic ledger item 208,L1000-000208,SYN-INV-000208,Synthetic Party 8,Interest Income,other_income,-155.58,Operations
+2026-07-28,1634.97,AUD,Sales,Synthetic ledger item 209,L1000-000209,SYN-INV-000209,Synthetic Party 9,Sales,income,163.5,Sales
+2026-07-29,1714.16,AUD,Purchases,Synthetic ledger item 210,L1000-000210,SYN-INV-000210,Synthetic Party 10,Purchases,cost_of_goods_sold,171.42,Admin
+2026-07-30,1793.35,AUD,Rent,Synthetic ledger item 211,L1000-000211,SYN-INV-000211,Synthetic Party 11,Rent,expense,179.34,Operations
+2026-07-31,1872.54,AUD,Office Expenses,Synthetic ledger item 212,L1000-000212,SYN-INV-000212,Synthetic Party 12,Office Expenses,expense,187.25,Sales
+2026-08-01,1951.73,AUD,Bank Fees,Synthetic ledger item 213,L1000-000213,SYN-INV-000213,Synthetic Party 13,Bank Fees,expense,195.17,Admin
+2026-08-02,2030.92,AUD,Subscriptions,Synthetic ledger item 214,L1000-000214,SYN-INV-000214,Synthetic Party 14,Subscriptions,expense,203.09,Operations
+2026-08-03,2110.11,AUD,Travel - National,Synthetic ledger item 215,L1000-000215,SYN-INV-000215,Synthetic Party 15,Travel - National,expense,211.01,Sales
+2026-08-04,2189.3,AUD,Interest Income,Synthetic ledger item 216,L1000-000216,SYN-INV-000216,Synthetic Party 16,Interest Income,other_income,218.93,Admin
+2026-08-05,2268.49,AUD,Sales,Synthetic ledger item 217,L1000-000217,SYN-INV-000217,Synthetic Party 17,Sales,income,226.85,Operations
+2026-08-06,2347.68,AUD,Purchases,Synthetic ledger item 218,L1000-000218,SYN-INV-000218,Synthetic Party 18,Purchases,cost_of_goods_sold,234.77,Sales
+2026-08-07,2426.87,AUD,Rent,Synthetic ledger item 219,L1000-000219,SYN-INV-000219,Synthetic Party 19,Rent,expense,242.69,Admin
+2026-08-08,2506.06,AUD,Office Expenses,Synthetic ledger item 220,L1000-000220,SYN-INV-000220,Synthetic Party 20,Office Expenses,expense,250.61,Operations
+2026-08-09,2585.25,AUD,Bank Fees,Synthetic ledger item 221,L1000-000221,SYN-INV-000221,Synthetic Party 21,Bank Fees,expense,258.53,Sales
+2026-08-10,2664.44,AUD,Subscriptions,Synthetic ledger item 222,L1000-000222,SYN-INV-000222,Synthetic Party 22,Subscriptions,expense,266.44,Admin
+2026-08-11,0,AUD,Travel - National,Synthetic ledger item 223,L1000-000223,SYN-INV-000223,Synthetic Party 23,Travel - National,expense,0,Operations
+2026-08-12,2822.82,AUD,Interest Income,Synthetic ledger item 224,L1000-000224,SYN-INV-000224,Synthetic Party 24,Interest Income,other_income,282.28,Sales
+2026-08-13,2902.01,AUD,Sales,Synthetic ledger item 225,L1000-000225,SYN-INV-000225,Synthetic Party 25,Sales,income,290.2,Admin
+2026-08-14,2981.2,AUD,Purchases,Synthetic ledger item 226,L1000-000226,SYN-INV-000226,Synthetic Party 1,Purchases,cost_of_goods_sold,298.12,Operations
+2026-08-15,3060.39,AUD,Rent,Synthetic ledger item 227,L1000-000227,SYN-INV-000227,Synthetic Party 2,Rent,expense,306.04,Sales
+2026-08-16,3139.58,AUD,Office Expenses,Synthetic ledger item 228,L1000-000228,SYN-INV-000228,Synthetic Party 3,Office Expenses,expense,313.96,Admin
+2026-08-17,3218.77,AUD,Bank Fees,Synthetic ledger item 229,L1000-000229,SYN-INV-000229,Synthetic Party 4,Bank Fees,expense,321.88,Operations
+2026-08-18,3297.96,AUD,Subscriptions,Synthetic ledger item 230,L1000-000230,SYN-INV-000230,Synthetic Party 5,Subscriptions,expense,329.8,Sales
+2026-08-19,-3377.15,AUD,Travel - National,Synthetic ledger item 231,L1000-000231,SYN-INV-000231,Synthetic Party 6,Travel - National,expense,-337.71,Admin
+2026-08-20,3456.34,AUD,Interest Income,Synthetic ledger item 232,L1000-000232,SYN-INV-000232,Synthetic Party 7,Interest Income,other_income,345.63,Operations
+2026-08-21,3535.53,AUD,Sales,Synthetic ledger item 233,L1000-000233,SYN-INV-000233,Synthetic Party 8,Sales,income,353.55,Sales
+2026-08-22,3614.72,AUD,Purchases,Synthetic ledger item 234,L1000-000234,SYN-INV-000234,Synthetic Party 9,Purchases,cost_of_goods_sold,361.47,Admin
+2026-08-23,3693.91,AUD,Rent,Synthetic ledger item 235,L1000-000235,SYN-INV-000235,Synthetic Party 10,Rent,expense,369.39,Operations
+2026-08-24,3773.1,AUD,Office Expenses,Synthetic ledger item 236,L1000-000236,SYN-INV-000236,Synthetic Party 11,Office Expenses,expense,377.31,Sales
+2026-08-25,3852.29,AUD,Bank Fees,Synthetic ledger item 237,L1000-000237,SYN-INV-000237,Synthetic Party 12,Bank Fees,expense,385.23,Admin
+2026-08-26,3931.48,AUD,Subscriptions,Synthetic ledger item 238,L1000-000238,SYN-INV-000238,Synthetic Party 13,Subscriptions,expense,393.15,Operations
+2026-08-27,4010.67,AUD,Travel - National,Synthetic ledger item 239,L1000-000239,SYN-INV-000239,Synthetic Party 14,Travel - National,expense,401.07,Sales
+2026-08-28,4089.86,AUD,Interest Income,Synthetic ledger item 240,L1000-000240,SYN-INV-000240,Synthetic Party 15,Interest Income,other_income,408.99,Admin
+2026-08-29,4169.05,AUD,Sales,Synthetic ledger item 241,L1000-000241,SYN-INV-000241,Synthetic Party 16,Sales,income,416.91,Operations
+2026-08-30,4248.24,AUD,Purchases,Synthetic ledger item 242,L1000-000242,SYN-INV-000242,Synthetic Party 17,Purchases,cost_of_goods_sold,424.82,Sales
+2026-08-31,4327.43,AUD,Rent,Synthetic ledger item 243,L1000-000243,SYN-INV-000243,Synthetic Party 18,Rent,expense,432.74,Admin
+2026-09-01,4406.62,AUD,Office Expenses,Synthetic ledger item 244,L1000-000244,SYN-INV-000244,Synthetic Party 19,Office Expenses,expense,440.66,Operations
+2026-09-02,4485.81,AUD,Bank Fees,Synthetic ledger item 245,L1000-000245,SYN-INV-000245,Synthetic Party 20,Bank Fees,expense,448.58,Sales
+2026-09-03,4565,AUD,Subscriptions,Synthetic ledger item 246,L1000-000246,SYN-INV-000246,Synthetic Party 21,Subscriptions,expense,456.5,Admin
+2026-09-04,4644.19,AUD,Travel - National,Synthetic ledger item 247,L1000-000247,SYN-INV-000247,Synthetic Party 22,Travel - National,expense,464.42,Operations
+2026-09-05,4723.38,AUD,Interest Income,Synthetic ledger item 248,L1000-000248,SYN-INV-000248,Synthetic Party 23,Interest Income,other_income,472.34,Sales
+2026-09-06,4802.57,AUD,Sales,Synthetic ledger item 249,L1000-000249,SYN-INV-000249,Synthetic Party 24,Sales,income,480.26,Admin
+2026-09-07,4881.76,AUD,Purchases,Synthetic ledger item 250,L1000-000250,SYN-INV-000250,Synthetic Party 25,Purchases,cost_of_goods_sold,488.18,Operations
+2026-09-08,4960.95,AUD,Rent,Synthetic ledger item 251,L1000-000251,SYN-INV-000251,Synthetic Party 1,Rent,expense,496.1,Sales
+2026-09-09,50.14,AUD,Office Expenses,Synthetic ledger item 252,L1000-000252,SYN-INV-000252,Synthetic Party 2,Office Expenses,expense,5.01,Admin
+2026-09-10,129.33,AUD,Bank Fees,Synthetic ledger item 253,L1000-000253,SYN-INV-000253,Synthetic Party 3,Bank Fees,expense,12.93,Operations
+2026-09-11,-208.52,AUD,Subscriptions,Synthetic ledger item 254,L1000-000254,SYN-INV-000254,Synthetic Party 4,Subscriptions,expense,-20.85,Sales
+2026-09-12,287.71,AUD,Travel - National,Synthetic ledger item 255,L1000-000255,SYN-INV-000255,Synthetic Party 5,Travel - National,expense,28.77,Admin
+2026-09-13,366.9,AUD,Interest Income,Synthetic ledger item 256,L1000-000256,SYN-INV-000256,Synthetic Party 6,Interest Income,other_income,36.69,Operations
+2026-09-14,446.09,AUD,Sales,Synthetic ledger item 257,L1000-000257,SYN-INV-000257,Synthetic Party 7,Sales,income,44.61,Sales
+2026-09-15,525.28,AUD,Purchases,Synthetic ledger item 258,L1000-000258,SYN-INV-000258,Synthetic Party 8,Purchases,cost_of_goods_sold,52.53,Admin
+2026-09-16,604.47,AUD,Rent,Synthetic ledger item 259,L1000-000259,SYN-INV-000259,Synthetic Party 9,Rent,expense,60.45,Operations
+2026-09-17,0,AUD,Office Expenses,Synthetic ledger item 260,L1000-000260,SYN-INV-000260,Synthetic Party 10,Office Expenses,expense,0,Sales
+2026-09-18,762.85,AUD,Bank Fees,Synthetic ledger item 261,L1000-000261,SYN-INV-000261,Synthetic Party 11,Bank Fees,expense,76.29,Admin
+2026-09-19,842.04,AUD,Subscriptions,Synthetic ledger item 262,L1000-000262,SYN-INV-000262,Synthetic Party 12,Subscriptions,expense,84.2,Operations
+2026-09-20,921.23,AUD,Travel - National,Synthetic ledger item 263,L1000-000263,SYN-INV-000263,Synthetic Party 13,Travel - National,expense,92.12,Sales
+2026-09-21,1000.42,AUD,Interest Income,Synthetic ledger item 264,L1000-000264,SYN-INV-000264,Synthetic Party 14,Interest Income,other_income,100.04,Admin
+2026-09-22,1079.61,AUD,Sales,Synthetic ledger item 265,L1000-000265,SYN-INV-000265,Synthetic Party 15,Sales,income,107.96,Operations
+2026-09-23,1158.8,AUD,Purchases,Synthetic ledger item 266,L1000-000266,SYN-INV-000266,Synthetic Party 16,Purchases,cost_of_goods_sold,115.88,Sales
+2026-09-24,1237.99,AUD,Rent,Synthetic ledger item 267,L1000-000267,SYN-INV-000267,Synthetic Party 17,Rent,expense,123.8,Admin
+2026-09-25,1317.18,AUD,Office Expenses,Synthetic ledger item 268,L1000-000268,SYN-INV-000268,Synthetic Party 18,Office Expenses,expense,131.72,Operations
+2026-09-26,1396.37,AUD,Bank Fees,Synthetic ledger item 269,L1000-000269,SYN-INV-000269,Synthetic Party 19,Bank Fees,expense,139.64,Sales
+2026-09-27,1475.56,AUD,Subscriptions,Synthetic ledger item 270,L1000-000270,SYN-INV-000270,Synthetic Party 20,Subscriptions,expense,147.56,Admin
+2026-09-28,1554.75,AUD,Travel - National,Synthetic ledger item 271,L1000-000271,SYN-INV-000271,Synthetic Party 21,Travel - National,expense,155.48,Operations
+2026-09-29,1633.94,AUD,Interest Income,Synthetic ledger item 272,L1000-000272,SYN-INV-000272,Synthetic Party 22,Interest Income,other_income,163.39,Sales
+2026-09-30,1713.13,AUD,Sales,Synthetic ledger item 273,L1000-000273,SYN-INV-000273,Synthetic Party 23,Sales,income,171.31,Admin
+2026-01-01,1792.32,AUD,Purchases,Synthetic ledger item 274,L1000-000274,SYN-INV-000274,Synthetic Party 24,Purchases,cost_of_goods_sold,179.23,Operations
+2026-01-02,1871.51,AUD,Rent,Synthetic ledger item 275,L1000-000275,SYN-INV-000275,Synthetic Party 25,Rent,expense,187.15,Sales
+2026-01-03,1950.7,AUD,Office Expenses,Synthetic ledger item 276,L1000-000276,SYN-INV-000276,Synthetic Party 1,Office Expenses,expense,195.07,Admin
+2026-01-04,-2029.89,AUD,Bank Fees,Synthetic ledger item 277,L1000-000277,SYN-INV-000277,Synthetic Party 2,Bank Fees,expense,-202.99,Operations
+2026-01-05,2109.08,AUD,Subscriptions,Synthetic ledger item 278,L1000-000278,SYN-INV-000278,Synthetic Party 3,Subscriptions,expense,210.91,Sales
+2026-01-06,2188.27,AUD,Travel - National,Synthetic ledger item 279,L1000-000279,SYN-INV-000279,Synthetic Party 4,Travel - National,expense,218.83,Admin
+2026-01-07,2267.46,AUD,Interest Income,Synthetic ledger item 280,L1000-000280,SYN-INV-000280,Synthetic Party 5,Interest Income,other_income,226.75,Operations
+2026-01-08,2346.65,AUD,Sales,Synthetic ledger item 281,L1000-000281,SYN-INV-000281,Synthetic Party 6,Sales,income,234.67,Sales
+2026-01-09,2425.84,AUD,Purchases,Synthetic ledger item 282,L1000-000282,SYN-INV-000282,Synthetic Party 7,Purchases,cost_of_goods_sold,242.58,Admin
+2026-01-10,2505.03,AUD,Rent,Synthetic ledger item 283,L1000-000283,SYN-INV-000283,Synthetic Party 8,Rent,expense,250.5,Operations
+2026-01-11,2584.22,AUD,Office Expenses,Synthetic ledger item 284,L1000-000284,SYN-INV-000284,Synthetic Party 9,Office Expenses,expense,258.42,Sales
+2026-01-12,2663.41,AUD,Bank Fees,Synthetic ledger item 285,L1000-000285,SYN-INV-000285,Synthetic Party 10,Bank Fees,expense,266.34,Admin
+2026-01-13,2742.6,AUD,Subscriptions,Synthetic ledger item 286,L1000-000286,SYN-INV-000286,Synthetic Party 11,Subscriptions,expense,274.26,Operations
+2026-01-14,2821.79,AUD,Travel - National,Synthetic ledger item 287,L1000-000287,SYN-INV-000287,Synthetic Party 12,Travel - National,expense,282.18,Sales
+2026-01-15,2900.98,AUD,Interest Income,Synthetic ledger item 288,L1000-000288,SYN-INV-000288,Synthetic Party 13,Interest Income,other_income,290.1,Admin
+2026-01-16,2980.17,AUD,Sales,Synthetic ledger item 289,L1000-000289,SYN-INV-000289,Synthetic Party 14,Sales,income,298.02,Operations
+2026-01-17,3059.36,AUD,Purchases,Synthetic ledger item 290,L1000-000290,SYN-INV-000290,Synthetic Party 15,Purchases,cost_of_goods_sold,305.94,Sales
+2026-01-18,3138.55,AUD,Rent,Synthetic ledger item 291,L1000-000291,SYN-INV-000291,Synthetic Party 16,Rent,expense,313.86,Admin
+2026-01-19,3217.74,AUD,Office Expenses,Synthetic ledger item 292,L1000-000292,SYN-INV-000292,Synthetic Party 17,Office Expenses,expense,321.77,Operations
+2026-01-20,3296.93,AUD,Bank Fees,Synthetic ledger item 293,L1000-000293,SYN-INV-000293,Synthetic Party 18,Bank Fees,expense,329.69,Sales
+2026-01-21,3376.12,AUD,Subscriptions,Synthetic ledger item 294,L1000-000294,SYN-INV-000294,Synthetic Party 19,Subscriptions,expense,337.61,Admin
+2026-01-22,3455.31,AUD,Travel - National,Synthetic ledger item 295,L1000-000295,SYN-INV-000295,Synthetic Party 20,Travel - National,expense,345.53,Operations
+2026-01-23,3534.5,AUD,Interest Income,Synthetic ledger item 296,L1000-000296,SYN-INV-000296,Synthetic Party 21,Interest Income,other_income,353.45,Sales
+2026-01-24,0,AUD,Sales,Synthetic ledger item 297,L1000-000297,SYN-INV-000297,Synthetic Party 22,Sales,income,0,Admin
+2026-01-25,3692.88,AUD,Purchases,Synthetic ledger item 298,L1000-000298,SYN-INV-000298,Synthetic Party 23,Purchases,cost_of_goods_sold,369.29,Operations
+2026-01-26,3772.07,AUD,Rent,Synthetic ledger item 299,L1000-000299,SYN-INV-000299,Synthetic Party 24,Rent,expense,377.21,Sales
+2026-01-27,-3851.26,AUD,Office Expenses,Synthetic ledger item 300,L1000-000300,SYN-INV-000300,Synthetic Party 25,Office Expenses,expense,-385.13,Admin
+2026-01-28,3930.45,AUD,Bank Fees,Synthetic ledger item 301,L1000-000301,SYN-INV-000301,Synthetic Party 1,Bank Fees,expense,393.05,Operations
+2026-01-29,4009.64,AUD,Subscriptions,Synthetic ledger item 302,L1000-000302,SYN-INV-000302,Synthetic Party 2,Subscriptions,expense,400.96,Sales
+2026-01-30,4088.83,AUD,Travel - National,Synthetic ledger item 303,L1000-000303,SYN-INV-000303,Synthetic Party 3,Travel - National,expense,408.88,Admin
+2026-01-31,4168.02,AUD,Interest Income,Synthetic ledger item 304,L1000-000304,SYN-INV-000304,Synthetic Party 4,Interest Income,other_income,416.8,Operations
+2026-02-01,4247.21,AUD,Sales,Synthetic ledger item 305,L1000-000305,SYN-INV-000305,Synthetic Party 5,Sales,income,424.72,Sales
+2026-02-02,4326.4,AUD,Purchases,Synthetic ledger item 306,L1000-000306,SYN-INV-000306,Synthetic Party 6,Purchases,cost_of_goods_sold,432.64,Admin
+2026-02-03,4405.59,AUD,Rent,Synthetic ledger item 307,L1000-000307,SYN-INV-000307,Synthetic Party 7,Rent,expense,440.56,Operations
+2026-02-04,4484.78,AUD,Office Expenses,Synthetic ledger item 308,L1000-000308,SYN-INV-000308,Synthetic Party 8,Office Expenses,expense,448.48,Sales
+2026-02-05,4563.97,AUD,Bank Fees,Synthetic ledger item 309,L1000-000309,SYN-INV-000309,Synthetic Party 9,Bank Fees,expense,456.4,Admin
+2026-02-06,4643.16,AUD,Subscriptions,Synthetic ledger item 310,L1000-000310,SYN-INV-000310,Synthetic Party 10,Subscriptions,expense,464.32,Operations
+2026-02-07,4722.35,AUD,Travel - National,Synthetic ledger item 311,L1000-000311,SYN-INV-000311,Synthetic Party 11,Travel - National,expense,472.24,Sales
+2026-02-08,4801.54,AUD,Interest Income,Synthetic ledger item 312,L1000-000312,SYN-INV-000312,Synthetic Party 12,Interest Income,other_income,480.15,Admin
+2026-02-09,4880.73,AUD,Sales,Synthetic ledger item 313,L1000-000313,SYN-INV-000313,Synthetic Party 13,Sales,income,488.07,Operations
+2026-02-10,4959.92,AUD,Purchases,Synthetic ledger item 314,L1000-000314,SYN-INV-000314,Synthetic Party 14,Purchases,cost_of_goods_sold,495.99,Sales
+2026-02-11,49.11,AUD,Rent,Synthetic ledger item 315,L1000-000315,SYN-INV-000315,Synthetic Party 15,Rent,expense,4.91,Admin
+2026-02-12,128.3,AUD,Office Expenses,Synthetic ledger item 316,L1000-000316,SYN-INV-000316,Synthetic Party 16,Office Expenses,expense,12.83,Operations
+2026-02-13,207.49,AUD,Bank Fees,Synthetic ledger item 317,L1000-000317,SYN-INV-000317,Synthetic Party 17,Bank Fees,expense,20.75,Sales
+2026-02-14,286.68,AUD,Subscriptions,Synthetic ledger item 318,L1000-000318,SYN-INV-000318,Synthetic Party 18,Subscriptions,expense,28.67,Admin
+2026-02-15,365.87,AUD,Travel - National,Synthetic ledger item 319,L1000-000319,SYN-INV-000319,Synthetic Party 19,Travel - National,expense,36.59,Operations
+2026-02-16,445.06,AUD,Interest Income,Synthetic ledger item 320,L1000-000320,SYN-INV-000320,Synthetic Party 20,Interest Income,other_income,44.51,Sales
+2026-02-17,524.25,AUD,Sales,Synthetic ledger item 321,L1000-000321,SYN-INV-000321,Synthetic Party 21,Sales,income,52.43,Admin
+2026-02-18,603.44,AUD,Purchases,Synthetic ledger item 322,L1000-000322,SYN-INV-000322,Synthetic Party 22,Purchases,cost_of_goods_sold,60.34,Operations
+2026-02-19,-682.63,AUD,Rent,Synthetic ledger item 323,L1000-000323,SYN-INV-000323,Synthetic Party 23,Rent,expense,-68.26,Sales
+2026-02-20,761.82,AUD,Office Expenses,Synthetic ledger item 324,L1000-000324,SYN-INV-000324,Synthetic Party 24,Office Expenses,expense,76.18,Admin
+2026-02-21,841.01,AUD,Bank Fees,Synthetic ledger item 325,L1000-000325,SYN-INV-000325,Synthetic Party 25,Bank Fees,expense,84.1,Operations
+2026-02-22,920.2,AUD,Subscriptions,Synthetic ledger item 326,L1000-000326,SYN-INV-000326,Synthetic Party 1,Subscriptions,expense,92.02,Sales
+2026-02-23,999.39,AUD,Travel - National,Synthetic ledger item 327,L1000-000327,SYN-INV-000327,Synthetic Party 2,Travel - National,expense,99.94,Admin
+2026-02-24,1078.58,AUD,Interest Income,Synthetic ledger item 328,L1000-000328,SYN-INV-000328,Synthetic Party 3,Interest Income,other_income,107.86,Operations
+2026-02-25,1157.77,AUD,Sales,Synthetic ledger item 329,L1000-000329,SYN-INV-000329,Synthetic Party 4,Sales,income,115.78,Sales
+2026-02-26,1236.96,AUD,Purchases,Synthetic ledger item 330,L1000-000330,SYN-INV-000330,Synthetic Party 5,Purchases,cost_of_goods_sold,123.7,Admin
+2026-02-27,1316.15,AUD,Rent,Synthetic ledger item 331,L1000-000331,SYN-INV-000331,Synthetic Party 6,Rent,expense,131.62,Operations
+2026-02-28,1395.34,AUD,Office Expenses,Synthetic ledger item 332,L1000-000332,SYN-INV-000332,Synthetic Party 7,Office Expenses,expense,139.53,Sales
+2026-03-01,1474.53,AUD,Bank Fees,Synthetic ledger item 333,L1000-000333,SYN-INV-000333,Synthetic Party 8,Bank Fees,expense,147.45,Admin
+2026-03-02,0,AUD,Subscriptions,Synthetic ledger item 334,L1000-000334,SYN-INV-000334,Synthetic Party 9,Subscriptions,expense,0,Operations
+2026-03-03,1632.91,AUD,Travel - National,Synthetic ledger item 335,L1000-000335,SYN-INV-000335,Synthetic Party 10,Travel - National,expense,163.29,Sales
+2026-03-04,1712.1,AUD,Interest Income,Synthetic ledger item 336,L1000-000336,SYN-INV-000336,Synthetic Party 11,Interest Income,other_income,171.21,Admin
+2026-03-05,1791.29,AUD,Sales,Synthetic ledger item 337,L1000-000337,SYN-INV-000337,Synthetic Party 12,Sales,income,179.13,Operations
+2026-03-06,1870.48,AUD,Purchases,Synthetic ledger item 338,L1000-000338,SYN-INV-000338,Synthetic Party 13,Purchases,cost_of_goods_sold,187.05,Sales
+2026-03-07,1949.67,AUD,Rent,Synthetic ledger item 339,L1000-000339,SYN-INV-000339,Synthetic Party 14,Rent,expense,194.97,Admin
+2026-03-08,2028.86,AUD,Office Expenses,Synthetic ledger item 340,L1000-000340,SYN-INV-000340,Synthetic Party 15,Office Expenses,expense,202.89,Operations
+2026-03-09,2108.05,AUD,Bank Fees,Synthetic ledger item 341,L1000-000341,SYN-INV-000341,Synthetic Party 16,Bank Fees,expense,210.81,Sales
+2026-03-10,2187.24,AUD,Subscriptions,Synthetic ledger item 342,L1000-000342,SYN-INV-000342,Synthetic Party 17,Subscriptions,expense,218.72,Admin
+2026-03-11,2266.43,AUD,Travel - National,Synthetic ledger item 343,L1000-000343,SYN-INV-000343,Synthetic Party 18,Travel - National,expense,226.64,Operations
+2026-03-12,2345.62,AUD,Interest Income,Synthetic ledger item 344,L1000-000344,SYN-INV-000344,Synthetic Party 19,Interest Income,other_income,234.56,Sales
+2026-03-13,2424.81,AUD,Sales,Synthetic ledger item 345,L1000-000345,SYN-INV-000345,Synthetic Party 20,Sales,income,242.48,Admin
+2026-03-14,-2504,AUD,Purchases,Synthetic ledger item 346,L1000-000346,SYN-INV-000346,Synthetic Party 21,Purchases,cost_of_goods_sold,-250.4,Operations
+2026-03-15,2583.19,AUD,Rent,Synthetic ledger item 347,L1000-000347,SYN-INV-000347,Synthetic Party 22,Rent,expense,258.32,Sales
+2026-03-16,2662.38,AUD,Office Expenses,Synthetic ledger item 348,L1000-000348,SYN-INV-000348,Synthetic Party 23,Office Expenses,expense,266.24,Admin
+2026-03-17,2741.57,AUD,Bank Fees,Synthetic ledger item 349,L1000-000349,SYN-INV-000349,Synthetic Party 24,Bank Fees,expense,274.16,Operations
+2026-03-18,2820.76,AUD,Subscriptions,Synthetic ledger item 350,L1000-000350,SYN-INV-000350,Synthetic Party 25,Subscriptions,expense,282.08,Sales
+2026-03-19,2899.95,AUD,Travel - National,Synthetic ledger item 351,L1000-000351,SYN-INV-000351,Synthetic Party 1,Travel - National,expense,290,Admin
+2026-03-20,2979.14,AUD,Interest Income,Synthetic ledger item 352,L1000-000352,SYN-INV-000352,Synthetic Party 2,Interest Income,other_income,297.91,Operations
+2026-03-21,3058.33,AUD,Sales,Synthetic ledger item 353,L1000-000353,SYN-INV-000353,Synthetic Party 3,Sales,income,305.83,Sales
+2026-03-22,3137.52,AUD,Purchases,Synthetic ledger item 354,L1000-000354,SYN-INV-000354,Synthetic Party 4,Purchases,cost_of_goods_sold,313.75,Admin
+2026-03-23,3216.71,AUD,Rent,Synthetic ledger item 355,L1000-000355,SYN-INV-000355,Synthetic Party 5,Rent,expense,321.67,Operations
+2026-03-24,3295.9,AUD,Office Expenses,Synthetic ledger item 356,L1000-000356,SYN-INV-000356,Synthetic Party 6,Office Expenses,expense,329.59,Sales
+2026-03-25,3375.09,AUD,Bank Fees,Synthetic ledger item 357,L1000-000357,SYN-INV-000357,Synthetic Party 7,Bank Fees,expense,337.51,Admin
+2026-03-26,3454.28,AUD,Subscriptions,Synthetic ledger item 358,L1000-000358,SYN-INV-000358,Synthetic Party 8,Subscriptions,expense,345.43,Operations
+2026-03-27,3533.47,AUD,Travel - National,Synthetic ledger item 359,L1000-000359,SYN-INV-000359,Synthetic Party 9,Travel - National,expense,353.35,Sales
+2026-03-28,3612.66,AUD,Interest Income,Synthetic ledger item 360,L1000-000360,SYN-INV-000360,Synthetic Party 10,Interest Income,other_income,361.27,Admin
+2026-03-29,3691.85,AUD,Sales,Synthetic ledger item 361,L1000-000361,SYN-INV-000361,Synthetic Party 11,Sales,income,369.19,Operations
+2026-03-30,3771.04,AUD,Purchases,Synthetic ledger item 362,L1000-000362,SYN-INV-000362,Synthetic Party 12,Purchases,cost_of_goods_sold,377.1,Sales
+2026-03-31,3850.23,AUD,Rent,Synthetic ledger item 363,L1000-000363,SYN-INV-000363,Synthetic Party 13,Rent,expense,385.02,Admin
+2026-04-01,3929.42,AUD,Office Expenses,Synthetic ledger item 364,L1000-000364,SYN-INV-000364,Synthetic Party 14,Office Expenses,expense,392.94,Operations
+2026-04-02,4008.61,AUD,Bank Fees,Synthetic ledger item 365,L1000-000365,SYN-INV-000365,Synthetic Party 15,Bank Fees,expense,400.86,Sales
+2026-04-03,4087.8,AUD,Subscriptions,Synthetic ledger item 366,L1000-000366,SYN-INV-000366,Synthetic Party 16,Subscriptions,expense,408.78,Admin
+2026-04-04,4166.99,AUD,Travel - National,Synthetic ledger item 367,L1000-000367,SYN-INV-000367,Synthetic Party 17,Travel - National,expense,416.7,Operations
+2026-04-05,4246.18,AUD,Interest Income,Synthetic ledger item 368,L1000-000368,SYN-INV-000368,Synthetic Party 18,Interest Income,other_income,424.62,Sales
+2026-04-06,-4325.37,AUD,Sales,Synthetic ledger item 369,L1000-000369,SYN-INV-000369,Synthetic Party 19,Sales,income,-432.54,Admin
+2026-04-07,4404.56,AUD,Purchases,Synthetic ledger item 370,L1000-000370,SYN-INV-000370,Synthetic Party 20,Purchases,cost_of_goods_sold,440.46,Operations
+2026-04-08,0,AUD,Rent,Synthetic ledger item 371,L1000-000371,SYN-INV-000371,Synthetic Party 21,Rent,expense,0,Sales
+2026-04-09,4562.94,AUD,Office Expenses,Synthetic ledger item 372,L1000-000372,SYN-INV-000372,Synthetic Party 22,Office Expenses,expense,456.29,Admin
+2026-04-10,4642.13,AUD,Bank Fees,Synthetic ledger item 373,L1000-000373,SYN-INV-000373,Synthetic Party 23,Bank Fees,expense,464.21,Operations
+2026-04-11,4721.32,AUD,Subscriptions,Synthetic ledger item 374,L1000-000374,SYN-INV-000374,Synthetic Party 24,Subscriptions,expense,472.13,Sales
+2026-04-12,4800.51,AUD,Travel - National,Synthetic ledger item 375,L1000-000375,SYN-INV-000375,Synthetic Party 25,Travel - National,expense,480.05,Admin
+2026-04-13,4879.7,AUD,Interest Income,Synthetic ledger item 376,L1000-000376,SYN-INV-000376,Synthetic Party 1,Interest Income,other_income,487.97,Operations
+2026-04-14,4958.89,AUD,Sales,Synthetic ledger item 377,L1000-000377,SYN-INV-000377,Synthetic Party 2,Sales,income,495.89,Sales
+2026-04-15,48.08,AUD,Purchases,Synthetic ledger item 378,L1000-000378,SYN-INV-000378,Synthetic Party 3,Purchases,cost_of_goods_sold,4.81,Admin
+2026-04-16,127.27,AUD,Rent,Synthetic ledger item 379,L1000-000379,SYN-INV-000379,Synthetic Party 4,Rent,expense,12.73,Operations
+2026-04-17,206.46,AUD,Office Expenses,Synthetic ledger item 380,L1000-000380,SYN-INV-000380,Synthetic Party 5,Office Expenses,expense,20.65,Sales
+2026-04-18,285.65,AUD,Bank Fees,Synthetic ledger item 381,L1000-000381,SYN-INV-000381,Synthetic Party 6,Bank Fees,expense,28.57,Admin
+2026-04-19,364.84,AUD,Subscriptions,Synthetic ledger item 382,L1000-000382,SYN-INV-000382,Synthetic Party 7,Subscriptions,expense,36.48,Operations
+2026-04-20,444.03,AUD,Travel - National,Synthetic ledger item 383,L1000-000383,SYN-INV-000383,Synthetic Party 8,Travel - National,expense,44.4,Sales
+2026-04-21,523.22,AUD,Interest Income,Synthetic ledger item 384,L1000-000384,SYN-INV-000384,Synthetic Party 9,Interest Income,other_income,52.32,Admin
+2026-04-22,602.41,AUD,Sales,Synthetic ledger item 385,L1000-000385,SYN-INV-000385,Synthetic Party 10,Sales,income,60.24,Operations
+2026-04-23,681.6,AUD,Purchases,Synthetic ledger item 386,L1000-000386,SYN-INV-000386,Synthetic Party 11,Purchases,cost_of_goods_sold,68.16,Sales
+2026-04-24,760.79,AUD,Rent,Synthetic ledger item 387,L1000-000387,SYN-INV-000387,Synthetic Party 12,Rent,expense,76.08,Admin
+2026-04-25,839.98,AUD,Office Expenses,Synthetic ledger item 388,L1000-000388,SYN-INV-000388,Synthetic Party 13,Office Expenses,expense,84,Operations
+2026-04-26,919.17,AUD,Bank Fees,Synthetic ledger item 389,L1000-000389,SYN-INV-000389,Synthetic Party 14,Bank Fees,expense,91.92,Sales
+2026-04-27,998.36,AUD,Subscriptions,Synthetic ledger item 390,L1000-000390,SYN-INV-000390,Synthetic Party 15,Subscriptions,expense,99.84,Admin
+2026-04-28,1077.55,AUD,Travel - National,Synthetic ledger item 391,L1000-000391,SYN-INV-000391,Synthetic Party 16,Travel - National,expense,107.76,Operations
+2026-04-29,-1156.74,AUD,Interest Income,Synthetic ledger item 392,L1000-000392,SYN-INV-000392,Synthetic Party 17,Interest Income,other_income,-115.67,Sales
+2026-04-30,1235.93,AUD,Sales,Synthetic ledger item 393,L1000-000393,SYN-INV-000393,Synthetic Party 18,Sales,income,123.59,Admin
+2026-05-01,1315.12,AUD,Purchases,Synthetic ledger item 394,L1000-000394,SYN-INV-000394,Synthetic Party 19,Purchases,cost_of_goods_sold,131.51,Operations
+2026-05-02,1394.31,AUD,Rent,Synthetic ledger item 395,L1000-000395,SYN-INV-000395,Synthetic Party 20,Rent,expense,139.43,Sales
+2026-05-03,1473.5,AUD,Office Expenses,Synthetic ledger item 396,L1000-000396,SYN-INV-000396,Synthetic Party 21,Office Expenses,expense,147.35,Admin
+2026-05-04,1552.69,AUD,Bank Fees,Synthetic ledger item 397,L1000-000397,SYN-INV-000397,Synthetic Party 22,Bank Fees,expense,155.27,Operations
+2026-05-05,1631.88,AUD,Subscriptions,Synthetic ledger item 398,L1000-000398,SYN-INV-000398,Synthetic Party 23,Subscriptions,expense,163.19,Sales
+2026-05-06,1711.07,AUD,Travel - National,Synthetic ledger item 399,L1000-000399,SYN-INV-000399,Synthetic Party 24,Travel - National,expense,171.11,Admin
+2026-05-07,1790.26,AUD,Interest Income,Synthetic ledger item 400,L1000-000400,SYN-INV-000400,Synthetic Party 25,Interest Income,other_income,179.03,Operations
+2026-05-08,1869.45,AUD,Sales,Synthetic ledger item 401,L1000-000401,SYN-INV-000401,Synthetic Party 1,Sales,income,186.95,Sales
+2026-05-09,1948.64,AUD,Purchases,Synthetic ledger item 402,L1000-000402,SYN-INV-000402,Synthetic Party 2,Purchases,cost_of_goods_sold,194.86,Admin
+2026-05-10,2027.83,AUD,Rent,Synthetic ledger item 403,L1000-000403,SYN-INV-000403,Synthetic Party 3,Rent,expense,202.78,Operations
+2026-05-11,2107.02,AUD,Office Expenses,Synthetic ledger item 404,L1000-000404,SYN-INV-000404,Synthetic Party 4,Office Expenses,expense,210.7,Sales
+2026-05-12,2186.21,AUD,Bank Fees,Synthetic ledger item 405,L1000-000405,SYN-INV-000405,Synthetic Party 5,Bank Fees,expense,218.62,Admin
+2026-05-13,2265.4,AUD,Subscriptions,Synthetic ledger item 406,L1000-000406,SYN-INV-000406,Synthetic Party 6,Subscriptions,expense,226.54,Operations
+2026-05-14,2344.59,AUD,Travel - National,Synthetic ledger item 407,L1000-000407,SYN-INV-000407,Synthetic Party 7,Travel - National,expense,234.46,Sales
+2026-05-15,0,AUD,Interest Income,Synthetic ledger item 408,L1000-000408,SYN-INV-000408,Synthetic Party 8,Interest Income,other_income,0,Admin
+2026-05-16,2502.97,AUD,Sales,Synthetic ledger item 409,L1000-000409,SYN-INV-000409,Synthetic Party 9,Sales,income,250.3,Operations
+2026-05-17,2582.16,AUD,Purchases,Synthetic ledger item 410,L1000-000410,SYN-INV-000410,Synthetic Party 10,Purchases,cost_of_goods_sold,258.22,Sales
+2026-05-18,2661.35,AUD,Rent,Synthetic ledger item 411,L1000-000411,SYN-INV-000411,Synthetic Party 11,Rent,expense,266.14,Admin
+2026-05-19,2740.54,AUD,Office Expenses,Synthetic ledger item 412,L1000-000412,SYN-INV-000412,Synthetic Party 12,Office Expenses,expense,274.05,Operations
+2026-05-20,2819.73,AUD,Bank Fees,Synthetic ledger item 413,L1000-000413,SYN-INV-000413,Synthetic Party 13,Bank Fees,expense,281.97,Sales
+2026-05-21,2898.92,AUD,Subscriptions,Synthetic ledger item 414,L1000-000414,SYN-INV-000414,Synthetic Party 14,Subscriptions,expense,289.89,Admin
+2026-05-22,-2978.11,AUD,Travel - National,Synthetic ledger item 415,L1000-000415,SYN-INV-000415,Synthetic Party 15,Travel - National,expense,-297.81,Operations
+2026-05-23,3057.3,AUD,Interest Income,Synthetic ledger item 416,L1000-000416,SYN-INV-000416,Synthetic Party 16,Interest Income,other_income,305.73,Sales
+2026-05-24,3136.49,AUD,Sales,Synthetic ledger item 417,L1000-000417,SYN-INV-000417,Synthetic Party 17,Sales,income,313.65,Admin
+2026-05-25,3215.68,AUD,Purchases,Synthetic ledger item 418,L1000-000418,SYN-INV-000418,Synthetic Party 18,Purchases,cost_of_goods_sold,321.57,Operations
+2026-05-26,3294.87,AUD,Rent,Synthetic ledger item 419,L1000-000419,SYN-INV-000419,Synthetic Party 19,Rent,expense,329.49,Sales
+2026-05-27,3374.06,AUD,Office Expenses,Synthetic ledger item 420,L1000-000420,SYN-INV-000420,Synthetic Party 20,Office Expenses,expense,337.41,Admin
+2026-05-28,3453.25,AUD,Bank Fees,Synthetic ledger item 421,L1000-000421,SYN-INV-000421,Synthetic Party 21,Bank Fees,expense,345.33,Operations
+2026-05-29,3532.44,AUD,Subscriptions,Synthetic ledger item 422,L1000-000422,SYN-INV-000422,Synthetic Party 22,Subscriptions,expense,353.24,Sales
+2026-05-30,3611.63,AUD,Travel - National,Synthetic ledger item 423,L1000-000423,SYN-INV-000423,Synthetic Party 23,Travel - National,expense,361.16,Admin
+2026-05-31,3690.82,AUD,Interest Income,Synthetic ledger item 424,L1000-000424,SYN-INV-000424,Synthetic Party 24,Interest Income,other_income,369.08,Operations
+2026-06-01,3770.01,AUD,Sales,Synthetic ledger item 425,L1000-000425,SYN-INV-000425,Synthetic Party 25,Sales,income,377,Sales
+2026-06-02,3849.2,AUD,Purchases,Synthetic ledger item 426,L1000-000426,SYN-INV-000426,Synthetic Party 1,Purchases,cost_of_goods_sold,384.92,Admin
+2026-06-03,3928.39,AUD,Rent,Synthetic ledger item 427,L1000-000427,SYN-INV-000427,Synthetic Party 2,Rent,expense,392.84,Operations
+2026-06-04,4007.58,AUD,Office Expenses,Synthetic ledger item 428,L1000-000428,SYN-INV-000428,Synthetic Party 3,Office Expenses,expense,400.76,Sales
+2026-06-05,4086.77,AUD,Bank Fees,Synthetic ledger item 429,L1000-000429,SYN-INV-000429,Synthetic Party 4,Bank Fees,expense,408.68,Admin
+2026-06-06,4165.96,AUD,Subscriptions,Synthetic ledger item 430,L1000-000430,SYN-INV-000430,Synthetic Party 5,Subscriptions,expense,416.6,Operations
+2026-06-07,4245.15,AUD,Travel - National,Synthetic ledger item 431,L1000-000431,SYN-INV-000431,Synthetic Party 6,Travel - National,expense,424.52,Sales
+2026-06-08,4324.34,AUD,Interest Income,Synthetic ledger item 432,L1000-000432,SYN-INV-000432,Synthetic Party 7,Interest Income,other_income,432.43,Admin
+2026-06-09,4403.53,AUD,Sales,Synthetic ledger item 433,L1000-000433,SYN-INV-000433,Synthetic Party 8,Sales,income,440.35,Operations
+2026-06-10,4482.72,AUD,Purchases,Synthetic ledger item 434,L1000-000434,SYN-INV-000434,Synthetic Party 9,Purchases,cost_of_goods_sold,448.27,Sales
+2026-06-11,4561.91,AUD,Rent,Synthetic ledger item 435,L1000-000435,SYN-INV-000435,Synthetic Party 10,Rent,expense,456.19,Admin
+2026-06-12,4641.1,AUD,Office Expenses,Synthetic ledger item 436,L1000-000436,SYN-INV-000436,Synthetic Party 11,Office Expenses,expense,464.11,Operations
+2026-06-13,4720.29,AUD,Bank Fees,Synthetic ledger item 437,L1000-000437,SYN-INV-000437,Synthetic Party 12,Bank Fees,expense,472.03,Sales
+2026-06-14,-4799.48,AUD,Subscriptions,Synthetic ledger item 438,L1000-000438,SYN-INV-000438,Synthetic Party 13,Subscriptions,expense,-479.95,Admin
+2026-06-15,4878.67,AUD,Travel - National,Synthetic ledger item 439,L1000-000439,SYN-INV-000439,Synthetic Party 14,Travel - National,expense,487.87,Operations
+2026-06-16,4957.86,AUD,Interest Income,Synthetic ledger item 440,L1000-000440,SYN-INV-000440,Synthetic Party 15,Interest Income,other_income,495.79,Sales
+2026-06-17,47.05,AUD,Sales,Synthetic ledger item 441,L1000-000441,SYN-INV-000441,Synthetic Party 16,Sales,income,4.71,Admin
+2026-06-18,126.24,AUD,Purchases,Synthetic ledger item 442,L1000-000442,SYN-INV-000442,Synthetic Party 17,Purchases,cost_of_goods_sold,12.62,Operations
+2026-06-19,205.43,AUD,Rent,Synthetic ledger item 443,L1000-000443,SYN-INV-000443,Synthetic Party 18,Rent,expense,20.54,Sales
+2026-06-20,284.62,AUD,Office Expenses,Synthetic ledger item 444,L1000-000444,SYN-INV-000444,Synthetic Party 19,Office Expenses,expense,28.46,Admin
+2026-06-21,0,AUD,Bank Fees,Synthetic ledger item 445,L1000-000445,SYN-INV-000445,Synthetic Party 20,Bank Fees,expense,0,Operations
+2026-06-22,443,AUD,Subscriptions,Synthetic ledger item 446,L1000-000446,SYN-INV-000446,Synthetic Party 21,Subscriptions,expense,44.3,Sales
+2026-06-23,522.19,AUD,Travel - National,Synthetic ledger item 447,L1000-000447,SYN-INV-000447,Synthetic Party 22,Travel - National,expense,52.22,Admin
+2026-06-24,601.38,AUD,Interest Income,Synthetic ledger item 448,L1000-000448,SYN-INV-000448,Synthetic Party 23,Interest Income,other_income,60.14,Operations
+2026-06-25,680.57,AUD,Sales,Synthetic ledger item 449,L1000-000449,SYN-INV-000449,Synthetic Party 24,Sales,income,68.06,Sales
+2026-06-26,759.76,AUD,Purchases,Synthetic ledger item 450,L1000-000450,SYN-INV-000450,Synthetic Party 25,Purchases,cost_of_goods_sold,75.98,Admin
+2026-06-27,838.95,AUD,Rent,Synthetic ledger item 451,L1000-000451,SYN-INV-000451,Synthetic Party 1,Rent,expense,83.9,Operations
+2026-06-28,918.14,AUD,Office Expenses,Synthetic ledger item 452,L1000-000452,SYN-INV-000452,Synthetic Party 2,Office Expenses,expense,91.81,Sales
+2026-06-29,997.33,AUD,Bank Fees,Synthetic ledger item 453,L1000-000453,SYN-INV-000453,Synthetic Party 3,Bank Fees,expense,99.73,Admin
+2026-06-30,1076.52,AUD,Subscriptions,Synthetic ledger item 454,L1000-000454,SYN-INV-000454,Synthetic Party 4,Subscriptions,expense,107.65,Operations
+2026-07-01,1155.71,AUD,Travel - National,Synthetic ledger item 455,L1000-000455,SYN-INV-000455,Synthetic Party 5,Travel - National,expense,115.57,Sales
+2026-07-02,1234.9,AUD,Interest Income,Synthetic ledger item 456,L1000-000456,SYN-INV-000456,Synthetic Party 6,Interest Income,other_income,123.49,Admin
+2026-07-03,1314.09,AUD,Sales,Synthetic ledger item 457,L1000-000457,SYN-INV-000457,Synthetic Party 7,Sales,income,131.41,Operations
+2026-07-04,1393.28,AUD,Purchases,Synthetic ledger item 458,L1000-000458,SYN-INV-000458,Synthetic Party 8,Purchases,cost_of_goods_sold,139.33,Sales
+2026-07-05,1472.47,AUD,Rent,Synthetic ledger item 459,L1000-000459,SYN-INV-000459,Synthetic Party 9,Rent,expense,147.25,Admin
+2026-07-06,1551.66,AUD,Office Expenses,Synthetic ledger item 460,L1000-000460,SYN-INV-000460,Synthetic Party 10,Office Expenses,expense,155.17,Operations
+2026-07-07,-1630.85,AUD,Bank Fees,Synthetic ledger item 461,L1000-000461,SYN-INV-000461,Synthetic Party 11,Bank Fees,expense,-163.08,Sales
+2026-07-08,1710.04,AUD,Subscriptions,Synthetic ledger item 462,L1000-000462,SYN-INV-000462,Synthetic Party 12,Subscriptions,expense,171,Admin
+2026-07-09,1789.23,AUD,Travel - National,Synthetic ledger item 463,L1000-000463,SYN-INV-000463,Synthetic Party 13,Travel - National,expense,178.92,Operations
+2026-07-10,1868.42,AUD,Interest Income,Synthetic ledger item 464,L1000-000464,SYN-INV-000464,Synthetic Party 14,Interest Income,other_income,186.84,Sales
+2026-07-11,1947.61,AUD,Sales,Synthetic ledger item 465,L1000-000465,SYN-INV-000465,Synthetic Party 15,Sales,income,194.76,Admin
+2026-07-12,2026.8,AUD,Purchases,Synthetic ledger item 466,L1000-000466,SYN-INV-000466,Synthetic Party 16,Purchases,cost_of_goods_sold,202.68,Operations
+2026-07-13,2105.99,AUD,Rent,Synthetic ledger item 467,L1000-000467,SYN-INV-000467,Synthetic Party 17,Rent,expense,210.6,Sales
+2026-07-14,2185.18,AUD,Office Expenses,Synthetic ledger item 468,L1000-000468,SYN-INV-000468,Synthetic Party 18,Office Expenses,expense,218.52,Admin
+2026-07-15,2264.37,AUD,Bank Fees,Synthetic ledger item 469,L1000-000469,SYN-INV-000469,Synthetic Party 19,Bank Fees,expense,226.44,Operations
+2026-07-16,2343.56,AUD,Subscriptions,Synthetic ledger item 470,L1000-000470,SYN-INV-000470,Synthetic Party 20,Subscriptions,expense,234.36,Sales
+2026-07-17,2422.75,AUD,Travel - National,Synthetic ledger item 471,L1000-000471,SYN-INV-000471,Synthetic Party 21,Travel - National,expense,242.28,Admin
+2026-07-18,2501.94,AUD,Interest Income,Synthetic ledger item 472,L1000-000472,SYN-INV-000472,Synthetic Party 22,Interest Income,other_income,250.19,Operations
+2026-07-19,2581.13,AUD,Sales,Synthetic ledger item 473,L1000-000473,SYN-INV-000473,Synthetic Party 23,Sales,income,258.11,Sales
+2026-07-20,2660.32,AUD,Purchases,Synthetic ledger item 474,L1000-000474,SYN-INV-000474,Synthetic Party 24,Purchases,cost_of_goods_sold,266.03,Admin
+2026-07-21,2739.51,AUD,Rent,Synthetic ledger item 475,L1000-000475,SYN-INV-000475,Synthetic Party 25,Rent,expense,273.95,Operations
+2026-07-22,2818.7,AUD,Office Expenses,Synthetic ledger item 476,L1000-000476,SYN-INV-000476,Synthetic Party 1,Office Expenses,expense,281.87,Sales
+2026-07-23,2897.89,AUD,Bank Fees,Synthetic ledger item 477,L1000-000477,SYN-INV-000477,Synthetic Party 2,Bank Fees,expense,289.79,Admin
+2026-07-24,2977.08,AUD,Subscriptions,Synthetic ledger item 478,L1000-000478,SYN-INV-000478,Synthetic Party 3,Subscriptions,expense,297.71,Operations
+2026-07-25,3056.27,AUD,Travel - National,Synthetic ledger item 479,L1000-000479,SYN-INV-000479,Synthetic Party 4,Travel - National,expense,305.63,Sales
+2026-07-26,3135.46,AUD,Interest Income,Synthetic ledger item 480,L1000-000480,SYN-INV-000480,Synthetic Party 5,Interest Income,other_income,313.55,Admin
+2026-07-27,3214.65,AUD,Sales,Synthetic ledger item 481,L1000-000481,SYN-INV-000481,Synthetic Party 6,Sales,income,321.47,Operations
+2026-07-28,0,AUD,Purchases,Synthetic ledger item 482,L1000-000482,SYN-INV-000482,Synthetic Party 7,Purchases,cost_of_goods_sold,0,Sales
+2026-07-29,3373.03,AUD,Rent,Synthetic ledger item 483,L1000-000483,SYN-INV-000483,Synthetic Party 8,Rent,expense,337.3,Admin
+2026-07-30,-3452.22,AUD,Office Expenses,Synthetic ledger item 484,L1000-000484,SYN-INV-000484,Synthetic Party 9,Office Expenses,expense,-345.22,Operations
+2026-07-31,3531.41,AUD,Bank Fees,Synthetic ledger item 485,L1000-000485,SYN-INV-000485,Synthetic Party 10,Bank Fees,expense,353.14,Sales
+2026-08-01,3610.6,AUD,Subscriptions,Synthetic ledger item 486,L1000-000486,SYN-INV-000486,Synthetic Party 11,Subscriptions,expense,361.06,Admin
+2026-08-02,3689.79,AUD,Travel - National,Synthetic ledger item 487,L1000-000487,SYN-INV-000487,Synthetic Party 12,Travel - National,expense,368.98,Operations
+2026-08-03,3768.98,AUD,Interest Income,Synthetic ledger item 488,L1000-000488,SYN-INV-000488,Synthetic Party 13,Interest Income,other_income,376.9,Sales
+2026-08-04,3848.17,AUD,Sales,Synthetic ledger item 489,L1000-000489,SYN-INV-000489,Synthetic Party 14,Sales,income,384.82,Admin
+2026-08-05,3927.36,AUD,Purchases,Synthetic ledger item 490,L1000-000490,SYN-INV-000490,Synthetic Party 15,Purchases,cost_of_goods_sold,392.74,Operations
+2026-08-06,4006.55,AUD,Rent,Synthetic ledger item 491,L1000-000491,SYN-INV-000491,Synthetic Party 16,Rent,expense,400.66,Sales
+2026-08-07,4085.74,AUD,Office Expenses,Synthetic ledger item 492,L1000-000492,SYN-INV-000492,Synthetic Party 17,Office Expenses,expense,408.57,Admin
+2026-08-08,4164.93,AUD,Bank Fees,Synthetic ledger item 493,L1000-000493,SYN-INV-000493,Synthetic Party 18,Bank Fees,expense,416.49,Operations
+2026-08-09,4244.12,AUD,Subscriptions,Synthetic ledger item 494,L1000-000494,SYN-INV-000494,Synthetic Party 19,Subscriptions,expense,424.41,Sales
+2026-08-10,4323.31,AUD,Travel - National,Synthetic ledger item 495,L1000-000495,SYN-INV-000495,Synthetic Party 20,Travel - National,expense,432.33,Admin
+2026-08-11,4402.5,AUD,Interest Income,Synthetic ledger item 496,L1000-000496,SYN-INV-000496,Synthetic Party 21,Interest Income,other_income,440.25,Operations
+2026-08-12,4481.69,AUD,Sales,Synthetic ledger item 497,L1000-000497,SYN-INV-000497,Synthetic Party 22,Sales,income,448.17,Sales
+2026-08-13,4560.88,AUD,Purchases,Synthetic ledger item 498,L1000-000498,SYN-INV-000498,Synthetic Party 23,Purchases,cost_of_goods_sold,456.09,Admin
+2026-08-14,4640.07,AUD,Rent,Synthetic ledger item 499,L1000-000499,SYN-INV-000499,Synthetic Party 24,Rent,expense,464.01,Operations
+2026-08-15,4719.26,AUD,Office Expenses,Synthetic ledger item 500,L1000-000500,SYN-INV-000500,Synthetic Party 25,Office Expenses,expense,471.93,Sales
+2026-08-16,4798.45,AUD,Bank Fees,Synthetic ledger item 501,L1000-000501,SYN-INV-000501,Synthetic Party 1,Bank Fees,expense,479.85,Admin
+2026-08-17,4877.64,AUD,Subscriptions,Synthetic ledger item 502,L1000-000502,SYN-INV-000502,Synthetic Party 2,Subscriptions,expense,487.76,Operations
+2026-08-18,4956.83,AUD,Travel - National,Synthetic ledger item 503,L1000-000503,SYN-INV-000503,Synthetic Party 3,Travel - National,expense,495.68,Sales
+2026-08-19,46.02,AUD,Interest Income,Synthetic ledger item 504,L1000-000504,SYN-INV-000504,Synthetic Party 4,Interest Income,other_income,4.6,Admin
+2026-08-20,125.21,AUD,Sales,Synthetic ledger item 505,L1000-000505,SYN-INV-000505,Synthetic Party 5,Sales,income,12.52,Operations
+2026-08-21,204.4,AUD,Purchases,Synthetic ledger item 506,L1000-000506,SYN-INV-000506,Synthetic Party 6,Purchases,cost_of_goods_sold,20.44,Sales
+2026-08-22,-283.59,AUD,Rent,Synthetic ledger item 507,L1000-000507,SYN-INV-000507,Synthetic Party 7,Rent,expense,-28.36,Admin
+2026-08-23,362.78,AUD,Office Expenses,Synthetic ledger item 508,L1000-000508,SYN-INV-000508,Synthetic Party 8,Office Expenses,expense,36.28,Operations
+2026-08-24,441.97,AUD,Bank Fees,Synthetic ledger item 509,L1000-000509,SYN-INV-000509,Synthetic Party 9,Bank Fees,expense,44.2,Sales
+2026-08-25,521.16,AUD,Subscriptions,Synthetic ledger item 510,L1000-000510,SYN-INV-000510,Synthetic Party 10,Subscriptions,expense,52.12,Admin
+2026-08-26,600.35,AUD,Travel - National,Synthetic ledger item 511,L1000-000511,SYN-INV-000511,Synthetic Party 11,Travel - National,expense,60.04,Operations
+2026-08-27,679.54,AUD,Interest Income,Synthetic ledger item 512,L1000-000512,SYN-INV-000512,Synthetic Party 12,Interest Income,other_income,67.95,Sales
+2026-08-28,758.73,AUD,Sales,Synthetic ledger item 513,L1000-000513,SYN-INV-000513,Synthetic Party 13,Sales,income,75.87,Admin
+2026-08-29,837.92,AUD,Purchases,Synthetic ledger item 514,L1000-000514,SYN-INV-000514,Synthetic Party 14,Purchases,cost_of_goods_sold,83.79,Operations
+2026-08-30,917.11,AUD,Rent,Synthetic ledger item 515,L1000-000515,SYN-INV-000515,Synthetic Party 15,Rent,expense,91.71,Sales
+2026-08-31,996.3,AUD,Office Expenses,Synthetic ledger item 516,L1000-000516,SYN-INV-000516,Synthetic Party 16,Office Expenses,expense,99.63,Admin
+2026-09-01,1075.49,AUD,Bank Fees,Synthetic ledger item 517,L1000-000517,SYN-INV-000517,Synthetic Party 17,Bank Fees,expense,107.55,Operations
+2026-09-02,1154.68,AUD,Subscriptions,Synthetic ledger item 518,L1000-000518,SYN-INV-000518,Synthetic Party 18,Subscriptions,expense,115.47,Sales
+2026-09-03,0,AUD,Travel - National,Synthetic ledger item 519,L1000-000519,SYN-INV-000519,Synthetic Party 19,Travel - National,expense,0,Admin
+2026-09-04,1313.06,AUD,Interest Income,Synthetic ledger item 520,L1000-000520,SYN-INV-000520,Synthetic Party 20,Interest Income,other_income,131.31,Operations
+2026-09-05,1392.25,AUD,Sales,Synthetic ledger item 521,L1000-000521,SYN-INV-000521,Synthetic Party 21,Sales,income,139.23,Sales
+2026-09-06,1471.44,AUD,Purchases,Synthetic ledger item 522,L1000-000522,SYN-INV-000522,Synthetic Party 22,Purchases,cost_of_goods_sold,147.14,Admin
+2026-09-07,1550.63,AUD,Rent,Synthetic ledger item 523,L1000-000523,SYN-INV-000523,Synthetic Party 23,Rent,expense,155.06,Operations
+2026-09-08,1629.82,AUD,Office Expenses,Synthetic ledger item 524,L1000-000524,SYN-INV-000524,Synthetic Party 24,Office Expenses,expense,162.98,Sales
+2026-09-09,1709.01,AUD,Bank Fees,Synthetic ledger item 525,L1000-000525,SYN-INV-000525,Synthetic Party 25,Bank Fees,expense,170.9,Admin
+2026-09-10,1788.2,AUD,Subscriptions,Synthetic ledger item 526,L1000-000526,SYN-INV-000526,Synthetic Party 1,Subscriptions,expense,178.82,Operations
+2026-09-11,1867.39,AUD,Travel - National,Synthetic ledger item 527,L1000-000527,SYN-INV-000527,Synthetic Party 2,Travel - National,expense,186.74,Sales
+2026-09-12,1946.58,AUD,Interest Income,Synthetic ledger item 528,L1000-000528,SYN-INV-000528,Synthetic Party 3,Interest Income,other_income,194.66,Admin
+2026-09-13,2025.77,AUD,Sales,Synthetic ledger item 529,L1000-000529,SYN-INV-000529,Synthetic Party 4,Sales,income,202.58,Operations
+2026-09-14,-2104.96,AUD,Purchases,Synthetic ledger item 530,L1000-000530,SYN-INV-000530,Synthetic Party 5,Purchases,cost_of_goods_sold,-210.5,Sales
+2026-09-15,2184.15,AUD,Rent,Synthetic ledger item 531,L1000-000531,SYN-INV-000531,Synthetic Party 6,Rent,expense,218.42,Admin
+2026-09-16,2263.34,AUD,Office Expenses,Synthetic ledger item 532,L1000-000532,SYN-INV-000532,Synthetic Party 7,Office Expenses,expense,226.33,Operations
+2026-09-17,2342.53,AUD,Bank Fees,Synthetic ledger item 533,L1000-000533,SYN-INV-000533,Synthetic Party 8,Bank Fees,expense,234.25,Sales
+2026-09-18,2421.72,AUD,Subscriptions,Synthetic ledger item 534,L1000-000534,SYN-INV-000534,Synthetic Party 9,Subscriptions,expense,242.17,Admin
+2026-09-19,2500.91,AUD,Travel - National,Synthetic ledger item 535,L1000-000535,SYN-INV-000535,Synthetic Party 10,Travel - National,expense,250.09,Operations
+2026-09-20,2580.1,AUD,Interest Income,Synthetic ledger item 536,L1000-000536,SYN-INV-000536,Synthetic Party 11,Interest Income,other_income,258.01,Sales
+2026-09-21,2659.29,AUD,Sales,Synthetic ledger item 537,L1000-000537,SYN-INV-000537,Synthetic Party 12,Sales,income,265.93,Admin
+2026-09-22,2738.48,AUD,Purchases,Synthetic ledger item 538,L1000-000538,SYN-INV-000538,Synthetic Party 13,Purchases,cost_of_goods_sold,273.85,Operations
+2026-09-23,2817.67,AUD,Rent,Synthetic ledger item 539,L1000-000539,SYN-INV-000539,Synthetic Party 14,Rent,expense,281.77,Sales
+2026-09-24,2896.86,AUD,Office Expenses,Synthetic ledger item 540,L1000-000540,SYN-INV-000540,Synthetic Party 15,Office Expenses,expense,289.69,Admin
+2026-09-25,2976.05,AUD,Bank Fees,Synthetic ledger item 541,L1000-000541,SYN-INV-000541,Synthetic Party 16,Bank Fees,expense,297.61,Operations
+2026-09-26,3055.24,AUD,Subscriptions,Synthetic ledger item 542,L1000-000542,SYN-INV-000542,Synthetic Party 17,Subscriptions,expense,305.52,Sales
+2026-09-27,3134.43,AUD,Travel - National,Synthetic ledger item 543,L1000-000543,SYN-INV-000543,Synthetic Party 18,Travel - National,expense,313.44,Admin
+2026-09-28,3213.62,AUD,Interest Income,Synthetic ledger item 544,L1000-000544,SYN-INV-000544,Synthetic Party 19,Interest Income,other_income,321.36,Operations
+2026-09-29,3292.81,AUD,Sales,Synthetic ledger item 545,L1000-000545,SYN-INV-000545,Synthetic Party 20,Sales,income,329.28,Sales
+2026-09-30,3372,AUD,Purchases,Synthetic ledger item 546,L1000-000546,SYN-INV-000546,Synthetic Party 21,Purchases,cost_of_goods_sold,337.2,Admin
+2026-01-01,3451.19,AUD,Rent,Synthetic ledger item 547,L1000-000547,SYN-INV-000547,Synthetic Party 22,Rent,expense,345.12,Operations
+2026-01-02,3530.38,AUD,Office Expenses,Synthetic ledger item 548,L1000-000548,SYN-INV-000548,Synthetic Party 23,Office Expenses,expense,353.04,Sales
+2026-01-03,3609.57,AUD,Bank Fees,Synthetic ledger item 549,L1000-000549,SYN-INV-000549,Synthetic Party 24,Bank Fees,expense,360.96,Admin
+2026-01-04,3688.76,AUD,Subscriptions,Synthetic ledger item 550,L1000-000550,SYN-INV-000550,Synthetic Party 25,Subscriptions,expense,368.88,Operations
+2026-01-05,3767.95,AUD,Travel - National,Synthetic ledger item 551,L1000-000551,SYN-INV-000551,Synthetic Party 1,Travel - National,expense,376.8,Sales
+2026-01-06,3847.14,AUD,Interest Income,Synthetic ledger item 552,L1000-000552,SYN-INV-000552,Synthetic Party 2,Interest Income,other_income,384.71,Admin
+2026-01-07,-3926.33,AUD,Sales,Synthetic ledger item 553,L1000-000553,SYN-INV-000553,Synthetic Party 3,Sales,income,-392.63,Operations
+2026-01-08,4005.52,AUD,Purchases,Synthetic ledger item 554,L1000-000554,SYN-INV-000554,Synthetic Party 4,Purchases,cost_of_goods_sold,400.55,Sales
+2026-01-09,4084.71,AUD,Rent,Synthetic ledger item 555,L1000-000555,SYN-INV-000555,Synthetic Party 5,Rent,expense,408.47,Admin
+2026-01-10,0,AUD,Office Expenses,Synthetic ledger item 556,L1000-000556,SYN-INV-000556,Synthetic Party 6,Office Expenses,expense,0,Operations
+2026-01-11,4243.09,AUD,Bank Fees,Synthetic ledger item 557,L1000-000557,SYN-INV-000557,Synthetic Party 7,Bank Fees,expense,424.31,Sales
+2026-01-12,4322.28,AUD,Subscriptions,Synthetic ledger item 558,L1000-000558,SYN-INV-000558,Synthetic Party 8,Subscriptions,expense,432.23,Admin
+2026-01-13,4401.47,AUD,Travel - National,Synthetic ledger item 559,L1000-000559,SYN-INV-000559,Synthetic Party 9,Travel - National,expense,440.15,Operations
+2026-01-14,4480.66,AUD,Interest Income,Synthetic ledger item 560,L1000-000560,SYN-INV-000560,Synthetic Party 10,Interest Income,other_income,448.07,Sales
+2026-01-15,4559.85,AUD,Sales,Synthetic ledger item 561,L1000-000561,SYN-INV-000561,Synthetic Party 11,Sales,income,455.99,Admin
+2026-01-16,4639.04,AUD,Purchases,Synthetic ledger item 562,L1000-000562,SYN-INV-000562,Synthetic Party 12,Purchases,cost_of_goods_sold,463.9,Operations
+2026-01-17,4718.23,AUD,Rent,Synthetic ledger item 563,L1000-000563,SYN-INV-000563,Synthetic Party 13,Rent,expense,471.82,Sales
+2026-01-18,4797.42,AUD,Office Expenses,Synthetic ledger item 564,L1000-000564,SYN-INV-000564,Synthetic Party 14,Office Expenses,expense,479.74,Admin
+2026-01-19,4876.61,AUD,Bank Fees,Synthetic ledger item 565,L1000-000565,SYN-INV-000565,Synthetic Party 15,Bank Fees,expense,487.66,Operations
+2026-01-20,4955.8,AUD,Subscriptions,Synthetic ledger item 566,L1000-000566,SYN-INV-000566,Synthetic Party 16,Subscriptions,expense,495.58,Sales
+2026-01-21,44.99,AUD,Travel - National,Synthetic ledger item 567,L1000-000567,SYN-INV-000567,Synthetic Party 17,Travel - National,expense,4.5,Admin
+2026-01-22,124.18,AUD,Interest Income,Synthetic ledger item 568,L1000-000568,SYN-INV-000568,Synthetic Party 18,Interest Income,other_income,12.42,Operations
+2026-01-23,203.37,AUD,Sales,Synthetic ledger item 569,L1000-000569,SYN-INV-000569,Synthetic Party 19,Sales,income,20.34,Sales
+2026-01-24,282.56,AUD,Purchases,Synthetic ledger item 570,L1000-000570,SYN-INV-000570,Synthetic Party 20,Purchases,cost_of_goods_sold,28.26,Admin
+2026-01-25,361.75,AUD,Rent,Synthetic ledger item 571,L1000-000571,SYN-INV-000571,Synthetic Party 21,Rent,expense,36.18,Operations
+2026-01-26,440.94,AUD,Office Expenses,Synthetic ledger item 572,L1000-000572,SYN-INV-000572,Synthetic Party 22,Office Expenses,expense,44.09,Sales
+2026-01-27,520.13,AUD,Bank Fees,Synthetic ledger item 573,L1000-000573,SYN-INV-000573,Synthetic Party 23,Bank Fees,expense,52.01,Admin
+2026-01-28,599.32,AUD,Subscriptions,Synthetic ledger item 574,L1000-000574,SYN-INV-000574,Synthetic Party 24,Subscriptions,expense,59.93,Operations
+2026-01-29,678.51,AUD,Travel - National,Synthetic ledger item 575,L1000-000575,SYN-INV-000575,Synthetic Party 25,Travel - National,expense,67.85,Sales
+2026-01-30,-757.7,AUD,Interest Income,Synthetic ledger item 576,L1000-000576,SYN-INV-000576,Synthetic Party 1,Interest Income,other_income,-75.77,Admin
+2026-01-31,836.89,AUD,Sales,Synthetic ledger item 577,L1000-000577,SYN-INV-000577,Synthetic Party 2,Sales,income,83.69,Operations
+2026-02-01,916.08,AUD,Purchases,Synthetic ledger item 578,L1000-000578,SYN-INV-000578,Synthetic Party 3,Purchases,cost_of_goods_sold,91.61,Sales
+2026-02-02,995.27,AUD,Rent,Synthetic ledger item 579,L1000-000579,SYN-INV-000579,Synthetic Party 4,Rent,expense,99.53,Admin
+2026-02-03,1074.46,AUD,Office Expenses,Synthetic ledger item 580,L1000-000580,SYN-INV-000580,Synthetic Party 5,Office Expenses,expense,107.45,Operations
+2026-02-04,1153.65,AUD,Bank Fees,Synthetic ledger item 581,L1000-000581,SYN-INV-000581,Synthetic Party 6,Bank Fees,expense,115.37,Sales
+2026-02-05,1232.84,AUD,Subscriptions,Synthetic ledger item 582,L1000-000582,SYN-INV-000582,Synthetic Party 7,Subscriptions,expense,123.28,Admin
+2026-02-06,1312.03,AUD,Travel - National,Synthetic ledger item 583,L1000-000583,SYN-INV-000583,Synthetic Party 8,Travel - National,expense,131.2,Operations
+2026-02-07,1391.22,AUD,Interest Income,Synthetic ledger item 584,L1000-000584,SYN-INV-000584,Synthetic Party 9,Interest Income,other_income,139.12,Sales
+2026-02-08,1470.41,AUD,Sales,Synthetic ledger item 585,L1000-000585,SYN-INV-000585,Synthetic Party 10,Sales,income,147.04,Admin
+2026-02-09,1549.6,AUD,Purchases,Synthetic ledger item 586,L1000-000586,SYN-INV-000586,Synthetic Party 11,Purchases,cost_of_goods_sold,154.96,Operations
+2026-02-10,1628.79,AUD,Rent,Synthetic ledger item 587,L1000-000587,SYN-INV-000587,Synthetic Party 12,Rent,expense,162.88,Sales
+2026-02-11,1707.98,AUD,Office Expenses,Synthetic ledger item 588,L1000-000588,SYN-INV-000588,Synthetic Party 13,Office Expenses,expense,170.8,Admin
+2026-02-12,1787.17,AUD,Bank Fees,Synthetic ledger item 589,L1000-000589,SYN-INV-000589,Synthetic Party 14,Bank Fees,expense,178.72,Operations
+2026-02-13,1866.36,AUD,Subscriptions,Synthetic ledger item 590,L1000-000590,SYN-INV-000590,Synthetic Party 15,Subscriptions,expense,186.64,Sales
+2026-02-14,1945.55,AUD,Travel - National,Synthetic ledger item 591,L1000-000591,SYN-INV-000591,Synthetic Party 16,Travel - National,expense,194.56,Admin
+2026-02-15,2024.74,AUD,Interest Income,Synthetic ledger item 592,L1000-000592,SYN-INV-000592,Synthetic Party 17,Interest Income,other_income,202.47,Operations
+2026-02-16,0,AUD,Sales,Synthetic ledger item 593,L1000-000593,SYN-INV-000593,Synthetic Party 18,Sales,income,0,Sales
+2026-02-17,2183.12,AUD,Purchases,Synthetic ledger item 594,L1000-000594,SYN-INV-000594,Synthetic Party 19,Purchases,cost_of_goods_sold,218.31,Admin
+2026-02-18,2262.31,AUD,Rent,Synthetic ledger item 595,L1000-000595,SYN-INV-000595,Synthetic Party 20,Rent,expense,226.23,Operations
+2026-02-19,2341.5,AUD,Office Expenses,Synthetic ledger item 596,L1000-000596,SYN-INV-000596,Synthetic Party 21,Office Expenses,expense,234.15,Sales
+2026-02-20,2420.69,AUD,Bank Fees,Synthetic ledger item 597,L1000-000597,SYN-INV-000597,Synthetic Party 22,Bank Fees,expense,242.07,Admin
+2026-02-21,2499.88,AUD,Subscriptions,Synthetic ledger item 598,L1000-000598,SYN-INV-000598,Synthetic Party 23,Subscriptions,expense,249.99,Operations
+2026-02-22,-2579.07,AUD,Travel - National,Synthetic ledger item 599,L1000-000599,SYN-INV-000599,Synthetic Party 24,Travel - National,expense,-257.91,Sales
+2026-02-23,2658.26,AUD,Interest Income,Synthetic ledger item 600,L1000-000600,SYN-INV-000600,Synthetic Party 25,Interest Income,other_income,265.83,Admin
+2026-02-24,2737.45,AUD,Sales,Synthetic ledger item 601,L1000-000601,SYN-INV-000601,Synthetic Party 1,Sales,income,273.75,Operations
+2026-02-25,2816.64,AUD,Purchases,Synthetic ledger item 602,L1000-000602,SYN-INV-000602,Synthetic Party 2,Purchases,cost_of_goods_sold,281.66,Sales
+2026-02-26,2895.83,AUD,Rent,Synthetic ledger item 603,L1000-000603,SYN-INV-000603,Synthetic Party 3,Rent,expense,289.58,Admin
+2026-02-27,2975.02,AUD,Office Expenses,Synthetic ledger item 604,L1000-000604,SYN-INV-000604,Synthetic Party 4,Office Expenses,expense,297.5,Operations
+2026-02-28,3054.21,AUD,Bank Fees,Synthetic ledger item 605,L1000-000605,SYN-INV-000605,Synthetic Party 5,Bank Fees,expense,305.42,Sales
+2026-03-01,3133.4,AUD,Subscriptions,Synthetic ledger item 606,L1000-000606,SYN-INV-000606,Synthetic Party 6,Subscriptions,expense,313.34,Admin
+2026-03-02,3212.59,AUD,Travel - National,Synthetic ledger item 607,L1000-000607,SYN-INV-000607,Synthetic Party 7,Travel - National,expense,321.26,Operations
+2026-03-03,3291.78,AUD,Interest Income,Synthetic ledger item 608,L1000-000608,SYN-INV-000608,Synthetic Party 8,Interest Income,other_income,329.18,Sales
+2026-03-04,3370.97,AUD,Sales,Synthetic ledger item 609,L1000-000609,SYN-INV-000609,Synthetic Party 9,Sales,income,337.1,Admin
+2026-03-05,3450.16,AUD,Purchases,Synthetic ledger item 610,L1000-000610,SYN-INV-000610,Synthetic Party 10,Purchases,cost_of_goods_sold,345.02,Operations
+2026-03-06,3529.35,AUD,Rent,Synthetic ledger item 611,L1000-000611,SYN-INV-000611,Synthetic Party 11,Rent,expense,352.94,Sales
+2026-03-07,3608.54,AUD,Office Expenses,Synthetic ledger item 612,L1000-000612,SYN-INV-000612,Synthetic Party 12,Office Expenses,expense,360.85,Admin
+2026-03-08,3687.73,AUD,Bank Fees,Synthetic ledger item 613,L1000-000613,SYN-INV-000613,Synthetic Party 13,Bank Fees,expense,368.77,Operations
+2026-03-09,3766.92,AUD,Subscriptions,Synthetic ledger item 614,L1000-000614,SYN-INV-000614,Synthetic Party 14,Subscriptions,expense,376.69,Sales
+2026-03-10,3846.11,AUD,Travel - National,Synthetic ledger item 615,L1000-000615,SYN-INV-000615,Synthetic Party 15,Travel - National,expense,384.61,Admin
+2026-03-11,3925.3,AUD,Interest Income,Synthetic ledger item 616,L1000-000616,SYN-INV-000616,Synthetic Party 16,Interest Income,other_income,392.53,Operations
+2026-03-12,4004.49,AUD,Sales,Synthetic ledger item 617,L1000-000617,SYN-INV-000617,Synthetic Party 17,Sales,income,400.45,Sales
+2026-03-13,4083.68,AUD,Purchases,Synthetic ledger item 618,L1000-000618,SYN-INV-000618,Synthetic Party 18,Purchases,cost_of_goods_sold,408.37,Admin
+2026-03-14,4162.87,AUD,Rent,Synthetic ledger item 619,L1000-000619,SYN-INV-000619,Synthetic Party 19,Rent,expense,416.29,Operations
+2026-03-15,4242.06,AUD,Office Expenses,Synthetic ledger item 620,L1000-000620,SYN-INV-000620,Synthetic Party 20,Office Expenses,expense,424.21,Sales
+2026-03-16,4321.25,AUD,Bank Fees,Synthetic ledger item 621,L1000-000621,SYN-INV-000621,Synthetic Party 21,Bank Fees,expense,432.13,Admin
+2026-03-17,-4400.44,AUD,Subscriptions,Synthetic ledger item 622,L1000-000622,SYN-INV-000622,Synthetic Party 22,Subscriptions,expense,-440.04,Operations
+2026-03-18,4479.63,AUD,Travel - National,Synthetic ledger item 623,L1000-000623,SYN-INV-000623,Synthetic Party 23,Travel - National,expense,447.96,Sales
+2026-03-19,4558.82,AUD,Interest Income,Synthetic ledger item 624,L1000-000624,SYN-INV-000624,Synthetic Party 24,Interest Income,other_income,455.88,Admin
+2026-03-20,4638.01,AUD,Sales,Synthetic ledger item 625,L1000-000625,SYN-INV-000625,Synthetic Party 25,Sales,income,463.8,Operations
+2026-03-21,4717.2,AUD,Purchases,Synthetic ledger item 626,L1000-000626,SYN-INV-000626,Synthetic Party 1,Purchases,cost_of_goods_sold,471.72,Sales
+2026-03-22,4796.39,AUD,Rent,Synthetic ledger item 627,L1000-000627,SYN-INV-000627,Synthetic Party 2,Rent,expense,479.64,Admin
+2026-03-23,4875.58,AUD,Office Expenses,Synthetic ledger item 628,L1000-000628,SYN-INV-000628,Synthetic Party 3,Office Expenses,expense,487.56,Operations
+2026-03-24,4954.77,AUD,Bank Fees,Synthetic ledger item 629,L1000-000629,SYN-INV-000629,Synthetic Party 4,Bank Fees,expense,495.48,Sales
+2026-03-25,0,AUD,Subscriptions,Synthetic ledger item 630,L1000-000630,SYN-INV-000630,Synthetic Party 5,Subscriptions,expense,0,Admin
+2026-03-26,123.15,AUD,Travel - National,Synthetic ledger item 631,L1000-000631,SYN-INV-000631,Synthetic Party 6,Travel - National,expense,12.32,Operations
+2026-03-27,202.34,AUD,Interest Income,Synthetic ledger item 632,L1000-000632,SYN-INV-000632,Synthetic Party 7,Interest Income,other_income,20.23,Sales
+2026-03-28,281.53,AUD,Sales,Synthetic ledger item 633,L1000-000633,SYN-INV-000633,Synthetic Party 8,Sales,income,28.15,Admin
+2026-03-29,360.72,AUD,Purchases,Synthetic ledger item 634,L1000-000634,SYN-INV-000634,Synthetic Party 9,Purchases,cost_of_goods_sold,36.07,Operations
+2026-03-30,439.91,AUD,Rent,Synthetic ledger item 635,L1000-000635,SYN-INV-000635,Synthetic Party 10,Rent,expense,43.99,Sales
+2026-03-31,519.1,AUD,Office Expenses,Synthetic ledger item 636,L1000-000636,SYN-INV-000636,Synthetic Party 11,Office Expenses,expense,51.91,Admin
+2026-04-01,598.29,AUD,Bank Fees,Synthetic ledger item 637,L1000-000637,SYN-INV-000637,Synthetic Party 12,Bank Fees,expense,59.83,Operations
+2026-04-02,677.48,AUD,Subscriptions,Synthetic ledger item 638,L1000-000638,SYN-INV-000638,Synthetic Party 13,Subscriptions,expense,67.75,Sales
+2026-04-03,756.67,AUD,Travel - National,Synthetic ledger item 639,L1000-000639,SYN-INV-000639,Synthetic Party 14,Travel - National,expense,75.67,Admin
+2026-04-04,835.86,AUD,Interest Income,Synthetic ledger item 640,L1000-000640,SYN-INV-000640,Synthetic Party 15,Interest Income,other_income,83.59,Operations
+2026-04-05,915.05,AUD,Sales,Synthetic ledger item 641,L1000-000641,SYN-INV-000641,Synthetic Party 16,Sales,income,91.51,Sales
+2026-04-06,994.24,AUD,Purchases,Synthetic ledger item 642,L1000-000642,SYN-INV-000642,Synthetic Party 17,Purchases,cost_of_goods_sold,99.42,Admin
+2026-04-07,1073.43,AUD,Rent,Synthetic ledger item 643,L1000-000643,SYN-INV-000643,Synthetic Party 18,Rent,expense,107.34,Operations
+2026-04-08,1152.62,AUD,Office Expenses,Synthetic ledger item 644,L1000-000644,SYN-INV-000644,Synthetic Party 19,Office Expenses,expense,115.26,Sales
+2026-04-09,-1231.81,AUD,Bank Fees,Synthetic ledger item 645,L1000-000645,SYN-INV-000645,Synthetic Party 20,Bank Fees,expense,-123.18,Admin
+2026-04-10,1311,AUD,Subscriptions,Synthetic ledger item 646,L1000-000646,SYN-INV-000646,Synthetic Party 21,Subscriptions,expense,131.1,Operations
+2026-04-11,1390.19,AUD,Travel - National,Synthetic ledger item 647,L1000-000647,SYN-INV-000647,Synthetic Party 22,Travel - National,expense,139.02,Sales
+2026-04-12,1469.38,AUD,Interest Income,Synthetic ledger item 648,L1000-000648,SYN-INV-000648,Synthetic Party 23,Interest Income,other_income,146.94,Admin
+2026-04-13,1548.57,AUD,Sales,Synthetic ledger item 649,L1000-000649,SYN-INV-000649,Synthetic Party 24,Sales,income,154.86,Operations
+2026-04-14,1627.76,AUD,Purchases,Synthetic ledger item 650,L1000-000650,SYN-INV-000650,Synthetic Party 25,Purchases,cost_of_goods_sold,162.78,Sales
+2026-04-15,1706.95,AUD,Rent,Synthetic ledger item 651,L1000-000651,SYN-INV-000651,Synthetic Party 1,Rent,expense,170.7,Admin
+2026-04-16,1786.14,AUD,Office Expenses,Synthetic ledger item 652,L1000-000652,SYN-INV-000652,Synthetic Party 2,Office Expenses,expense,178.61,Operations
+2026-04-17,1865.33,AUD,Bank Fees,Synthetic ledger item 653,L1000-000653,SYN-INV-000653,Synthetic Party 3,Bank Fees,expense,186.53,Sales
+2026-04-18,1944.52,AUD,Subscriptions,Synthetic ledger item 654,L1000-000654,SYN-INV-000654,Synthetic Party 4,Subscriptions,expense,194.45,Admin
+2026-04-19,2023.71,AUD,Travel - National,Synthetic ledger item 655,L1000-000655,SYN-INV-000655,Synthetic Party 5,Travel - National,expense,202.37,Operations
+2026-04-20,2102.9,AUD,Interest Income,Synthetic ledger item 656,L1000-000656,SYN-INV-000656,Synthetic Party 6,Interest Income,other_income,210.29,Sales
+2026-04-21,2182.09,AUD,Sales,Synthetic ledger item 657,L1000-000657,SYN-INV-000657,Synthetic Party 7,Sales,income,218.21,Admin
+2026-04-22,2261.28,AUD,Purchases,Synthetic ledger item 658,L1000-000658,SYN-INV-000658,Synthetic Party 8,Purchases,cost_of_goods_sold,226.13,Operations
+2026-04-23,2340.47,AUD,Rent,Synthetic ledger item 659,L1000-000659,SYN-INV-000659,Synthetic Party 9,Rent,expense,234.05,Sales
+2026-04-24,2419.66,AUD,Office Expenses,Synthetic ledger item 660,L1000-000660,SYN-INV-000660,Synthetic Party 10,Office Expenses,expense,241.97,Admin
+2026-04-25,2498.85,AUD,Bank Fees,Synthetic ledger item 661,L1000-000661,SYN-INV-000661,Synthetic Party 11,Bank Fees,expense,249.89,Operations
+2026-04-26,2578.04,AUD,Subscriptions,Synthetic ledger item 662,L1000-000662,SYN-INV-000662,Synthetic Party 12,Subscriptions,expense,257.8,Sales
+2026-04-27,2657.23,AUD,Travel - National,Synthetic ledger item 663,L1000-000663,SYN-INV-000663,Synthetic Party 13,Travel - National,expense,265.72,Admin
+2026-04-28,2736.42,AUD,Interest Income,Synthetic ledger item 664,L1000-000664,SYN-INV-000664,Synthetic Party 14,Interest Income,other_income,273.64,Operations
+2026-04-29,2815.61,AUD,Sales,Synthetic ledger item 665,L1000-000665,SYN-INV-000665,Synthetic Party 15,Sales,income,281.56,Sales
+2026-04-30,2894.8,AUD,Purchases,Synthetic ledger item 666,L1000-000666,SYN-INV-000666,Synthetic Party 16,Purchases,cost_of_goods_sold,289.48,Admin
+2026-05-01,0,AUD,Rent,Synthetic ledger item 667,L1000-000667,SYN-INV-000667,Synthetic Party 17,Rent,expense,0,Operations
+2026-05-02,-3053.18,AUD,Office Expenses,Synthetic ledger item 668,L1000-000668,SYN-INV-000668,Synthetic Party 18,Office Expenses,expense,-305.32,Sales
+2026-05-03,3132.37,AUD,Bank Fees,Synthetic ledger item 669,L1000-000669,SYN-INV-000669,Synthetic Party 19,Bank Fees,expense,313.24,Admin
+2026-05-04,3211.56,AUD,Subscriptions,Synthetic ledger item 670,L1000-000670,SYN-INV-000670,Synthetic Party 20,Subscriptions,expense,321.16,Operations
+2026-05-05,3290.75,AUD,Travel - National,Synthetic ledger item 671,L1000-000671,SYN-INV-000671,Synthetic Party 21,Travel - National,expense,329.08,Sales
+2026-05-06,3369.94,AUD,Interest Income,Synthetic ledger item 672,L1000-000672,SYN-INV-000672,Synthetic Party 22,Interest Income,other_income,336.99,Admin
+2026-05-07,3449.13,AUD,Sales,Synthetic ledger item 673,L1000-000673,SYN-INV-000673,Synthetic Party 23,Sales,income,344.91,Operations
+2026-05-08,3528.32,AUD,Purchases,Synthetic ledger item 674,L1000-000674,SYN-INV-000674,Synthetic Party 24,Purchases,cost_of_goods_sold,352.83,Sales
+2026-05-09,3607.51,AUD,Rent,Synthetic ledger item 675,L1000-000675,SYN-INV-000675,Synthetic Party 25,Rent,expense,360.75,Admin
+2026-05-10,3686.7,AUD,Office Expenses,Synthetic ledger item 676,L1000-000676,SYN-INV-000676,Synthetic Party 1,Office Expenses,expense,368.67,Operations
+2026-05-11,3765.89,AUD,Bank Fees,Synthetic ledger item 677,L1000-000677,SYN-INV-000677,Synthetic Party 2,Bank Fees,expense,376.59,Sales
+2026-05-12,3845.08,AUD,Subscriptions,Synthetic ledger item 678,L1000-000678,SYN-INV-000678,Synthetic Party 3,Subscriptions,expense,384.51,Admin
+2026-05-13,3924.27,AUD,Travel - National,Synthetic ledger item 679,L1000-000679,SYN-INV-000679,Synthetic Party 4,Travel - National,expense,392.43,Operations
+2026-05-14,4003.46,AUD,Interest Income,Synthetic ledger item 680,L1000-000680,SYN-INV-000680,Synthetic Party 5,Interest Income,other_income,400.35,Sales
+2026-05-15,4082.65,AUD,Sales,Synthetic ledger item 681,L1000-000681,SYN-INV-000681,Synthetic Party 6,Sales,income,408.27,Admin
+2026-05-16,4161.84,AUD,Purchases,Synthetic ledger item 682,L1000-000682,SYN-INV-000682,Synthetic Party 7,Purchases,cost_of_goods_sold,416.18,Operations
+2026-05-17,4241.03,AUD,Rent,Synthetic ledger item 683,L1000-000683,SYN-INV-000683,Synthetic Party 8,Rent,expense,424.1,Sales
+2026-05-18,4320.22,AUD,Office Expenses,Synthetic ledger item 684,L1000-000684,SYN-INV-000684,Synthetic Party 9,Office Expenses,expense,432.02,Admin
+2026-05-19,4399.41,AUD,Bank Fees,Synthetic ledger item 685,L1000-000685,SYN-INV-000685,Synthetic Party 10,Bank Fees,expense,439.94,Operations
+2026-05-20,4478.6,AUD,Subscriptions,Synthetic ledger item 686,L1000-000686,SYN-INV-000686,Synthetic Party 11,Subscriptions,expense,447.86,Sales
+2026-05-21,4557.79,AUD,Travel - National,Synthetic ledger item 687,L1000-000687,SYN-INV-000687,Synthetic Party 12,Travel - National,expense,455.78,Admin
+2026-05-22,4636.98,AUD,Interest Income,Synthetic ledger item 688,L1000-000688,SYN-INV-000688,Synthetic Party 13,Interest Income,other_income,463.7,Operations
+2026-05-23,4716.17,AUD,Sales,Synthetic ledger item 689,L1000-000689,SYN-INV-000689,Synthetic Party 14,Sales,income,471.62,Sales
+2026-05-24,4795.36,AUD,Purchases,Synthetic ledger item 690,L1000-000690,SYN-INV-000690,Synthetic Party 15,Purchases,cost_of_goods_sold,479.54,Admin
+2026-05-25,-4874.55,AUD,Rent,Synthetic ledger item 691,L1000-000691,SYN-INV-000691,Synthetic Party 16,Rent,expense,-487.45,Operations
+2026-05-26,4953.74,AUD,Office Expenses,Synthetic ledger item 692,L1000-000692,SYN-INV-000692,Synthetic Party 17,Office Expenses,expense,495.37,Sales
+2026-05-27,42.93,AUD,Bank Fees,Synthetic ledger item 693,L1000-000693,SYN-INV-000693,Synthetic Party 18,Bank Fees,expense,4.29,Admin
+2026-05-28,122.12,AUD,Subscriptions,Synthetic ledger item 694,L1000-000694,SYN-INV-000694,Synthetic Party 19,Subscriptions,expense,12.21,Operations
+2026-05-29,201.31,AUD,Travel - National,Synthetic ledger item 695,L1000-000695,SYN-INV-000695,Synthetic Party 20,Travel - National,expense,20.13,Sales
+2026-05-30,280.5,AUD,Interest Income,Synthetic ledger item 696,L1000-000696,SYN-INV-000696,Synthetic Party 21,Interest Income,other_income,28.05,Admin
+2026-05-31,359.69,AUD,Sales,Synthetic ledger item 697,L1000-000697,SYN-INV-000697,Synthetic Party 22,Sales,income,35.97,Operations
+2026-06-01,438.88,AUD,Purchases,Synthetic ledger item 698,L1000-000698,SYN-INV-000698,Synthetic Party 23,Purchases,cost_of_goods_sold,43.89,Sales
+2026-06-02,518.07,AUD,Rent,Synthetic ledger item 699,L1000-000699,SYN-INV-000699,Synthetic Party 24,Rent,expense,51.81,Admin
+2026-06-03,597.26,AUD,Office Expenses,Synthetic ledger item 700,L1000-000700,SYN-INV-000700,Synthetic Party 25,Office Expenses,expense,59.73,Operations
+2026-06-04,676.45,AUD,Bank Fees,Synthetic ledger item 701,L1000-000701,SYN-INV-000701,Synthetic Party 1,Bank Fees,expense,67.65,Sales
+2026-06-05,755.64,AUD,Subscriptions,Synthetic ledger item 702,L1000-000702,SYN-INV-000702,Synthetic Party 2,Subscriptions,expense,75.56,Admin
+2026-06-06,834.83,AUD,Travel - National,Synthetic ledger item 703,L1000-000703,SYN-INV-000703,Synthetic Party 3,Travel - National,expense,83.48,Operations
+2026-06-07,0,AUD,Interest Income,Synthetic ledger item 704,L1000-000704,SYN-INV-000704,Synthetic Party 4,Interest Income,other_income,0,Sales
+2026-06-08,993.21,AUD,Sales,Synthetic ledger item 705,L1000-000705,SYN-INV-000705,Synthetic Party 5,Sales,income,99.32,Admin
+2026-06-09,1072.4,AUD,Purchases,Synthetic ledger item 706,L1000-000706,SYN-INV-000706,Synthetic Party 6,Purchases,cost_of_goods_sold,107.24,Operations
+2026-06-10,1151.59,AUD,Rent,Synthetic ledger item 707,L1000-000707,SYN-INV-000707,Synthetic Party 7,Rent,expense,115.16,Sales
+2026-06-11,1230.78,AUD,Office Expenses,Synthetic ledger item 708,L1000-000708,SYN-INV-000708,Synthetic Party 8,Office Expenses,expense,123.08,Admin
+2026-06-12,1309.97,AUD,Bank Fees,Synthetic ledger item 709,L1000-000709,SYN-INV-000709,Synthetic Party 9,Bank Fees,expense,131,Operations
+2026-06-13,1389.16,AUD,Subscriptions,Synthetic ledger item 710,L1000-000710,SYN-INV-000710,Synthetic Party 10,Subscriptions,expense,138.92,Sales
+2026-06-14,1468.35,AUD,Travel - National,Synthetic ledger item 711,L1000-000711,SYN-INV-000711,Synthetic Party 11,Travel - National,expense,146.84,Admin
+2026-06-15,1547.54,AUD,Interest Income,Synthetic ledger item 712,L1000-000712,SYN-INV-000712,Synthetic Party 12,Interest Income,other_income,154.75,Operations
+2026-06-16,1626.73,AUD,Sales,Synthetic ledger item 713,L1000-000713,SYN-INV-000713,Synthetic Party 13,Sales,income,162.67,Sales
+2026-06-17,-1705.92,AUD,Purchases,Synthetic ledger item 714,L1000-000714,SYN-INV-000714,Synthetic Party 14,Purchases,cost_of_goods_sold,-170.59,Admin
+2026-06-18,1785.11,AUD,Rent,Synthetic ledger item 715,L1000-000715,SYN-INV-000715,Synthetic Party 15,Rent,expense,178.51,Operations
+2026-06-19,1864.3,AUD,Office Expenses,Synthetic ledger item 716,L1000-000716,SYN-INV-000716,Synthetic Party 16,Office Expenses,expense,186.43,Sales
+2026-06-20,1943.49,AUD,Bank Fees,Synthetic ledger item 717,L1000-000717,SYN-INV-000717,Synthetic Party 17,Bank Fees,expense,194.35,Admin
+2026-06-21,2022.68,AUD,Subscriptions,Synthetic ledger item 718,L1000-000718,SYN-INV-000718,Synthetic Party 18,Subscriptions,expense,202.27,Operations
+2026-06-22,2101.87,AUD,Travel - National,Synthetic ledger item 719,L1000-000719,SYN-INV-000719,Synthetic Party 19,Travel - National,expense,210.19,Sales
+2026-06-23,2181.06,AUD,Interest Income,Synthetic ledger item 720,L1000-000720,SYN-INV-000720,Synthetic Party 20,Interest Income,other_income,218.11,Admin
+2026-06-24,2260.25,AUD,Sales,Synthetic ledger item 721,L1000-000721,SYN-INV-000721,Synthetic Party 21,Sales,income,226.03,Operations
+2026-06-25,2339.44,AUD,Purchases,Synthetic ledger item 722,L1000-000722,SYN-INV-000722,Synthetic Party 22,Purchases,cost_of_goods_sold,233.94,Sales
+2026-06-26,2418.63,AUD,Rent,Synthetic ledger item 723,L1000-000723,SYN-INV-000723,Synthetic Party 23,Rent,expense,241.86,Admin
+2026-06-27,2497.82,AUD,Office Expenses,Synthetic ledger item 724,L1000-000724,SYN-INV-000724,Synthetic Party 24,Office Expenses,expense,249.78,Operations
+2026-06-28,2577.01,AUD,Bank Fees,Synthetic ledger item 725,L1000-000725,SYN-INV-000725,Synthetic Party 25,Bank Fees,expense,257.7,Sales
+2026-06-29,2656.2,AUD,Subscriptions,Synthetic ledger item 726,L1000-000726,SYN-INV-000726,Synthetic Party 1,Subscriptions,expense,265.62,Admin
+2026-06-30,2735.39,AUD,Travel - National,Synthetic ledger item 727,L1000-000727,SYN-INV-000727,Synthetic Party 2,Travel - National,expense,273.54,Operations
+2026-07-01,2814.58,AUD,Interest Income,Synthetic ledger item 728,L1000-000728,SYN-INV-000728,Synthetic Party 3,Interest Income,other_income,281.46,Sales
+2026-07-02,2893.77,AUD,Sales,Synthetic ledger item 729,L1000-000729,SYN-INV-000729,Synthetic Party 4,Sales,income,289.38,Admin
+2026-07-03,2972.96,AUD,Purchases,Synthetic ledger item 730,L1000-000730,SYN-INV-000730,Synthetic Party 5,Purchases,cost_of_goods_sold,297.3,Operations
+2026-07-04,3052.15,AUD,Rent,Synthetic ledger item 731,L1000-000731,SYN-INV-000731,Synthetic Party 6,Rent,expense,305.22,Sales
+2026-07-05,3131.34,AUD,Office Expenses,Synthetic ledger item 732,L1000-000732,SYN-INV-000732,Synthetic Party 7,Office Expenses,expense,313.13,Admin
+2026-07-06,3210.53,AUD,Bank Fees,Synthetic ledger item 733,L1000-000733,SYN-INV-000733,Synthetic Party 8,Bank Fees,expense,321.05,Operations
+2026-07-07,3289.72,AUD,Subscriptions,Synthetic ledger item 734,L1000-000734,SYN-INV-000734,Synthetic Party 9,Subscriptions,expense,328.97,Sales
+2026-07-08,3368.91,AUD,Travel - National,Synthetic ledger item 735,L1000-000735,SYN-INV-000735,Synthetic Party 10,Travel - National,expense,336.89,Admin
+2026-07-09,3448.1,AUD,Interest Income,Synthetic ledger item 736,L1000-000736,SYN-INV-000736,Synthetic Party 11,Interest Income,other_income,344.81,Operations
+2026-07-10,-3527.29,AUD,Sales,Synthetic ledger item 737,L1000-000737,SYN-INV-000737,Synthetic Party 12,Sales,income,-352.73,Sales
+2026-07-11,3606.48,AUD,Purchases,Synthetic ledger item 738,L1000-000738,SYN-INV-000738,Synthetic Party 13,Purchases,cost_of_goods_sold,360.65,Admin
+2026-07-12,3685.67,AUD,Rent,Synthetic ledger item 739,L1000-000739,SYN-INV-000739,Synthetic Party 14,Rent,expense,368.57,Operations
+2026-07-13,3764.86,AUD,Office Expenses,Synthetic ledger item 740,L1000-000740,SYN-INV-000740,Synthetic Party 15,Office Expenses,expense,376.49,Sales
+2026-07-14,0,AUD,Bank Fees,Synthetic ledger item 741,L1000-000741,SYN-INV-000741,Synthetic Party 16,Bank Fees,expense,0,Admin
+2026-07-15,3923.24,AUD,Subscriptions,Synthetic ledger item 742,L1000-000742,SYN-INV-000742,Synthetic Party 17,Subscriptions,expense,392.32,Operations
+2026-07-16,4002.43,AUD,Travel - National,Synthetic ledger item 743,L1000-000743,SYN-INV-000743,Synthetic Party 18,Travel - National,expense,400.24,Sales
+2026-07-17,4081.62,AUD,Interest Income,Synthetic ledger item 744,L1000-000744,SYN-INV-000744,Synthetic Party 19,Interest Income,other_income,408.16,Admin
+2026-07-18,4160.81,AUD,Sales,Synthetic ledger item 745,L1000-000745,SYN-INV-000745,Synthetic Party 20,Sales,income,416.08,Operations
+2026-07-19,4240,AUD,Purchases,Synthetic ledger item 746,L1000-000746,SYN-INV-000746,Synthetic Party 21,Purchases,cost_of_goods_sold,424,Sales
+2026-07-20,4319.19,AUD,Rent,Synthetic ledger item 747,L1000-000747,SYN-INV-000747,Synthetic Party 22,Rent,expense,431.92,Admin
+2026-07-21,4398.38,AUD,Office Expenses,Synthetic ledger item 748,L1000-000748,SYN-INV-000748,Synthetic Party 23,Office Expenses,expense,439.84,Operations
+2026-07-22,4477.57,AUD,Bank Fees,Synthetic ledger item 749,L1000-000749,SYN-INV-000749,Synthetic Party 24,Bank Fees,expense,447.76,Sales
+2026-07-23,4556.76,AUD,Subscriptions,Synthetic ledger item 750,L1000-000750,SYN-INV-000750,Synthetic Party 25,Subscriptions,expense,455.68,Admin
+2026-07-24,4635.95,AUD,Travel - National,Synthetic ledger item 751,L1000-000751,SYN-INV-000751,Synthetic Party 1,Travel - National,expense,463.6,Operations
+2026-07-25,4715.14,AUD,Interest Income,Synthetic ledger item 752,L1000-000752,SYN-INV-000752,Synthetic Party 2,Interest Income,other_income,471.51,Sales
+2026-07-26,4794.33,AUD,Sales,Synthetic ledger item 753,L1000-000753,SYN-INV-000753,Synthetic Party 3,Sales,income,479.43,Admin
+2026-07-27,4873.52,AUD,Purchases,Synthetic ledger item 754,L1000-000754,SYN-INV-000754,Synthetic Party 4,Purchases,cost_of_goods_sold,487.35,Operations
+2026-07-28,4952.71,AUD,Rent,Synthetic ledger item 755,L1000-000755,SYN-INV-000755,Synthetic Party 5,Rent,expense,495.27,Sales
+2026-07-29,41.9,AUD,Office Expenses,Synthetic ledger item 756,L1000-000756,SYN-INV-000756,Synthetic Party 6,Office Expenses,expense,4.19,Admin
+2026-07-30,121.09,AUD,Bank Fees,Synthetic ledger item 757,L1000-000757,SYN-INV-000757,Synthetic Party 7,Bank Fees,expense,12.11,Operations
+2026-07-31,200.28,AUD,Subscriptions,Synthetic ledger item 758,L1000-000758,SYN-INV-000758,Synthetic Party 8,Subscriptions,expense,20.03,Sales
+2026-08-01,279.47,AUD,Travel - National,Synthetic ledger item 759,L1000-000759,SYN-INV-000759,Synthetic Party 9,Travel - National,expense,27.95,Admin
+2026-08-02,-358.66,AUD,Interest Income,Synthetic ledger item 760,L1000-000760,SYN-INV-000760,Synthetic Party 10,Interest Income,other_income,-35.87,Operations
+2026-08-03,437.85,AUD,Sales,Synthetic ledger item 761,L1000-000761,SYN-INV-000761,Synthetic Party 11,Sales,income,43.79,Sales
+2026-08-04,517.04,AUD,Purchases,Synthetic ledger item 762,L1000-000762,SYN-INV-000762,Synthetic Party 12,Purchases,cost_of_goods_sold,51.7,Admin
+2026-08-05,596.23,AUD,Rent,Synthetic ledger item 763,L1000-000763,SYN-INV-000763,Synthetic Party 13,Rent,expense,59.62,Operations
+2026-08-06,675.42,AUD,Office Expenses,Synthetic ledger item 764,L1000-000764,SYN-INV-000764,Synthetic Party 14,Office Expenses,expense,67.54,Sales
+2026-08-07,754.61,AUD,Bank Fees,Synthetic ledger item 765,L1000-000765,SYN-INV-000765,Synthetic Party 15,Bank Fees,expense,75.46,Admin
+2026-08-08,833.8,AUD,Subscriptions,Synthetic ledger item 766,L1000-000766,SYN-INV-000766,Synthetic Party 16,Subscriptions,expense,83.38,Operations
+2026-08-09,912.99,AUD,Travel - National,Synthetic ledger item 767,L1000-000767,SYN-INV-000767,Synthetic Party 17,Travel - National,expense,91.3,Sales
+2026-08-10,992.18,AUD,Interest Income,Synthetic ledger item 768,L1000-000768,SYN-INV-000768,Synthetic Party 18,Interest Income,other_income,99.22,Admin
+2026-08-11,1071.37,AUD,Sales,Synthetic ledger item 769,L1000-000769,SYN-INV-000769,Synthetic Party 19,Sales,income,107.14,Operations
+2026-08-12,1150.56,AUD,Purchases,Synthetic ledger item 770,L1000-000770,SYN-INV-000770,Synthetic Party 20,Purchases,cost_of_goods_sold,115.06,Sales
+2026-08-13,1229.75,AUD,Rent,Synthetic ledger item 771,L1000-000771,SYN-INV-000771,Synthetic Party 21,Rent,expense,122.98,Admin
+2026-08-14,1308.94,AUD,Office Expenses,Synthetic ledger item 772,L1000-000772,SYN-INV-000772,Synthetic Party 22,Office Expenses,expense,130.89,Operations
+2026-08-15,1388.13,AUD,Bank Fees,Synthetic ledger item 773,L1000-000773,SYN-INV-000773,Synthetic Party 23,Bank Fees,expense,138.81,Sales
+2026-08-16,1467.32,AUD,Subscriptions,Synthetic ledger item 774,L1000-000774,SYN-INV-000774,Synthetic Party 24,Subscriptions,expense,146.73,Admin
+2026-08-17,1546.51,AUD,Travel - National,Synthetic ledger item 775,L1000-000775,SYN-INV-000775,Synthetic Party 25,Travel - National,expense,154.65,Operations
+2026-08-18,1625.7,AUD,Interest Income,Synthetic ledger item 776,L1000-000776,SYN-INV-000776,Synthetic Party 1,Interest Income,other_income,162.57,Sales
+2026-08-19,1704.89,AUD,Sales,Synthetic ledger item 777,L1000-000777,SYN-INV-000777,Synthetic Party 2,Sales,income,170.49,Admin
+2026-08-20,0,AUD,Purchases,Synthetic ledger item 778,L1000-000778,SYN-INV-000778,Synthetic Party 3,Purchases,cost_of_goods_sold,0,Operations
+2026-08-21,1863.27,AUD,Rent,Synthetic ledger item 779,L1000-000779,SYN-INV-000779,Synthetic Party 4,Rent,expense,186.33,Sales
+2026-08-22,1942.46,AUD,Office Expenses,Synthetic ledger item 780,L1000-000780,SYN-INV-000780,Synthetic Party 5,Office Expenses,expense,194.25,Admin
+2026-08-23,2021.65,AUD,Bank Fees,Synthetic ledger item 781,L1000-000781,SYN-INV-000781,Synthetic Party 6,Bank Fees,expense,202.17,Operations
+2026-08-24,2100.84,AUD,Subscriptions,Synthetic ledger item 782,L1000-000782,SYN-INV-000782,Synthetic Party 7,Subscriptions,expense,210.08,Sales
+2026-08-25,-2180.03,AUD,Travel - National,Synthetic ledger item 783,L1000-000783,SYN-INV-000783,Synthetic Party 8,Travel - National,expense,-218,Admin
+2026-08-26,2259.22,AUD,Interest Income,Synthetic ledger item 784,L1000-000784,SYN-INV-000784,Synthetic Party 9,Interest Income,other_income,225.92,Operations
+2026-08-27,2338.41,AUD,Sales,Synthetic ledger item 785,L1000-000785,SYN-INV-000785,Synthetic Party 10,Sales,income,233.84,Sales
+2026-08-28,2417.6,AUD,Purchases,Synthetic ledger item 786,L1000-000786,SYN-INV-000786,Synthetic Party 11,Purchases,cost_of_goods_sold,241.76,Admin
+2026-08-29,2496.79,AUD,Rent,Synthetic ledger item 787,L1000-000787,SYN-INV-000787,Synthetic Party 12,Rent,expense,249.68,Operations
+2026-08-30,2575.98,AUD,Office Expenses,Synthetic ledger item 788,L1000-000788,SYN-INV-000788,Synthetic Party 13,Office Expenses,expense,257.6,Sales
+2026-08-31,2655.17,AUD,Bank Fees,Synthetic ledger item 789,L1000-000789,SYN-INV-000789,Synthetic Party 14,Bank Fees,expense,265.52,Admin
+2026-09-01,2734.36,AUD,Subscriptions,Synthetic ledger item 790,L1000-000790,SYN-INV-000790,Synthetic Party 15,Subscriptions,expense,273.44,Operations
+2026-09-02,2813.55,AUD,Travel - National,Synthetic ledger item 791,L1000-000791,SYN-INV-000791,Synthetic Party 16,Travel - National,expense,281.36,Sales
+2026-09-03,2892.74,AUD,Interest Income,Synthetic ledger item 792,L1000-000792,SYN-INV-000792,Synthetic Party 17,Interest Income,other_income,289.27,Admin
+2026-09-04,2971.93,AUD,Sales,Synthetic ledger item 793,L1000-000793,SYN-INV-000793,Synthetic Party 18,Sales,income,297.19,Operations
+2026-09-05,3051.12,AUD,Purchases,Synthetic ledger item 794,L1000-000794,SYN-INV-000794,Synthetic Party 19,Purchases,cost_of_goods_sold,305.11,Sales
+2026-09-06,3130.31,AUD,Rent,Synthetic ledger item 795,L1000-000795,SYN-INV-000795,Synthetic Party 20,Rent,expense,313.03,Admin
+2026-09-07,3209.5,AUD,Office Expenses,Synthetic ledger item 796,L1000-000796,SYN-INV-000796,Synthetic Party 21,Office Expenses,expense,320.95,Operations
+2026-09-08,3288.69,AUD,Bank Fees,Synthetic ledger item 797,L1000-000797,SYN-INV-000797,Synthetic Party 22,Bank Fees,expense,328.87,Sales
+2026-09-09,3367.88,AUD,Subscriptions,Synthetic ledger item 798,L1000-000798,SYN-INV-000798,Synthetic Party 23,Subscriptions,expense,336.79,Admin
+2026-09-10,3447.07,AUD,Travel - National,Synthetic ledger item 799,L1000-000799,SYN-INV-000799,Synthetic Party 24,Travel - National,expense,344.71,Operations
+2026-09-11,3526.26,AUD,Interest Income,Synthetic ledger item 800,L1000-000800,SYN-INV-000800,Synthetic Party 25,Interest Income,other_income,352.63,Sales
+2026-09-12,3605.45,AUD,Sales,Synthetic ledger item 801,L1000-000801,SYN-INV-000801,Synthetic Party 1,Sales,income,360.55,Admin
+2026-09-13,3684.64,AUD,Purchases,Synthetic ledger item 802,L1000-000802,SYN-INV-000802,Synthetic Party 2,Purchases,cost_of_goods_sold,368.46,Operations
+2026-09-14,3763.83,AUD,Rent,Synthetic ledger item 803,L1000-000803,SYN-INV-000803,Synthetic Party 3,Rent,expense,376.38,Sales
+2026-09-15,3843.02,AUD,Office Expenses,Synthetic ledger item 804,L1000-000804,SYN-INV-000804,Synthetic Party 4,Office Expenses,expense,384.3,Admin
+2026-09-16,3922.21,AUD,Bank Fees,Synthetic ledger item 805,L1000-000805,SYN-INV-000805,Synthetic Party 5,Bank Fees,expense,392.22,Operations
+2026-09-17,-4001.4,AUD,Subscriptions,Synthetic ledger item 806,L1000-000806,SYN-INV-000806,Synthetic Party 6,Subscriptions,expense,-400.14,Sales
+2026-09-18,4080.59,AUD,Travel - National,Synthetic ledger item 807,L1000-000807,SYN-INV-000807,Synthetic Party 7,Travel - National,expense,408.06,Admin
+2026-09-19,4159.78,AUD,Interest Income,Synthetic ledger item 808,L1000-000808,SYN-INV-000808,Synthetic Party 8,Interest Income,other_income,415.98,Operations
+2026-09-20,4238.97,AUD,Sales,Synthetic ledger item 809,L1000-000809,SYN-INV-000809,Synthetic Party 9,Sales,income,423.9,Sales
+2026-09-21,4318.16,AUD,Purchases,Synthetic ledger item 810,L1000-000810,SYN-INV-000810,Synthetic Party 10,Purchases,cost_of_goods_sold,431.82,Admin
+2026-09-22,4397.35,AUD,Rent,Synthetic ledger item 811,L1000-000811,SYN-INV-000811,Synthetic Party 11,Rent,expense,439.74,Operations
+2026-09-23,4476.54,AUD,Office Expenses,Synthetic ledger item 812,L1000-000812,SYN-INV-000812,Synthetic Party 12,Office Expenses,expense,447.65,Sales
+2026-09-24,4555.73,AUD,Bank Fees,Synthetic ledger item 813,L1000-000813,SYN-INV-000813,Synthetic Party 13,Bank Fees,expense,455.57,Admin
+2026-09-25,4634.92,AUD,Subscriptions,Synthetic ledger item 814,L1000-000814,SYN-INV-000814,Synthetic Party 14,Subscriptions,expense,463.49,Operations
+2026-09-26,0,AUD,Travel - National,Synthetic ledger item 815,L1000-000815,SYN-INV-000815,Synthetic Party 15,Travel - National,expense,0,Sales
+2026-09-27,4793.3,AUD,Interest Income,Synthetic ledger item 816,L1000-000816,SYN-INV-000816,Synthetic Party 16,Interest Income,other_income,479.33,Admin
+2026-09-28,4872.49,AUD,Sales,Synthetic ledger item 817,L1000-000817,SYN-INV-000817,Synthetic Party 17,Sales,income,487.25,Operations
+2026-09-29,4951.68,AUD,Purchases,Synthetic ledger item 818,L1000-000818,SYN-INV-000818,Synthetic Party 18,Purchases,cost_of_goods_sold,495.17,Sales
+2026-09-30,40.87,AUD,Rent,Synthetic ledger item 819,L1000-000819,SYN-INV-000819,Synthetic Party 19,Rent,expense,4.09,Admin
+2026-01-01,120.06,AUD,Office Expenses,Synthetic ledger item 820,L1000-000820,SYN-INV-000820,Synthetic Party 20,Office Expenses,expense,12.01,Operations
+2026-01-02,199.25,AUD,Bank Fees,Synthetic ledger item 821,L1000-000821,SYN-INV-000821,Synthetic Party 21,Bank Fees,expense,19.93,Sales
+2026-01-03,278.44,AUD,Subscriptions,Synthetic ledger item 822,L1000-000822,SYN-INV-000822,Synthetic Party 22,Subscriptions,expense,27.84,Admin
+2026-01-04,357.63,AUD,Travel - National,Synthetic ledger item 823,L1000-000823,SYN-INV-000823,Synthetic Party 23,Travel - National,expense,35.76,Operations
+2026-01-05,436.82,AUD,Interest Income,Synthetic ledger item 824,L1000-000824,SYN-INV-000824,Synthetic Party 24,Interest Income,other_income,43.68,Sales
+2026-01-06,516.01,AUD,Sales,Synthetic ledger item 825,L1000-000825,SYN-INV-000825,Synthetic Party 25,Sales,income,51.6,Admin
+2026-01-07,595.2,AUD,Purchases,Synthetic ledger item 826,L1000-000826,SYN-INV-000826,Synthetic Party 1,Purchases,cost_of_goods_sold,59.52,Operations
+2026-01-08,674.39,AUD,Rent,Synthetic ledger item 827,L1000-000827,SYN-INV-000827,Synthetic Party 2,Rent,expense,67.44,Sales
+2026-01-09,753.58,AUD,Office Expenses,Synthetic ledger item 828,L1000-000828,SYN-INV-000828,Synthetic Party 3,Office Expenses,expense,75.36,Admin
+2026-01-10,-832.77,AUD,Bank Fees,Synthetic ledger item 829,L1000-000829,SYN-INV-000829,Synthetic Party 4,Bank Fees,expense,-83.28,Operations
+2026-01-11,911.96,AUD,Subscriptions,Synthetic ledger item 830,L1000-000830,SYN-INV-000830,Synthetic Party 5,Subscriptions,expense,91.2,Sales
+2026-01-12,991.15,AUD,Travel - National,Synthetic ledger item 831,L1000-000831,SYN-INV-000831,Synthetic Party 6,Travel - National,expense,99.12,Admin
+2026-01-13,1070.34,AUD,Interest Income,Synthetic ledger item 832,L1000-000832,SYN-INV-000832,Synthetic Party 7,Interest Income,other_income,107.03,Operations
+2026-01-14,1149.53,AUD,Sales,Synthetic ledger item 833,L1000-000833,SYN-INV-000833,Synthetic Party 8,Sales,income,114.95,Sales
+2026-01-15,1228.72,AUD,Purchases,Synthetic ledger item 834,L1000-000834,SYN-INV-000834,Synthetic Party 9,Purchases,cost_of_goods_sold,122.87,Admin
+2026-01-16,1307.91,AUD,Rent,Synthetic ledger item 835,L1000-000835,SYN-INV-000835,Synthetic Party 10,Rent,expense,130.79,Operations
+2026-01-17,1387.1,AUD,Office Expenses,Synthetic ledger item 836,L1000-000836,SYN-INV-000836,Synthetic Party 11,Office Expenses,expense,138.71,Sales
+2026-01-18,1466.29,AUD,Bank Fees,Synthetic ledger item 837,L1000-000837,SYN-INV-000837,Synthetic Party 12,Bank Fees,expense,146.63,Admin
+2026-01-19,1545.48,AUD,Subscriptions,Synthetic ledger item 838,L1000-000838,SYN-INV-000838,Synthetic Party 13,Subscriptions,expense,154.55,Operations
+2026-01-20,1624.67,AUD,Travel - National,Synthetic ledger item 839,L1000-000839,SYN-INV-000839,Synthetic Party 14,Travel - National,expense,162.47,Sales
+2026-01-21,1703.86,AUD,Interest Income,Synthetic ledger item 840,L1000-000840,SYN-INV-000840,Synthetic Party 15,Interest Income,other_income,170.39,Admin
+2026-01-22,1783.05,AUD,Sales,Synthetic ledger item 841,L1000-000841,SYN-INV-000841,Synthetic Party 16,Sales,income,178.31,Operations
+2026-01-23,1862.24,AUD,Purchases,Synthetic ledger item 842,L1000-000842,SYN-INV-000842,Synthetic Party 17,Purchases,cost_of_goods_sold,186.22,Sales
+2026-01-24,1941.43,AUD,Rent,Synthetic ledger item 843,L1000-000843,SYN-INV-000843,Synthetic Party 18,Rent,expense,194.14,Admin
+2026-01-25,2020.62,AUD,Office Expenses,Synthetic ledger item 844,L1000-000844,SYN-INV-000844,Synthetic Party 19,Office Expenses,expense,202.06,Operations
+2026-01-26,2099.81,AUD,Bank Fees,Synthetic ledger item 845,L1000-000845,SYN-INV-000845,Synthetic Party 20,Bank Fees,expense,209.98,Sales
+2026-01-27,2179,AUD,Subscriptions,Synthetic ledger item 846,L1000-000846,SYN-INV-000846,Synthetic Party 21,Subscriptions,expense,217.9,Admin
+2026-01-28,2258.19,AUD,Travel - National,Synthetic ledger item 847,L1000-000847,SYN-INV-000847,Synthetic Party 22,Travel - National,expense,225.82,Operations
+2026-01-29,2337.38,AUD,Interest Income,Synthetic ledger item 848,L1000-000848,SYN-INV-000848,Synthetic Party 23,Interest Income,other_income,233.74,Sales
+2026-01-30,2416.57,AUD,Sales,Synthetic ledger item 849,L1000-000849,SYN-INV-000849,Synthetic Party 24,Sales,income,241.66,Admin
+2026-01-31,2495.76,AUD,Purchases,Synthetic ledger item 850,L1000-000850,SYN-INV-000850,Synthetic Party 25,Purchases,cost_of_goods_sold,249.58,Operations
+2026-02-01,2574.95,AUD,Rent,Synthetic ledger item 851,L1000-000851,SYN-INV-000851,Synthetic Party 1,Rent,expense,257.5,Sales
+2026-02-02,0,AUD,Office Expenses,Synthetic ledger item 852,L1000-000852,SYN-INV-000852,Synthetic Party 2,Office Expenses,expense,0,Admin
+2026-02-03,2733.33,AUD,Bank Fees,Synthetic ledger item 853,L1000-000853,SYN-INV-000853,Synthetic Party 3,Bank Fees,expense,273.33,Operations
+2026-02-04,2812.52,AUD,Subscriptions,Synthetic ledger item 854,L1000-000854,SYN-INV-000854,Synthetic Party 4,Subscriptions,expense,281.25,Sales
+2026-02-05,2891.71,AUD,Travel - National,Synthetic ledger item 855,L1000-000855,SYN-INV-000855,Synthetic Party 5,Travel - National,expense,289.17,Admin
+2026-02-06,2970.9,AUD,Interest Income,Synthetic ledger item 856,L1000-000856,SYN-INV-000856,Synthetic Party 6,Interest Income,other_income,297.09,Operations
+2026-02-07,3050.09,AUD,Sales,Synthetic ledger item 857,L1000-000857,SYN-INV-000857,Synthetic Party 7,Sales,income,305.01,Sales
+2026-02-08,3129.28,AUD,Purchases,Synthetic ledger item 858,L1000-000858,SYN-INV-000858,Synthetic Party 8,Purchases,cost_of_goods_sold,312.93,Admin
+2026-02-09,3208.47,AUD,Rent,Synthetic ledger item 859,L1000-000859,SYN-INV-000859,Synthetic Party 9,Rent,expense,320.85,Operations
+2026-02-10,3287.66,AUD,Office Expenses,Synthetic ledger item 860,L1000-000860,SYN-INV-000860,Synthetic Party 10,Office Expenses,expense,328.77,Sales
+2026-02-11,3366.85,AUD,Bank Fees,Synthetic ledger item 861,L1000-000861,SYN-INV-000861,Synthetic Party 11,Bank Fees,expense,336.69,Admin
+2026-02-12,3446.04,AUD,Subscriptions,Synthetic ledger item 862,L1000-000862,SYN-INV-000862,Synthetic Party 12,Subscriptions,expense,344.6,Operations
+2026-02-13,3525.23,AUD,Travel - National,Synthetic ledger item 863,L1000-000863,SYN-INV-000863,Synthetic Party 13,Travel - National,expense,352.52,Sales
+2026-02-14,3604.42,AUD,Interest Income,Synthetic ledger item 864,L1000-000864,SYN-INV-000864,Synthetic Party 14,Interest Income,other_income,360.44,Admin
+2026-02-15,3683.61,AUD,Sales,Synthetic ledger item 865,L1000-000865,SYN-INV-000865,Synthetic Party 15,Sales,income,368.36,Operations
+2026-02-16,3762.8,AUD,Purchases,Synthetic ledger item 866,L1000-000866,SYN-INV-000866,Synthetic Party 16,Purchases,cost_of_goods_sold,376.28,Sales
+2026-02-17,3841.99,AUD,Rent,Synthetic ledger item 867,L1000-000867,SYN-INV-000867,Synthetic Party 17,Rent,expense,384.2,Admin
+2026-02-18,3921.18,AUD,Office Expenses,Synthetic ledger item 868,L1000-000868,SYN-INV-000868,Synthetic Party 18,Office Expenses,expense,392.12,Operations
+2026-02-19,4000.37,AUD,Bank Fees,Synthetic ledger item 869,L1000-000869,SYN-INV-000869,Synthetic Party 19,Bank Fees,expense,400.04,Sales
+2026-02-20,4079.56,AUD,Subscriptions,Synthetic ledger item 870,L1000-000870,SYN-INV-000870,Synthetic Party 20,Subscriptions,expense,407.96,Admin
+2026-02-21,4158.75,AUD,Travel - National,Synthetic ledger item 871,L1000-000871,SYN-INV-000871,Synthetic Party 21,Travel - National,expense,415.88,Operations
+2026-02-22,4237.94,AUD,Interest Income,Synthetic ledger item 872,L1000-000872,SYN-INV-000872,Synthetic Party 22,Interest Income,other_income,423.79,Sales
+2026-02-23,4317.13,AUD,Sales,Synthetic ledger item 873,L1000-000873,SYN-INV-000873,Synthetic Party 23,Sales,income,431.71,Admin
+2026-02-24,4396.32,AUD,Purchases,Synthetic ledger item 874,L1000-000874,SYN-INV-000874,Synthetic Party 24,Purchases,cost_of_goods_sold,439.63,Operations
+2026-02-25,-4475.51,AUD,Rent,Synthetic ledger item 875,L1000-000875,SYN-INV-000875,Synthetic Party 25,Rent,expense,-447.55,Sales
+2026-02-26,4554.7,AUD,Office Expenses,Synthetic ledger item 876,L1000-000876,SYN-INV-000876,Synthetic Party 1,Office Expenses,expense,455.47,Admin
+2026-02-27,4633.89,AUD,Bank Fees,Synthetic ledger item 877,L1000-000877,SYN-INV-000877,Synthetic Party 2,Bank Fees,expense,463.39,Operations
+2026-02-28,4713.08,AUD,Subscriptions,Synthetic ledger item 878,L1000-000878,SYN-INV-000878,Synthetic Party 3,Subscriptions,expense,471.31,Sales
+2026-03-01,4792.27,AUD,Travel - National,Synthetic ledger item 879,L1000-000879,SYN-INV-000879,Synthetic Party 4,Travel - National,expense,479.23,Admin
+2026-03-02,4871.46,AUD,Interest Income,Synthetic ledger item 880,L1000-000880,SYN-INV-000880,Synthetic Party 5,Interest Income,other_income,487.15,Operations
+2026-03-03,4950.65,AUD,Sales,Synthetic ledger item 881,L1000-000881,SYN-INV-000881,Synthetic Party 6,Sales,income,495.07,Sales
+2026-03-04,39.84,AUD,Purchases,Synthetic ledger item 882,L1000-000882,SYN-INV-000882,Synthetic Party 7,Purchases,cost_of_goods_sold,3.98,Admin
+2026-03-05,119.03,AUD,Rent,Synthetic ledger item 883,L1000-000883,SYN-INV-000883,Synthetic Party 8,Rent,expense,11.9,Operations
+2026-03-06,198.22,AUD,Office Expenses,Synthetic ledger item 884,L1000-000884,SYN-INV-000884,Synthetic Party 9,Office Expenses,expense,19.82,Sales
+2026-03-07,277.41,AUD,Bank Fees,Synthetic ledger item 885,L1000-000885,SYN-INV-000885,Synthetic Party 10,Bank Fees,expense,27.74,Admin
+2026-03-08,356.6,AUD,Subscriptions,Synthetic ledger item 886,L1000-000886,SYN-INV-000886,Synthetic Party 11,Subscriptions,expense,35.66,Operations
+2026-03-09,435.79,AUD,Travel - National,Synthetic ledger item 887,L1000-000887,SYN-INV-000887,Synthetic Party 12,Travel - National,expense,43.58,Sales
+2026-03-10,514.98,AUD,Interest Income,Synthetic ledger item 888,L1000-000888,SYN-INV-000888,Synthetic Party 13,Interest Income,other_income,51.5,Admin
+2026-03-11,0,AUD,Sales,Synthetic ledger item 889,L1000-000889,SYN-INV-000889,Synthetic Party 14,Sales,income,0,Operations
+2026-03-12,673.36,AUD,Purchases,Synthetic ledger item 890,L1000-000890,SYN-INV-000890,Synthetic Party 15,Purchases,cost_of_goods_sold,67.34,Sales
+2026-03-13,752.55,AUD,Rent,Synthetic ledger item 891,L1000-000891,SYN-INV-000891,Synthetic Party 16,Rent,expense,75.26,Admin
+2026-03-14,831.74,AUD,Office Expenses,Synthetic ledger item 892,L1000-000892,SYN-INV-000892,Synthetic Party 17,Office Expenses,expense,83.17,Operations
+2026-03-15,910.93,AUD,Bank Fees,Synthetic ledger item 893,L1000-000893,SYN-INV-000893,Synthetic Party 18,Bank Fees,expense,91.09,Sales
+2026-03-16,990.12,AUD,Subscriptions,Synthetic ledger item 894,L1000-000894,SYN-INV-000894,Synthetic Party 19,Subscriptions,expense,99.01,Admin
+2026-03-17,1069.31,AUD,Travel - National,Synthetic ledger item 895,L1000-000895,SYN-INV-000895,Synthetic Party 20,Travel - National,expense,106.93,Operations
+2026-03-18,1148.5,AUD,Interest Income,Synthetic ledger item 896,L1000-000896,SYN-INV-000896,Synthetic Party 21,Interest Income,other_income,114.85,Sales
+2026-03-19,1227.69,AUD,Sales,Synthetic ledger item 897,L1000-000897,SYN-INV-000897,Synthetic Party 22,Sales,income,122.77,Admin
+2026-03-20,-1306.88,AUD,Purchases,Synthetic ledger item 898,L1000-000898,SYN-INV-000898,Synthetic Party 23,Purchases,cost_of_goods_sold,-130.69,Operations
+2026-03-21,1386.07,AUD,Rent,Synthetic ledger item 899,L1000-000899,SYN-INV-000899,Synthetic Party 24,Rent,expense,138.61,Sales
+2026-03-22,1465.26,AUD,Office Expenses,Synthetic ledger item 900,L1000-000900,SYN-INV-000900,Synthetic Party 25,Office Expenses,expense,146.53,Admin
+2026-03-23,1544.45,AUD,Bank Fees,Synthetic ledger item 901,L1000-000901,SYN-INV-000901,Synthetic Party 1,Bank Fees,expense,154.45,Operations
+2026-03-24,1623.64,AUD,Subscriptions,Synthetic ledger item 902,L1000-000902,SYN-INV-000902,Synthetic Party 2,Subscriptions,expense,162.36,Sales
+2026-03-25,1702.83,AUD,Travel - National,Synthetic ledger item 903,L1000-000903,SYN-INV-000903,Synthetic Party 3,Travel - National,expense,170.28,Admin
+2026-03-26,1782.02,AUD,Interest Income,Synthetic ledger item 904,L1000-000904,SYN-INV-000904,Synthetic Party 4,Interest Income,other_income,178.2,Operations
+2026-03-27,1861.21,AUD,Sales,Synthetic ledger item 905,L1000-000905,SYN-INV-000905,Synthetic Party 5,Sales,income,186.12,Sales
+2026-03-28,1940.4,AUD,Purchases,Synthetic ledger item 906,L1000-000906,SYN-INV-000906,Synthetic Party 6,Purchases,cost_of_goods_sold,194.04,Admin
+2026-03-29,2019.59,AUD,Rent,Synthetic ledger item 907,L1000-000907,SYN-INV-000907,Synthetic Party 7,Rent,expense,201.96,Operations
+2026-03-30,2098.78,AUD,Office Expenses,Synthetic ledger item 908,L1000-000908,SYN-INV-000908,Synthetic Party 8,Office Expenses,expense,209.88,Sales
+2026-03-31,2177.97,AUD,Bank Fees,Synthetic ledger item 909,L1000-000909,SYN-INV-000909,Synthetic Party 9,Bank Fees,expense,217.8,Admin
+2026-04-01,2257.16,AUD,Subscriptions,Synthetic ledger item 910,L1000-000910,SYN-INV-000910,Synthetic Party 10,Subscriptions,expense,225.72,Operations
+2026-04-02,2336.35,AUD,Travel - National,Synthetic ledger item 911,L1000-000911,SYN-INV-000911,Synthetic Party 11,Travel - National,expense,233.64,Sales
+2026-04-03,2415.54,AUD,Interest Income,Synthetic ledger item 912,L1000-000912,SYN-INV-000912,Synthetic Party 12,Interest Income,other_income,241.55,Admin
+2026-04-04,2494.73,AUD,Sales,Synthetic ledger item 913,L1000-000913,SYN-INV-000913,Synthetic Party 13,Sales,income,249.47,Operations
+2026-04-05,2573.92,AUD,Purchases,Synthetic ledger item 914,L1000-000914,SYN-INV-000914,Synthetic Party 14,Purchases,cost_of_goods_sold,257.39,Sales
+2026-04-06,2653.11,AUD,Rent,Synthetic ledger item 915,L1000-000915,SYN-INV-000915,Synthetic Party 15,Rent,expense,265.31,Admin
+2026-04-07,2732.3,AUD,Office Expenses,Synthetic ledger item 916,L1000-000916,SYN-INV-000916,Synthetic Party 16,Office Expenses,expense,273.23,Operations
+2026-04-08,2811.49,AUD,Bank Fees,Synthetic ledger item 917,L1000-000917,SYN-INV-000917,Synthetic Party 17,Bank Fees,expense,281.15,Sales
+2026-04-09,2890.68,AUD,Subscriptions,Synthetic ledger item 918,L1000-000918,SYN-INV-000918,Synthetic Party 18,Subscriptions,expense,289.07,Admin
+2026-04-10,2969.87,AUD,Travel - National,Synthetic ledger item 919,L1000-000919,SYN-INV-000919,Synthetic Party 19,Travel - National,expense,296.99,Operations
+2026-04-11,3049.06,AUD,Interest Income,Synthetic ledger item 920,L1000-000920,SYN-INV-000920,Synthetic Party 20,Interest Income,other_income,304.91,Sales
+2026-04-12,-3128.25,AUD,Sales,Synthetic ledger item 921,L1000-000921,SYN-INV-000921,Synthetic Party 21,Sales,income,-312.82,Admin
+2026-04-13,3207.44,AUD,Purchases,Synthetic ledger item 922,L1000-000922,SYN-INV-000922,Synthetic Party 22,Purchases,cost_of_goods_sold,320.74,Operations
+2026-04-14,3286.63,AUD,Rent,Synthetic ledger item 923,L1000-000923,SYN-INV-000923,Synthetic Party 23,Rent,expense,328.66,Sales
+2026-04-15,3365.82,AUD,Office Expenses,Synthetic ledger item 924,L1000-000924,SYN-INV-000924,Synthetic Party 24,Office Expenses,expense,336.58,Admin
+2026-04-16,3445.01,AUD,Bank Fees,Synthetic ledger item 925,L1000-000925,SYN-INV-000925,Synthetic Party 25,Bank Fees,expense,344.5,Operations
+2026-04-17,0,AUD,Subscriptions,Synthetic ledger item 926,L1000-000926,SYN-INV-000926,Synthetic Party 1,Subscriptions,expense,0,Sales
+2026-04-18,3603.39,AUD,Travel - National,Synthetic ledger item 927,L1000-000927,SYN-INV-000927,Synthetic Party 2,Travel - National,expense,360.34,Admin
+2026-04-19,3682.58,AUD,Interest Income,Synthetic ledger item 928,L1000-000928,SYN-INV-000928,Synthetic Party 3,Interest Income,other_income,368.26,Operations
+2026-04-20,3761.77,AUD,Sales,Synthetic ledger item 929,L1000-000929,SYN-INV-000929,Synthetic Party 4,Sales,income,376.18,Sales
+2026-04-21,3840.96,AUD,Purchases,Synthetic ledger item 930,L1000-000930,SYN-INV-000930,Synthetic Party 5,Purchases,cost_of_goods_sold,384.1,Admin
+2026-04-22,3920.15,AUD,Rent,Synthetic ledger item 931,L1000-000931,SYN-INV-000931,Synthetic Party 6,Rent,expense,392.02,Operations
+2026-04-23,3999.34,AUD,Office Expenses,Synthetic ledger item 932,L1000-000932,SYN-INV-000932,Synthetic Party 7,Office Expenses,expense,399.93,Sales
+2026-04-24,4078.53,AUD,Bank Fees,Synthetic ledger item 933,L1000-000933,SYN-INV-000933,Synthetic Party 8,Bank Fees,expense,407.85,Admin
+2026-04-25,4157.72,AUD,Subscriptions,Synthetic ledger item 934,L1000-000934,SYN-INV-000934,Synthetic Party 9,Subscriptions,expense,415.77,Operations
+2026-04-26,4236.91,AUD,Travel - National,Synthetic ledger item 935,L1000-000935,SYN-INV-000935,Synthetic Party 10,Travel - National,expense,423.69,Sales
+2026-04-27,4316.1,AUD,Interest Income,Synthetic ledger item 936,L1000-000936,SYN-INV-000936,Synthetic Party 11,Interest Income,other_income,431.61,Admin
+2026-04-28,4395.29,AUD,Sales,Synthetic ledger item 937,L1000-000937,SYN-INV-000937,Synthetic Party 12,Sales,income,439.53,Operations
+2026-04-29,4474.48,AUD,Purchases,Synthetic ledger item 938,L1000-000938,SYN-INV-000938,Synthetic Party 13,Purchases,cost_of_goods_sold,447.45,Sales
+2026-04-30,4553.67,AUD,Rent,Synthetic ledger item 939,L1000-000939,SYN-INV-000939,Synthetic Party 14,Rent,expense,455.37,Admin
+2026-05-01,4632.86,AUD,Office Expenses,Synthetic ledger item 940,L1000-000940,SYN-INV-000940,Synthetic Party 15,Office Expenses,expense,463.29,Operations
+2026-05-02,4712.05,AUD,Bank Fees,Synthetic ledger item 941,L1000-000941,SYN-INV-000941,Synthetic Party 16,Bank Fees,expense,471.21,Sales
+2026-05-03,4791.24,AUD,Subscriptions,Synthetic ledger item 942,L1000-000942,SYN-INV-000942,Synthetic Party 17,Subscriptions,expense,479.12,Admin
+2026-05-04,4870.43,AUD,Travel - National,Synthetic ledger item 943,L1000-000943,SYN-INV-000943,Synthetic Party 18,Travel - National,expense,487.04,Operations
+2026-05-05,-4949.62,AUD,Interest Income,Synthetic ledger item 944,L1000-000944,SYN-INV-000944,Synthetic Party 19,Interest Income,other_income,-494.96,Sales
+2026-05-06,38.81,AUD,Sales,Synthetic ledger item 945,L1000-000945,SYN-INV-000945,Synthetic Party 20,Sales,income,3.88,Admin
+2026-05-07,118,AUD,Purchases,Synthetic ledger item 946,L1000-000946,SYN-INV-000946,Synthetic Party 21,Purchases,cost_of_goods_sold,11.8,Operations
+2026-05-08,197.19,AUD,Rent,Synthetic ledger item 947,L1000-000947,SYN-INV-000947,Synthetic Party 22,Rent,expense,19.72,Sales
+2026-05-09,276.38,AUD,Office Expenses,Synthetic ledger item 948,L1000-000948,SYN-INV-000948,Synthetic Party 23,Office Expenses,expense,27.64,Admin
+2026-05-10,355.57,AUD,Bank Fees,Synthetic ledger item 949,L1000-000949,SYN-INV-000949,Synthetic Party 24,Bank Fees,expense,35.56,Operations
+2026-05-11,434.76,AUD,Subscriptions,Synthetic ledger item 950,L1000-000950,SYN-INV-000950,Synthetic Party 25,Subscriptions,expense,43.48,Sales
+2026-05-12,513.95,AUD,Travel - National,Synthetic ledger item 951,L1000-000951,SYN-INV-000951,Synthetic Party 1,Travel - National,expense,51.4,Admin
+2026-05-13,593.14,AUD,Interest Income,Synthetic ledger item 952,L1000-000952,SYN-INV-000952,Synthetic Party 2,Interest Income,other_income,59.31,Operations
+2026-05-14,672.33,AUD,Sales,Synthetic ledger item 953,L1000-000953,SYN-INV-000953,Synthetic Party 3,Sales,income,67.23,Sales
+2026-05-15,751.52,AUD,Purchases,Synthetic ledger item 954,L1000-000954,SYN-INV-000954,Synthetic Party 4,Purchases,cost_of_goods_sold,75.15,Admin
+2026-05-16,830.71,AUD,Rent,Synthetic ledger item 955,L1000-000955,SYN-INV-000955,Synthetic Party 5,Rent,expense,83.07,Operations
+2026-05-17,909.9,AUD,Office Expenses,Synthetic ledger item 956,L1000-000956,SYN-INV-000956,Synthetic Party 6,Office Expenses,expense,90.99,Sales
+2026-05-18,989.09,AUD,Bank Fees,Synthetic ledger item 957,L1000-000957,SYN-INV-000957,Synthetic Party 7,Bank Fees,expense,98.91,Admin
+2026-05-19,1068.28,AUD,Subscriptions,Synthetic ledger item 958,L1000-000958,SYN-INV-000958,Synthetic Party 8,Subscriptions,expense,106.83,Operations
+2026-05-20,1147.47,AUD,Travel - National,Synthetic ledger item 959,L1000-000959,SYN-INV-000959,Synthetic Party 9,Travel - National,expense,114.75,Sales
+2026-05-21,1226.66,AUD,Interest Income,Synthetic ledger item 960,L1000-000960,SYN-INV-000960,Synthetic Party 10,Interest Income,other_income,122.67,Admin
+2026-05-22,1305.85,AUD,Sales,Synthetic ledger item 961,L1000-000961,SYN-INV-000961,Synthetic Party 11,Sales,income,130.59,Operations
+2026-05-23,1385.04,AUD,Purchases,Synthetic ledger item 962,L1000-000962,SYN-INV-000962,Synthetic Party 12,Purchases,cost_of_goods_sold,138.5,Sales
+2026-05-24,0,AUD,Rent,Synthetic ledger item 963,L1000-000963,SYN-INV-000963,Synthetic Party 13,Rent,expense,0,Admin
+2026-05-25,1543.42,AUD,Office Expenses,Synthetic ledger item 964,L1000-000964,SYN-INV-000964,Synthetic Party 14,Office Expenses,expense,154.34,Operations
+2026-05-26,1622.61,AUD,Bank Fees,Synthetic ledger item 965,L1000-000965,SYN-INV-000965,Synthetic Party 15,Bank Fees,expense,162.26,Sales
+2026-05-27,1701.8,AUD,Subscriptions,Synthetic ledger item 966,L1000-000966,SYN-INV-000966,Synthetic Party 16,Subscriptions,expense,170.18,Admin
+2026-05-28,-1780.99,AUD,Travel - National,Synthetic ledger item 967,L1000-000967,SYN-INV-000967,Synthetic Party 17,Travel - National,expense,-178.1,Operations
+2026-05-29,1860.18,AUD,Interest Income,Synthetic ledger item 968,L1000-000968,SYN-INV-000968,Synthetic Party 18,Interest Income,other_income,186.02,Sales
+2026-05-30,1939.37,AUD,Sales,Synthetic ledger item 969,L1000-000969,SYN-INV-000969,Synthetic Party 19,Sales,income,193.94,Admin
+2026-05-31,2018.56,AUD,Purchases,Synthetic ledger item 970,L1000-000970,SYN-INV-000970,Synthetic Party 20,Purchases,cost_of_goods_sold,201.86,Operations
+2026-06-01,2097.75,AUD,Rent,Synthetic ledger item 971,L1000-000971,SYN-INV-000971,Synthetic Party 21,Rent,expense,209.78,Sales
+2026-06-02,2176.94,AUD,Office Expenses,Synthetic ledger item 972,L1000-000972,SYN-INV-000972,Synthetic Party 22,Office Expenses,expense,217.69,Admin
+2026-06-03,2256.13,AUD,Bank Fees,Synthetic ledger item 973,L1000-000973,SYN-INV-000973,Synthetic Party 23,Bank Fees,expense,225.61,Operations
+2026-06-04,2335.32,AUD,Subscriptions,Synthetic ledger item 974,L1000-000974,SYN-INV-000974,Synthetic Party 24,Subscriptions,expense,233.53,Sales
+2026-06-05,2414.51,AUD,Travel - National,Synthetic ledger item 975,L1000-000975,SYN-INV-000975,Synthetic Party 25,Travel - National,expense,241.45,Admin
+2026-06-06,2493.7,AUD,Interest Income,Synthetic ledger item 976,L1000-000976,SYN-INV-000976,Synthetic Party 1,Interest Income,other_income,249.37,Operations
+2026-06-07,2572.89,AUD,Sales,Synthetic ledger item 977,L1000-000977,SYN-INV-000977,Synthetic Party 2,Sales,income,257.29,Sales
+2026-06-08,2652.08,AUD,Purchases,Synthetic ledger item 978,L1000-000978,SYN-INV-000978,Synthetic Party 3,Purchases,cost_of_goods_sold,265.21,Admin
+2026-06-09,2731.27,AUD,Rent,Synthetic ledger item 979,L1000-000979,SYN-INV-000979,Synthetic Party 4,Rent,expense,273.13,Operations
+2026-06-10,2810.46,AUD,Office Expenses,Synthetic ledger item 980,L1000-000980,SYN-INV-000980,Synthetic Party 5,Office Expenses,expense,281.05,Sales
+2026-06-11,2889.65,AUD,Bank Fees,Synthetic ledger item 981,L1000-000981,SYN-INV-000981,Synthetic Party 6,Bank Fees,expense,288.97,Admin
+2026-06-12,2968.84,AUD,Subscriptions,Synthetic ledger item 982,L1000-000982,SYN-INV-000982,Synthetic Party 7,Subscriptions,expense,296.88,Operations
+2026-06-13,3048.03,AUD,Travel - National,Synthetic ledger item 983,L1000-000983,SYN-INV-000983,Synthetic Party 8,Travel - National,expense,304.8,Sales
+2026-06-14,3127.22,AUD,Interest Income,Synthetic ledger item 984,L1000-000984,SYN-INV-000984,Synthetic Party 9,Interest Income,other_income,312.72,Admin
+2026-06-15,3206.41,AUD,Sales,Synthetic ledger item 985,L1000-000985,SYN-INV-000985,Synthetic Party 10,Sales,income,320.64,Operations
+2026-06-16,3285.6,AUD,Purchases,Synthetic ledger item 986,L1000-000986,SYN-INV-000986,Synthetic Party 11,Purchases,cost_of_goods_sold,328.56,Sales
+2026-06-17,3364.79,AUD,Rent,Synthetic ledger item 987,L1000-000987,SYN-INV-000987,Synthetic Party 12,Rent,expense,336.48,Admin
+2026-06-18,3443.98,AUD,Office Expenses,Synthetic ledger item 988,L1000-000988,SYN-INV-000988,Synthetic Party 13,Office Expenses,expense,344.4,Operations
+2026-06-19,3523.17,AUD,Bank Fees,Synthetic ledger item 989,L1000-000989,SYN-INV-000989,Synthetic Party 14,Bank Fees,expense,352.32,Sales
+2026-06-20,-3602.36,AUD,Subscriptions,Synthetic ledger item 990,L1000-000990,SYN-INV-000990,Synthetic Party 15,Subscriptions,expense,-360.24,Admin
+2026-06-21,3681.55,AUD,Travel - National,Synthetic ledger item 991,L1000-000991,SYN-INV-000991,Synthetic Party 16,Travel - National,expense,368.16,Operations
+2026-06-22,3760.74,AUD,Interest Income,Synthetic ledger item 992,L1000-000992,SYN-INV-000992,Synthetic Party 17,Interest Income,other_income,376.07,Sales
+2026-06-23,3839.93,AUD,Sales,Synthetic ledger item 993,L1000-000993,SYN-INV-000993,Synthetic Party 18,Sales,income,383.99,Admin
+2026-06-24,3919.12,AUD,Purchases,Synthetic ledger item 994,L1000-000994,SYN-INV-000994,Synthetic Party 19,Purchases,cost_of_goods_sold,391.91,Operations
+2026-06-25,3998.31,AUD,Rent,Synthetic ledger item 995,L1000-000995,SYN-INV-000995,Synthetic Party 20,Rent,expense,399.83,Sales
+2026-06-26,4077.5,AUD,Office Expenses,Synthetic ledger item 996,L1000-000996,SYN-INV-000996,Synthetic Party 21,Office Expenses,expense,407.75,Admin
+2026-06-27,4156.69,AUD,Bank Fees,Synthetic ledger item 997,L1000-000997,SYN-INV-000997,Synthetic Party 22,Bank Fees,expense,415.67,Operations
+2026-06-28,4235.88,AUD,Subscriptions,Synthetic ledger item 998,L1000-000998,SYN-INV-000998,Synthetic Party 23,Subscriptions,expense,423.59,Sales
+2026-06-29,4315.07,AUD,Travel - National,Synthetic ledger item 999,L1000-000999,SYN-INV-000999,Synthetic Party 24,Travel - National,expense,431.51,Admin
+2026-06-30,0,AUD,Interest Income,Synthetic ledger item 1000,L1000-001000,SYN-INV-001000,Synthetic Party 25,Interest Income,other_income,0,Operations

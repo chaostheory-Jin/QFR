@@ -1,0 +1,13 @@
+﻿Date,Amount,Currency,Account,Description,LineID,InvoiceNumber,Contact,Category,Role,TaxAmount,Department
+2026-02-30,0,AUD,Sales,Synthetic ledger item 1,BAD-000001,SYN-INV-000001,Synthetic Party 1,Sales,income,0,Operations
+,212.64,AUD,Purchases,Synthetic ledger item 2,BAD-000002,SYN-INV-000002,Synthetic Party 2,Purchases,cost_of_goods_sold,21.26,Sales
+2026-01-03,100AUD,AUD,Rent,Synthetic ledger item 3,BAD-000003,SYN-INV-000003,Synthetic Party 3,Rent,expense,29.18,Admin
+2026-01-04,$12,AUD,Office Expenses,Synthetic ledger item 4,BAD-000004,SYN-INV-000004,Synthetic Party 4,Office Expenses,expense,37.1,Operations
+2026-01-05,"1,00",AUD,Bank Fees,Synthetic ledger item 5,BAD-000005,SYN-INV-000005,Synthetic Party 5,Bank Fees,expense,45.02,Sales
+2026-01-06,1.001,AUD,Subscriptions,Synthetic ledger item 6,BAD-000006,SYN-INV-000006,Synthetic Party 6,Subscriptions,expense,52.94,Admin
+2026-01-07,608.59,AUD,,Synthetic ledger item 7,BAD-000007,SYN-INV-000007,Synthetic Party 7,Travel - National,expense,60.86,Operations
+2026-01-08,687.78,AUD,Interest Income,,BAD-000008,SYN-INV-000008,Synthetic Party 8,Interest Income,other_income,68.78,Sales
+2026-01-09,766.97,AUD,Sales,Synthetic ledger item 9,BAD-000009,SYN-INV-000009,Synthetic Party 9,Sales,income,invalid,Admin
+2026-01-10,846.16,AUD,Purchases,Synthetic ledger item 10,BAD-000010,SYN-INV-000010,Synthetic Party 10,Purchases,revenue,84.62,Operations
+2026-01-11,1000000000001,AUD,Rent,Synthetic ledger item 11,BAD-000011,SYN-INV-000011,Synthetic Party 11,Rent,expense,92.54,Sales
+2026-01-12,Infinity,AUD,Office Expenses,Synthetic ledger item 12,BAD-000012,SYN-INV-000012,Synthetic Party 12,Office Expenses,expense,100.45,Admin

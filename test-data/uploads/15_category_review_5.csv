@@ -1,0 +1,6 @@
+﻿Date,Amount,Currency,Account,Description,LineID,InvoiceNumber,Contact,Category,Role,TaxAmount,Department
+2026-01-01,0,AUD,Sales,Synthetic ledger item 1,REVIEW-000001,SYN-INV-000001,Synthetic Party 1,Unknown synthetic category,,0,Operations
+2026-01-02,212.64,AUD,Purchases,Synthetic ledger item 2,REVIEW-000002,SYN-INV-000002,Synthetic Party 2,Unknown synthetic category,,21.26,Sales
+2026-01-03,291.83,AUD,Rent,Synthetic ledger item 3,REVIEW-000003,SYN-INV-000003,Synthetic Party 3,Unknown synthetic category,,29.18,Admin
+2026-01-04,371.02,AUD,Office Expenses,Synthetic ledger item 4,REVIEW-000004,SYN-INV-000004,Synthetic Party 4,Unknown synthetic category,,37.1,Operations
+2026-01-05,450.21,AUD,Bank Fees,Synthetic ledger item 5,REVIEW-000005,SYN-INV-000005,Synthetic Party 5,Unknown synthetic category,,45.02,Sales

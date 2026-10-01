@@ -8,6 +8,7 @@ export interface BSLineItem {
 
 export interface BSSection {
   title: string
+  classification?: 'current' | 'non-current'
   items: BSLineItem[]
   total: BSLineItem
 }
@@ -53,11 +54,11 @@ export const BALANCE_SHEET_DATA: BalanceSheetData = {
     subsections: [
       {
         title: 'Current Liabilities',
-        items: [{ name: 'GST', current: -791.20, prior: 0 }],
-        total: { name: 'Total Current Liabilities', current: -791.20, prior: 0 },
+        items: [{ name: 'GST', current: 791.20, prior: 0 }],
+        total: { name: 'Total Current Liabilities', current: 791.20, prior: 0 },
       },
     ],
-    total: { name: 'Total Liabilities', current: -791.20, prior: 0 },
+    total: { name: 'Total Liabilities', current: 791.20, prior: 0 },
   },
   netAssets: { name: 'Net Assets', current: 7912.00, prior: 0 },
   equity: {

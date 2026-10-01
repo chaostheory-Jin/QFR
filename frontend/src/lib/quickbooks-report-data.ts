@@ -36,7 +36,23 @@ type QuickBooksGeneratedData = {
 }
 
 export const QUICKBOOKS_DATA = generatedData as unknown as QuickBooksGeneratedData
-export const QUICKBOOKS_REPORT_DATA = QUICKBOOKS_DATA.profitLoss
+export const QUICKBOOKS_REPORT_DATA: ReportData = {
+  ...QUICKBOOKS_DATA.profitLoss,
+  allowed_categories: Array.from(new Set(['Unmapped', ...QUICKBOOKS_DATA.profitLoss.allowed_categories, ...QUICKBOOKS_DATA.profitLoss.raw_data.map(row => row.AccountName)])),
+  income_categories: Array.from(new Set([
+    ...QUICKBOOKS_DATA.profitLoss.income_categories,
+    ...QUICKBOOKS_DATA.profitLoss.raw_data.map(row => row.AccountName).filter(name => /^(Income|Other Income) > /.test(name)),
+  ])),
+  raw_data: QUICKBOOKS_DATA.profitLoss.raw_data.map((row, index) => ({
+    ...row,
+    LineID: row.LineID ?? `quickbooks-pl-${index + 1}`,
+    // Old bundles lost the backend HITL flags. Do not assume a high score
+    // means auto-accepted when the ambiguity/review evidence is unavailable.
+    ReviewRequired: row.ReviewRequired ?? true,
+    ReviewReason: row.ReviewReason ?? 'Legacy export lacks source review metadata; regenerate or review manually.',
+    LineRole: row.LineRole ?? (/^(Income|Other Income) > /.test(row.AccountName) ? 'income' : 'expense'),
+  })),
+}
 export const QUICKBOOKS_AGING = QUICKBOOKS_DATA.balanceSheet.aging
 
 function displayDate(iso: string): string {
@@ -80,6 +96,7 @@ function makeSections(accounts: QuickBooksAccount[], currentDate: string, priorD
 
   return Array.from(groups, ([title, items]) => ({
     title,
+    classification: title === 'Current Assets' || title === 'Current Liabilities' ? 'current' : 'non-current',
     items,
     total: {
       name: `Total ${title}`,

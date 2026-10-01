@@ -42,7 +42,7 @@ function sumItems(name: string, items: BSLineItem[]): BSLineItem {
 function filterSection(section: BSSection, f: BSFilterState): BSSection | null {
   const items = section.items.filter((it) => matchesFilters(it.name, f))
   if (items.length === 0) return null
-  return { title: section.title, items, total: sumItems(section.total.name, items) }
+  return { ...section, items, total: sumItems(section.total.name, items) }
 }
 
 export function allAccountNames(data: BalanceSheetData): string[] {

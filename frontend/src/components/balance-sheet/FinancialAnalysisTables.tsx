@@ -10,11 +10,12 @@ import {
 } from '@/components/ui/table'
 import type { BalanceSheetData } from '@/lib/balance-sheet-mock'
 import { cn } from '@/lib/utils'
+import { liquidityMetrics } from '@/lib/balance-sheet-metrics'
 
-function fmtAUD(value: number): string {
+function fmtCurrency(value: number, currency: string): string {
   return new Intl.NumberFormat('en-AU', {
     style: 'currency',
-    currency: 'AUD',
+    currency,
     minimumFractionDigits: 2,
   }).format(value)
 }
@@ -50,38 +51,37 @@ function Indicator({ tone }: { tone: 'good' | 'watch' | 'risk' }) {
 }
 
 export function FinancialAnalysisTables({ data }: { data: BalanceSheetData }) {
+  const fmtAUD = (value: number) => fmtCurrency(value, data.currency ?? 'AUD')
   const totalAssets = data.assets.total.current
   const totalLiabilities = data.liabilities.total.current
   const totalEquity = data.equity.total.current
-  const currentAssets = data.assets.subsections.reduce((sum, section) => sum + section.total.current, 0)
-  const currentLiabilities = data.liabilities.subsections.reduce((sum, section) => sum + section.total.current, 0)
-  const workingCapital = currentAssets + currentLiabilities
+  const { workingCapital, currentRatio } = liquidityMetrics(data)
 
   const ratios = [
     {
       metric: 'Current Ratio',
-      value: fmtRatio(divide(Math.abs(currentAssets), Math.abs(currentLiabilities))),
+      value: fmtRatio(currentRatio),
       benchmark: '> 1.00x',
       comment: 'Measures short-term asset coverage over current liabilities.',
-      tone: Math.abs(currentAssets) >= Math.abs(currentLiabilities) ? 'good' : 'risk',
+      tone: currentRatio === null ? 'watch' : currentRatio >= 1 ? 'good' : 'risk',
     },
     {
       metric: 'Working Capital',
       value: fmtAUD(workingCapital),
       benchmark: 'Positive preferred',
-      comment: 'Current assets plus displayed liabilities, where liabilities are presented as negative balances.',
+      comment: 'Current assets minus current liabilities; fixed assets and long-term debt are excluded.',
       tone: workingCapital >= 0 ? 'good' : 'risk',
     },
     {
       metric: 'Debt to Assets',
-      value: pct(divide(Math.abs(totalLiabilities), Math.abs(totalAssets)) ? divide(Math.abs(totalLiabilities), Math.abs(totalAssets))! * 100 : null),
+      value: pct(totalAssets > 0 ? totalLiabilities / totalAssets * 100 : null),
       benchmark: 'Lower is safer',
       comment: 'Shows how much of the asset base is funded by liabilities.',
       tone: Math.abs(totalLiabilities) <= Math.abs(totalAssets) * 0.6 ? 'good' : 'watch',
     },
     {
       metric: 'Liabilities to Equity',
-      value: fmtRatio(divide(Math.abs(totalLiabilities), Math.abs(totalEquity))),
+      value: fmtRatio(totalEquity > 0 ? totalLiabilities / totalEquity : null),
       benchmark: '< 1.00x',
       comment: 'Highlights leverage against equity. Negative equity should be reviewed.',
       tone: totalEquity >= 0 && Math.abs(totalLiabilities) <= totalEquity ? 'good' : 'risk',
@@ -177,14 +177,14 @@ export function FinancialAnalysisTables({ data }: { data: BalanceSheetData }) {
           </Table>
           <div className="mt-3 flex gap-2 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-800">
             <Info className="mt-0.5 size-3.5 shrink-0" />
-            Presentation convention: assets and equity are positive; liabilities are negative.
+            Liabilities use credit-positive balances. Ratios use current sections only; negative equity requires review.
           </div>
         </CardContent>
       </Card>
 
       <Card className="xl:col-span-2">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold">Year-on-Year Movement</CardTitle>
+          <CardTitle className="text-sm font-semibold">Period Movement</CardTitle>
           <CardDescription>Movement analysis across the main balance sheet totals.</CardDescription>
         </CardHeader>
         <CardContent>

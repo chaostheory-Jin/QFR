@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { ExportControls, type ExportMode } from '@/components/ExportControls'
 import { exportRowsToExcel, type ExportRow } from '@/lib/excel-export'
 import type { RawRow } from '@/lib/report-data'
+import { requiresReview } from '@/lib/report-utils'
+import type { ReviewDraft, ReviewMap, ReviewStatus } from '@/lib/mapping-reviews'
 
 function fmt(v: number) {
   return v.toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -15,45 +17,44 @@ function fmt(v: number) {
 type Props = {
   rows: RawRow[]
   reviewThreshold: number
+  categories: string[]
+  reviews: ReviewMap
+  onSaveReview: (lineId: string, review: ReviewDraft) => Promise<void>
+  reviewReady: boolean
+  saving: boolean
 }
 
-type ReviewStatus = 'Pending' | 'Approved' | 'Needs changes' | 'Rejected'
-type ReviewState = Record<string, { status: ReviewStatus; note: string }>
-
-function rowKey(row: RawRow, index: number): string {
-  return [
-    row.Type,
-    row.InvoiceNumber,
-    row.Date,
-    row.Contact,
-    row.AccountCode,
-    row.Description,
-    index,
-  ].join('|')
-}
-
-export function DataTables({ rows, reviewThreshold }: Props) {
-  const [reviewState, setReviewState] = useState<ReviewState>({})
+export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveReview, reviewReady, saving }: Props) {
+  const [drafts, setDrafts] = useState<Record<string, ReviewDraft>>({})
+  const [showAll, setShowAll] = useState(false)
   const [exportMode, setExportMode] = useState<ExportMode>('summary')
-  const rowsWithKeys = useMemo(() => rows.map((row, index) => ({ row, key: rowKey(row, index) })), [rows])
+  const rowsWithKeys = useMemo(() => rows.map(row => ({ row, key: row.LineID! })), [rows])
   const reviewRows = rowsWithKeys
-    .filter(({ row }) => row.Confidence < reviewThreshold)
+    .filter(({ row, key }) => showAll || requiresReview(row, reviewThreshold) || Boolean(reviews[key]))
     .sort((a, b) => a.row.Confidence - b.row.Confidence)
-    .slice(0, 200)
 
-  function updateReview(key: string, patch: Partial<ReviewState[string]>) {
-    setReviewState((current) => ({
+  function reviewFor(key: string): ReviewDraft {
+    const row = rowsWithKeys.find(item => item.key === key)?.row
+    return drafts[key] ?? reviews[key] ?? { status: 'Pending', category: row?.ProposedCategory ?? row?.MappedCategory ?? 'Unmapped', note: '' }
+  }
+
+  function updateReview(key: string, patch: Partial<ReviewDraft>) {
+    const base = reviewFor(key)
+    setDrafts((current) => ({
       ...current,
-      [key]: {
-        status: current[key]?.status ?? 'Pending',
-        note: current[key]?.note ?? '',
-        ...patch,
-      },
+      [key]: { ...base, ...patch },
     }))
   }
 
-  function reviewFor(key: string): ReviewState[string] {
-    return reviewState[key] ?? { status: 'Pending', note: '' }
+  async function saveReview(key: string) {
+    try {
+      await onSaveReview(key, reviewFor(key))
+      setDrafts(current => {
+        const next = { ...current }
+        delete next[key]
+        return next
+      })
+    } catch { /* The page displays the server error; keep the unsaved draft. */ }
   }
 
   function buildSummaryExport(): ExportRow[] {
@@ -82,12 +83,12 @@ export function DataTables({ rows, reviewThreshold }: Props) {
         needsChanges: 0,
         rejected: 0,
       }
-      const review = reviewFor(key)
+      const review = reviews[key] ?? { status: 'Pending' }
       item.lines += 1
       item.amount += row.Amount
       item.budget += row.Budget ?? 0
       item.confidenceTotal += row.Confidence
-      if (row.Confidence < reviewThreshold) item.lowConfidence += 1
+      if (requiresReview(row, reviewThreshold) && review.status !== 'Approved') item.lowConfidence += 1
       if (review.status === 'Approved') item.approved += 1
       if (review.status === 'Needs changes') item.needsChanges += 1
       if (review.status === 'Rejected') item.rejected += 1
@@ -102,7 +103,7 @@ export function DataTables({ rows, reviewThreshold }: Props) {
         Amount: item.amount,
         Budget: item.budget || null,
         'Average Confidence': item.lines ? item.confidenceTotal / item.lines : 0,
-        'Low Confidence Lines': item.lowConfidence,
+        'Review Required Lines': item.lowConfidence,
         Approved: item.approved,
         'Needs Changes': item.needsChanges,
         Rejected: item.rejected,
@@ -111,8 +112,9 @@ export function DataTables({ rows, reviewThreshold }: Props) {
 
   function buildLineExport(): ExportRow[] {
     return rowsWithKeys.map(({ row, key }) => {
-      const review = reviewFor(key)
+      const review = reviews[key]
       return {
+        'Line ID': key,
         Type: row.Type,
         Invoice: String(row.InvoiceNumber),
         Date: row.Date,
@@ -121,12 +123,18 @@ export function DataTables({ rows, reviewThreshold }: Props) {
         Account: row.AccountName,
         Description: row.Description,
         Category: row.MappedCategory,
+        'Original AI Category': row.ProposedCategory,
+        'Review Required': row.ReviewRequired,
+        'Review Reason': row.ReviewReason,
+        'Accepted Category': row.AutoAcceptedCategory,
         Amount: row.Amount,
         Budget: row.Budget,
         Confidence: row.Confidence,
         Reason: row.Reason,
-        'Review Status': review.status,
-        'Reviewer Note': review.note,
+        'Review Status': review?.status ?? 'Pending',
+        'Reviewer Note': review?.note ?? '',
+        'Reviewed At': review?.updatedAt,
+        'Review Revision': review?.revision,
       }
     })
   }
@@ -146,9 +154,9 @@ export function DataTables({ rows, reviewThreshold }: Props) {
         <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <CardTitle>Profit &amp; Loss Detail</CardTitle>
-            <CardDescription>Filtered line-level P&amp;L records. Showing first 200 rows.</CardDescription>
+            <CardDescription>Saved review categories drive this report. Unsaved drafts do not affect totals. Showing first 200 rows.</CardDescription>
           </div>
-          <ExportControls mode={exportMode} onModeChange={setExportMode} onExport={handleExport} />
+          <ExportControls mode={exportMode} onModeChange={setExportMode} onExport={handleExport} disabled={!reviewReady || saving} />
         </CardHeader>
         <CardContent>
           <div className="max-h-80 overflow-auto">
@@ -182,10 +190,11 @@ export function DataTables({ rows, reviewThreshold }: Props) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Human-in-the-loop Review (Low Confidence)</CardTitle>
+          <CardTitle>Human-in-the-loop Review</CardTitle>
           <CardDescription>
-            Items below confidence {reviewThreshold.toFixed(2)}. Review decisions stay in this browser session and are included in exports.
+            Source-flagged, unmapped or confidence ≤ {reviewThreshold.toFixed(2)} lines. Save a decision to update the report and its server-side audit history.
           </CardDescription>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={showAll} onChange={event => setShowAll(event.target.checked)} />Review all lines</label>
         </CardHeader>
         <CardContent>
           <div className="max-h-80 overflow-auto">
@@ -196,11 +205,13 @@ export function DataTables({ rows, reviewThreshold }: Props) {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Type</TableHead><TableHead>Date</TableHead><TableHead>Contact</TableHead>
-                    <TableHead>Account</TableHead><TableHead>Category</TableHead>
+                    <TableHead>Account</TableHead><TableHead>AI proposal / Review reason</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
                     <TableHead className="text-right">Confidence</TableHead>
                     <TableHead>Decision</TableHead>
                     <TableHead>Reviewer Note</TableHead>
+                    <TableHead>Reviewed Category</TableHead>
+                    <TableHead>Save</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -212,12 +223,12 @@ export function DataTables({ rows, reviewThreshold }: Props) {
                       <TableCell>{r.Date}</TableCell>
                       <TableCell>{r.Contact}</TableCell>
                       <TableCell>{r.AccountName}</TableCell>
-                      <TableCell>{r.MappedCategory}</TableCell>
+                      <TableCell>{r.ProposedCategory ?? r.MappedCategory}<p className="mt-1 max-w-64 text-xs text-muted-foreground">{r.ReviewReason}</p></TableCell>
                       <TableCell className="text-right">${fmt(r.Amount)}</TableCell>
                       <TableCell className="text-right">{r.Confidence.toFixed(2)}</TableCell>
                       <TableCell>
                         <div className="flex min-w-40 flex-wrap gap-1">
-                          {(['Approved', 'Needs changes', 'Rejected'] as ReviewStatus[]).map((status) => (
+                          {(['Pending', 'Approved', 'Needs changes', 'Rejected'] as ReviewStatus[]).map((status) => (
                             <Button
                               key={status}
                               type="button"
@@ -238,6 +249,15 @@ export function DataTables({ rows, reviewThreshold }: Props) {
                           placeholder="Add note..."
                           className="h-8 min-w-48 rounded-lg border border-input bg-background px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                         />
+                      </TableCell>
+                      <TableCell>
+                        <select aria-label={`Reviewed category for ${r.InvoiceNumber}`} value={review.category} onChange={event => updateReview(key, { category: event.target.value })} className="max-w-72 rounded border p-2 text-sm">
+                          {categories.map(category => <option key={category} value={category}>{category}</option>)}
+                        </select>
+                      </TableCell>
+                      <TableCell>
+                        <Button type="button" size="xs" disabled={!reviewReady || saving} onClick={() => void saveReview(key)}>Save review</Button>
+                        <p className="mt-1 text-xs text-muted-foreground">{drafts[key] ? 'Unsaved changes' : reviews[key] ? `Saved · revision ${reviews[key].revision}` : 'Not reviewed'}</p>
                       </TableCell>
                     </TableRow>
                     )
