@@ -1,5 +1,8 @@
 'use client'
 
+import { browserDataRequest } from '@/lib/browser-data'
+import { BrowserFileLink, useBrowserFileUrl } from '@/components/BrowserFileLink'
+
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertCircle,
@@ -280,7 +283,10 @@ export default function ReconciliationPage() {
 
   const working = phase === 'extracting' || phase === 'matching'
   const selectedExtraction = extractions[activeDocument] ?? DEMO_INVOICES[0]
-  const previewUrl = previewUrls[activeDocument] ?? null
+  const archivedFile = savedRun?.files.find(file => file.index === selectedExtraction.documentIndex && file.archived)
+  const archivedPreview = useBrowserFileUrl(archivedFile && !invoiceFiles.length
+    ? `/api/reconciliation-reviews?id=${savedRun!.id}&original=${archivedFile.index}&preview=1` : null)
+  const previewUrl = previewUrls[activeDocument] ?? (archivedFile?.mime.startsWith('image/') ? archivedPreview.url : null)
   const matchedCount = savedRun ? reviewedResults(savedRun).filter(result => result.matched).length : matches.filter((match) => match.matched).length
   const selectedVerified = selectedExtraction.fieldVerification
   const activeProcessStepIndex = PROCESSING_STEPS.reduce(
@@ -350,7 +356,8 @@ export default function ReconciliationPage() {
     setProgress(68)
     await delay(1300)
     setMatches(reconcileInvoices(DEMO_INVOICES, DEMO_STATEMENT))
-    try { await persistRun(DEMO_INVOICES, DEMO_STATEMENT, 'UGX', true) } catch (error) { setError((error as Error).message) }
+    try { await persistRun(DEMO_INVOICES, DEMO_STATEMENT, 'UGX', true) }
+    catch (error) { setError((error as Error).message); setPhase('error'); return }
     setProgress(100)
     setPhase('complete')
   }
@@ -424,7 +431,7 @@ export default function ReconciliationPage() {
     const sources = sample ? [] : [{ file: statementFile!, index: -1 }, ...invoiceFiles.map((file, index) => ({ file, index }))]
     const files = await Promise.all(sources.map(async ({ file, index }) => ({ index, name: file.name, mime: file.type,
       sha256: Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', await file.arrayBuffer()))).map(byte => byte.toString(16).padStart(2, '0')).join(''), archived: false })))
-    const response = await fetch('/api/reconciliation-reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    const response = await browserDataRequest('/api/reconciliation-reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ invoices, statements, currency, sample, files, materiality: sample ? 26000000 : Number(materiality) }) })
     let run = await response.json()
     if (!response.ok) throw new Error(run.error || 'Unable to save reconciliation snapshot.')
@@ -432,7 +439,7 @@ export default function ReconciliationPage() {
     window.history.replaceState(null, '', `/reconciliation#${run.id}`)
     for (const { file, index } of sources) {
       const form = new FormData(); form.append('id', run.id); form.append('index', String(index)); form.append('file', file)
-      const archived = await fetch('/api/reconciliation-reviews', { method: 'POST', body: form })
+      const archived = await browserDataRequest('/api/reconciliation-reviews', { method: 'POST', body: form })
       run = await archived.json()
       if (!archived.ok) throw new Error(run.error || 'Original archive failed. Review remains blocked.')
       setSavedRun(run)
@@ -450,7 +457,7 @@ export default function ReconciliationPage() {
     const id = window.location.hash.slice(1)
     if (!id) return
     const controller = new AbortController()
-    void fetch(`/api/reconciliation-reviews?id=${id}`, { signal: controller.signal }).then(async response => {
+    void browserDataRequest(`/api/reconciliation-reviews?id=${id}`, { signal: controller.signal }).then(async response => {
       const run = await response.json()
       if (!response.ok) throw new Error(run.error || 'Unable to restore saved reconciliation.')
       if (!controller.signal.aborted) restoreRun(run)
@@ -521,12 +528,14 @@ export default function ReconciliationPage() {
                   </>}
                   {working && <div className="reconciliation-scan-line absolute inset-x-0 top-0 h-12 border-b-2 border-blue-500 bg-blue-400/15" />}
                 </div>
+              ) : archivedPreview.url && archivedFile?.mime === 'application/pdf' ? (
+                <iframe title={`Saved original ${archivedFile.name}`} src={archivedPreview.url} className="h-[580px] w-full rounded-md border bg-white" />
               ) : (savedRun && !savedRun.sample) || invoiceFiles.length > 0 ? (
                 <div className="mx-auto flex min-h-64 max-w-[390px] flex-col items-center justify-center gap-3 rounded-md border bg-white p-6 text-center text-sm">
                   <FileSearch className="size-10 text-blue-700" />
                   <p>{invoiceFiles[activeDocument]?.name ?? selectedExtraction.fileName}</p>
                   <p className="text-xs text-muted-foreground">No synthetic invoice preview is used for uploaded documents. Inspect the original document before reviewing extracted fields.</p>
-                  {savedRun?.files.find(file => file.index === selectedExtraction.documentIndex)?.archived && <a className="text-blue-700 underline" href={`/api/reconciliation-reviews?id=${savedRun.id}&original=${selectedExtraction.documentIndex}`}>Download archived original</a>}
+                  {savedRun?.files.find(file => file.index === selectedExtraction.documentIndex)?.archived && <BrowserFileLink className="text-blue-700 underline" href={`/api/reconciliation-reviews?id=${savedRun.id}&original=${selectedExtraction.documentIndex}`}>Download archived original</BrowserFileLink>}
                 </div>
               ) : (
                 <DemoInvoice scanning={working} extraction={selectedExtraction} />
@@ -592,7 +601,7 @@ export default function ReconciliationPage() {
           </CardHeader>
           <CardContent className="relative p-0">
             <div className="flex items-center justify-between border-b px-4 py-3 text-xs">
-              <span className="font-semibold text-slate-700">{statementFile?.name ?? 'COLA customer statement · sample'}</span>
+              <span className="font-semibold text-slate-700">{statementFile?.name ?? savedRun?.files.find(file => file.index === -1)?.name ?? 'COLA customer statement · sample'}</span>
               <span className="text-muted-foreground">All {statementRecords.length.toLocaleString()} lines loaded</span>
             </div>
             <div ref={statementScrollRef} className="max-h-[560px] overflow-auto">

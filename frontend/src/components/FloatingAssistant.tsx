@@ -11,6 +11,7 @@ import { liquidityMetrics } from '@/lib/balance-sheet-metrics'
 import { requiresReview } from '@/lib/report-utils'
 import type { RawRow } from '@/lib/report-data'
 import { cn } from '@/lib/utils'
+import { PAYROLL_LINES, payrollAssistantContext } from '@/lib/payroll-mock'
 
 const PL_QUESTIONS = [
   'Summarise the top expense categories and any low-confidence mappings.',
@@ -180,6 +181,7 @@ export function FloatingAssistant() {
   const [isThinking, setIsThinking] = useState(false)
 
   const quickQuestions = useMemo(() => {
+    if (pathname.includes('payroll')) return ['Summarise the mock payroll and monthly employer cost.', 'Which payroll lines need manual review?', 'Explain gross pay, net pay and super in this mock register.']
     if (pathname.includes('balance-sheet')) return BALANCE_SHEET_QUESTIONS
     if (pathname.includes('profit-loss')) return PL_QUESTIONS
     return [...PL_QUESTIONS.slice(0, 2), ...BALANCE_SHEET_QUESTIONS.slice(0, 2)]
@@ -197,7 +199,8 @@ export function FloatingAssistant() {
     setIsThinking(true)
     setStatus('Generating')
 
-    const draft = localDraft(trimmed)
+    const isPayroll = pathname.includes('payroll')
+    const draft = isPayroll ? payrollAssistantContext() : localDraft(trimmed)
     setAnswer('Generating answer...')
 
     try {
@@ -207,8 +210,8 @@ export function FloatingAssistant() {
         body: JSON.stringify({
           question: trimmed,
           localDraft: draft,
-          datasetSummary: datasetSummary(),
-          sampleRows: REPORT_DATA.raw_data.slice(0, 120),
+          datasetSummary: isPayroll ? payrollAssistantContext() : datasetSummary(),
+          sampleRows: isPayroll ? PAYROLL_LINES : REPORT_DATA.raw_data.slice(0, 120),
         }),
       })
 

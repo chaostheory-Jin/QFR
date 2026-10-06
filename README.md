@@ -210,20 +210,17 @@ and are not production authentication.
   proposal, score and amount remain unchanged for audit. Saved decisions reload
   after refreshing the page. Balance-sheet reviews are saved audit decisions,
   not edits to official ledger balances.
-- The Node.js API stores the effective reviewed mapping and an append-only
-  decision history in `output/reviews/`, separated by source and dataset hash
-  (also by date range for balance sheets). Stable line IDs, per-line revisions,
-  exclusive file locks and atomic replacement prevent filtered-row mismatches
-  and concurrent overwrites. Changed imports do not inherit stale approvals.
-- Configure `QFR_REVIEW_STORE_DIR` in `frontend/.env.local` for a different
-  **durable** directory. This filesystem implementation is for a local server
-  or a server with a persistent/shared volume. Vercel without explicit storage
-  configuration fails visibly; a temporary directory is not durable storage.
-  Multi-instance serverless deployment needs a shared database/object store.
-  A crash can leave a lock file: stop writers and investigate before removing
-  it. Do not delete locks while the server is writing.
+- The dashboard stores mapping decisions in browser IndexedDB, separated by
+  source, dataset hash and date range. Stable line IDs, per-line revisions and
+  atomic browser transactions protect against filtered-row mismatches and
+  concurrent edits in multiple tabs. Changed datasets do not inherit approvals.
+- Browser data is not synchronized to Python or the server. Use dashboard Excel
+  export for the current reviewed result. Legacy Node filesystem review APIs
+  remain available for local workflows (`output/reviews/`, optionally
+  `QFR_REVIEW_STORE_DIR`), but the dashboard no longer calls those APIs.
 
-To export a saved P&L review result for the Python workflow without calling AI:
+To export a **legacy server-saved** P&L review result for Python without AI
+(this does not read browser decisions):
 
 ```bash
 python export_reviewed_reports.py --review-file output/reviews/quickbooks-<snapshot-hash>.json
@@ -265,8 +262,8 @@ Dashboard review exports include only saved decisions, not unsaved drafts.
   not currently include invoice references. Xero demo balances explicitly mark
   missing transaction evidence. Adapter calculations are unchanged.
 - Attach original PDF, PNG or JPEG documents (up to 3 MB each) to an individual
-  transaction in Report Explorer. Exact bytes and notes persist under the local
-  data store, scoped to source, report, company, dataset snapshot and record.
+  transaction in Report Explorer. Exact bytes and notes persist in browser
+  IndexedDB, scoped to source, report, company, dataset snapshot and record.
   Refresh restores attachments; attaching a file is manual evidence collection,
   not verification, approval or an automatically inferred invoice match.
 - Reconciliation runs archive the original extraction separately from decisions
@@ -281,16 +278,50 @@ Dashboard review exports include only saved decisions, not unsaved drafts.
   matches. Review is blocked until original files have been archived and their
   hashes verified. Audit JSON includes both immutable automated results and the
   effective reviewed results.
-- Persistence is local server-side storage in `output/data-platform/` by default.
-  Set `QFR_DATA_STORE_DIR` in `frontend/.env.local` to a durable volume. Exclusive
-  locks, optimistic revisions and atomic writes protect concurrent decisions.
-  Unknown schema versions fail visibly rather than silently discarding history.
-  As with mapping reviews, do not remove surviving locks without investigating.
-  Vercel without configured durable storage fails explicitly.
+- Dashboard imports, reconciliation snapshots, original files, attachments and
+  reviews now use browser IndexedDB (`qfr-browser-data-v1`), not Vercel disk.
+  No database, cloud bucket, `QFR_DATA_STORE_DIR` or absolute file path is needed.
+  Local files are stored as Blobs and served through temporary object URLs for
+  preview/download. Hash verification, validation, materiality rules, immutable
+  source extraction and revision checks are retained. IndexedDB transactions
+  serialize duplicate checks and simultaneous review writes across tabs.
+- Data is available only in the same browser profile **and origin**. Localhost,
+  Vercel preview URLs and a production domain each have separate storage. Clearing
+  site data, browser eviction or private browsing can remove it. There is no
+  cloud backup or cross-device synchronization. Download important originals;
+  export Excel reports and reconciliation audit JSON. Storage denial/full quota
+  fails visibly. Existing server-side archives are not automatically migrated.
+- AI/PDF analysis still uses `/api/reconciliation`, sends selected documents to
+  the analysis provider, and needs the login-supplied API key or server key.
+  Existing conservative request batching remains (3.75 MiB source-file budget;
+  Vercel's function payload cap is 4.5 MB). Large source files may still require
+  splitting. Saving results no longer makes a second server upload or writes to
+  a nonexistent server directory. The existing pure-JavaScript statement PDF
+  parser does not require `pdftotext`.
+- Legacy filesystem APIs remain for local workflows only. They are not used by
+  the dashboard and still require durable storage if called directly on Vercel.
 - **Security limit:** existing demo authentication is not production identity or
   customer isolation. Reviewer names/roles are explicitly self-declared, not
   verified RBAC. Do not deploy this approval prototype for production financial
   authorization until server authentication, tenant isolation and role checks exist.
+
+### Payroll mock register
+
+- `/payroll` is integrated into the sidebar and floating AI assistant. It uses
+  12 fictional employees, nine monthly pay runs (Jan–Sep 2026), and 108 stable
+  employee/pay-run records. It is not downloaded Xero/QuickBooks payroll.
+- Amounts are integer AUD cents. Gross = base + overtime + allowance + bonus;
+  net = gross − withholding − deductions; employer cost = gross + super.
+  Withholding/super rates and confidence scores are **illustrative fixtures**,
+  not tax/award/leave calculations or real AI probabilities.
+- Date, department, employee, payment-status and confidence filters feed cards,
+  monthly chart, run summary, by-line register and Excel exports. A payslip view
+  explains each calculation. Draft September runs are included unless filtered.
+- Three mock low-confidence cases support notes and review decisions, saved to
+  this browser with history and optimistic revisions. Approval never marks pay
+  as paid or changes the original amounts. No payments are initiated and no mock
+  amounts are added to existing P&L/Balance Sheet reports. The AI assistant is
+  given the explicitly labelled full mock register, not the page's filters.
 
 ### Invoice reconciliation evidence
 

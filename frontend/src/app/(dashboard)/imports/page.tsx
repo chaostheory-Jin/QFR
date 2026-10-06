@@ -1,5 +1,8 @@
 'use client'
 
+import { browserDataRequest } from '@/lib/browser-data'
+import { BrowserFileLink } from '@/components/BrowserFileLink'
+
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -27,16 +30,16 @@ export default function ImportsPage() {
     setBatch(next); setMapping(next.mapping); setSheet(next.sheet); setOptions(next.options); setDirty(false)
     window.history.replaceState(null, '', `/imports#${next.id}`)
   }
-  async function refreshList() { setBatches((await payload(await fetch('/api/imports'))).batches) }
+  async function refreshList() { setBatches((await payload(await browserDataRequest('/api/imports'))).batches) }
   async function load(id: string) {
     setBusy(true); setError('')
-    try { apply(await payload(await fetch(`/api/imports?id=${id}`))) } catch (error) { setError((error as Error).message) } finally { setBusy(false) }
+    try { apply(await payload(await browserDataRequest(`/api/imports?id=${id}`))) } catch (error) { setError((error as Error).message) } finally { setBusy(false) }
   }
   useEffect(() => {
     const controller = new AbortController()
-    void fetch('/api/imports', { signal: controller.signal }).then(payload).then(data => setBatches(data.batches)).catch(error => { if (!controller.signal.aborted) setError(error.message) })
+    void browserDataRequest('/api/imports', { signal: controller.signal }).then(payload).then(data => setBatches(data.batches)).catch(error => { if (!controller.signal.aborted) setError(error.message) })
     const id = window.location.hash.slice(1)
-    if (id) void fetch(`/api/imports?id=${id}`, { signal: controller.signal }).then(payload).then(apply).catch(error => { if (!controller.signal.aborted) setError(error.message) })
+    if (id) void browserDataRequest(`/api/imports?id=${id}`, { signal: controller.signal }).then(payload).then(apply).catch(error => { if (!controller.signal.aborted) setError(error.message) })
     return () => controller.abort()
   }, [])
   async function upload(sample = false, invalid = false) {
@@ -46,14 +49,14 @@ export default function ImportsPage() {
       if (!source) throw new Error('Choose a file first.')
       const form = new FormData(); form.append('file', source)
       form.append('metadata', JSON.stringify(sample ? { source: 'Mock fixture', company: 'Mock Company — not customer data', currency: 'AUD', kind: 'ledger', sample: true } : metadata))
-      apply(await payload(await fetch('/api/imports', { method: 'POST', body: form }))); await refreshList()
+      apply(await payload(await browserDataRequest('/api/imports', { method: 'POST', body: form }))); await refreshList()
     } catch (error) { setError((error as Error).message) } finally { setBusy(false) }
   }
   async function validate(commit: boolean) {
     if (!batch) return
     setBusy(true); setError('')
     try {
-      apply(await payload(await fetch('/api/imports', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: batch.id, revision: batch.revision, sheet, mapping, options, commit }) })))
+      apply(await payload(await browserDataRequest('/api/imports', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: batch.id, revision: batch.revision, sheet, mapping, options, commit }) })))
       await refreshList()
     } catch (error) { setError((error as Error).message) } finally { setBusy(false) }
   }
@@ -79,7 +82,7 @@ export default function ImportsPage() {
     {batch && <>
       <Card><CardHeader><CardTitle>{batch.metadata.sample ? 'MOCK · ' : ''}{batch.fileName} — {batch.status}</CardTitle></CardHeader><CardContent className="space-y-4">
         <p className="break-all text-xs text-muted-foreground">Batch {batch.id} · Original SHA-256 {batch.sha256} · {batch.metadata.company} · {batch.metadata.source} · {batch.metadata.currency} · {batch.metadata.kind}</p>
-        <a className="text-sm text-blue-700 underline" href={`/api/imports?id=${batch.id}&original=1`}>Download unchanged original</a>
+        <BrowserFileLink className="text-sm text-blue-700 underline" href={`/api/imports?id=${batch.id}&original=1`}>Download unchanged original</BrowserFileLink>
         {batch.status === 'draft' && <>
           <div className="flex flex-wrap gap-4">
             <label className="text-sm">Worksheet <select aria-label="Worksheet" className={inputClass} value={sheet} onChange={event => { setSheet(event.target.value); setMapping(suggestColumns(batch.tables.find(table => table.sheet === event.target.value)!.headers)); setDirty(true) }} disabled={busy}>{batch.tables.map(table => <option key={table.sheet}>{table.sheet}</option>)}</select></label>

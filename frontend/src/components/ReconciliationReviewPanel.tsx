@@ -1,5 +1,8 @@
 'use client'
 
+import { browserDataRequest } from '@/lib/browser-data'
+import { BrowserFileLink } from '@/components/BrowserFileLink'
+
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,7 +14,7 @@ export function ReconciliationReviewPanel({ run, onRun, onRestore }: { run: Reco
   const [drafts, setDrafts] = useState<Record<string, ReviewDecision>>({})
   const [reviewer, setReviewer] = useState(''), [role, setRole] = useState<'finance' | 'manager'>('finance')
   async function request(url: string, init?: RequestInit) {
-    const response = await fetch(url, init), data = await response.json()
+    const response = await browserDataRequest(url, init), data = await response.json()
     if (!response.ok) throw new Error(data.error || 'Review request failed.')
     return data
   }
@@ -42,7 +45,7 @@ export function ReconciliationReviewPanel({ run, onRun, onRestore }: { run: Reco
     {run && <>
       <p className="break-all text-xs text-muted-foreground">{run.sample ? 'MOCK fixture — not live customer data' : 'Archived extraction'} · Batch {run.id} · {run.createdAt} · Materiality threshold {run.materiality} {run.currency}. Amounts at or above this threshold require manager approval regardless of AI confidence.</p>
       <p className="rounded bg-amber-50 p-3 text-xs text-amber-900">This project currently uses demo authentication. Reviewer name and role below are self-declared audit fields, not verified identity or secure production role authorization.</p>
-      {!run.sample && <div className="space-y-1">{run.files.map(file => <p className="break-all text-xs" key={file.index}>{file.name} · SHA-256 {file.sha256} · {file.archived ? <a className="text-blue-700 underline" href={`/api/reconciliation-reviews?id=${run.id}&original=${file.index}`}>Download original</a> : 'Original not archived — review blocked'}</p>)}</div>}
+      {!run.sample && <div className="space-y-1">{run.files.map(file => <p className="break-all text-xs" key={file.index}>{file.name} · SHA-256 {file.sha256} · {file.archived ? <BrowserFileLink className="text-blue-700 underline" href={`/api/reconciliation-reviews?id=${run.id}&original=${file.index}`}>Download original</BrowserFileLink> : 'Original not archived — review blocked'}</p>)}</div>}
       <div className="flex flex-wrap gap-4"><label className="text-sm">Reviewer <input aria-label="Reconciliation reviewer" className={field} value={reviewer} onChange={event => setReviewer(event.target.value)} /></label><label className="text-sm">Declared role <select aria-label="Reconciliation reviewer role" className={field} value={role} onChange={event => setRole(event.target.value as 'finance' | 'manager')}><option value="finance">Finance reviewer</option><option value="manager">Finance manager</option></select></label></div>
       <div className="space-y-3">{reviewedResults(run).map(result => {
         const index = result.original.documentIndex, draft = draftFor(index)

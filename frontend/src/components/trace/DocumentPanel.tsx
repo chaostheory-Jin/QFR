@@ -1,5 +1,8 @@
 'use client'
 
+import { browserDataRequest } from '@/lib/browser-data'
+import { BrowserFileLink, useBrowserFileUrl } from '@/components/BrowserFileLink'
+
 import { useEffect, useState } from 'react'
 import { FileText, Upload, Download, Paperclip, CalendarDays, Building2, ArrowUpRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -14,10 +17,11 @@ export function DocumentPanel({ entry, source, report, currency }: { entry: Trac
   const query = new URLSearchParams({ source, report, record: entry.id }).toString()
   const endpoint = `/api/trace-documents?${query}`
   const active = documents.find(document => document.id === activeId) ?? documents[0]
+  const preview = useBrowserFileUrl(active ? `${endpoint}&file=${active.id}&preview=1` : null)
   const money = new Intl.NumberFormat('en-AU', { style: 'currency', currency })
   useEffect(() => {
     const controller = new AbortController()
-    fetch(endpoint, { signal: controller.signal }).then(async response => {
+    browserDataRequest(endpoint, { signal: controller.signal }).then(async response => {
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Unable to load documents.')
       setDocuments(data.documents); setLoading(false)
@@ -29,7 +33,7 @@ export function DocumentPanel({ entry, source, report, currency }: { entry: Trac
     setSaving(true); setError('')
     try {
       const form = new FormData(); form.append('file', file); form.append('note', note)
-      const response = await fetch(endpoint, { method: 'POST', body: form }), data = await response.json()
+      const response = await browserDataRequest(endpoint, { method: 'POST', body: form }), data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Unable to save document.')
       setDocuments(data.documents); setActiveId(data.documents.at(-1)?.id ?? ''); setAdding(false); setFile(null); setNote('')
     } catch (error) { setError((error as Error).message) } finally { setSaving(false) }
@@ -48,12 +52,11 @@ export function DocumentPanel({ entry, source, report, currency }: { entry: Trac
       {loading ? <p className="text-sm text-slate-500" role="status">Loading supporting documents…</p> : active ? <div className="space-y-3">
         <label className="block text-xs font-medium text-slate-500">Supporting document<select aria-label="Supporting document" className="mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900" value={active.id} onChange={event => setActiveId(event.target.value)}>{documents.map(document => <option key={document.id} value={document.id}>{document.name}</option>)}</select></label>
         <div className="overflow-hidden rounded-xl border bg-slate-50">
-          {active.mime === 'application/pdf' ? <iframe title={`Preview of ${active.name}`} src={`${endpoint}&file=${active.id}&preview=1`} className="h-[480px] w-full bg-white" />
-            // Native image requests preserve the user's authenticated session.
+          {!preview.url ? <p className="p-5 text-sm">{preview.error || 'Loading saved original…'}</p> : active.mime === 'application/pdf' ? <iframe title={`Preview of ${active.name}`} src={preview.url} className="h-[480px] w-full bg-white" />
             // eslint-disable-next-line @next/next/no-img-element
-            : <img alt={`Supporting document: ${active.name}`} src={`${endpoint}&file=${active.id}&preview=1`} className="max-h-[560px] w-full object-contain" />}
+            : <img alt={`Supporting document: ${active.name}`} src={preview.url} className="max-h-[560px] w-full object-contain" />}
         </div>
-        <div className="flex flex-wrap gap-3 text-sm text-indigo-700"><a className="inline-flex items-center gap-1" target="_blank" rel="noreferrer" href={`${endpoint}&file=${active.id}&preview=1`}>Open full size <ArrowUpRight size={14} /></a><a className="inline-flex items-center gap-1" href={`${endpoint}&file=${active.id}`}><Download size={14} /> Download original</a></div>
+        <div className="flex flex-wrap gap-3 text-sm text-indigo-700">{preview.url && <a className="inline-flex items-center gap-1" target="_blank" rel="noreferrer" href={preview.url}>Open full size <ArrowUpRight size={14} /></a>}<BrowserFileLink className="inline-flex items-center gap-1" href={`${endpoint}&file=${active.id}`}><Download size={14} /> Download original</BrowserFileLink></div>
         <p className="text-xs text-slate-500">Added manually on {new Date(active.addedAt).toLocaleDateString('en-AU')}. Attachment does not approve the transaction.</p>
         {active.note && <p className="rounded-lg bg-amber-50 p-3 text-sm text-slate-700">{active.note}</p>}
       </div> : <div className="rounded-xl border border-dashed border-slate-300 px-5 py-7 text-center">
