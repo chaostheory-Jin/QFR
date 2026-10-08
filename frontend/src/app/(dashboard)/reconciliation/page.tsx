@@ -33,6 +33,8 @@ import {
 import { cn } from '@/lib/utils'
 import { ReconciliationReviewPanel } from '@/components/ReconciliationReviewPanel'
 import { reviewedResults, type ReconciliationRun } from '@/lib/reconciliation-review'
+import { candidateFocus, rankStatementCandidates } from '@/lib/reconciliation-candidates'
+import { ReconciliationCandidates } from '@/components/ReconciliationCandidates'
 
 type Phase = 'idle' | 'extracting' | 'matching' | 'complete' | 'error'
 
@@ -44,7 +46,7 @@ const PROCESSING_STEPS = [
   { at: 62, label: 'Preserve invoice evidence', detail: 'Keeping original values; OCR conflicts require review.' },
   { at: 76, label: 'Match ID and amount', detail: 'Only exact ID + amount can match automatically; weak similarities are candidates.' },
   { at: 88, label: 'Check one-to-one assignment', detail: 'Preventing two invoices from consuming the same statement row.' },
-  { at: 97, label: 'Write audit result', detail: 'Recording original evidence, differences and review reasons.' },
+  { at: 97, label: 'Rank review candidates', detail: 'Ranking related statement lines for review, preserving original evidence and highlighting the best candidate.' },
 ]
 
 const MAX_HOSTED_BODY_BYTES = Math.floor(3.75 * 1024 * 1024)
@@ -141,10 +143,6 @@ function createUploadBatches(statement: File, invoices: File[]): Array<Array<{ f
   })
   if (current.length) batches.push(current)
   return batches
-}
-
-function statementRecordKey(record: StatementRecord): string {
-  return record.lineIndex ? `line-${record.lineIndex}` : `${record.invoiceNumber}-${record.amount}`
 }
 
 function UploadPanel({
@@ -280,6 +278,7 @@ export default function ReconciliationPage() {
   const [materiality, setMateriality] = useState('')
   const [previewUrls, setPreviewUrls] = useState<Array<string | null>>([])
   const statementScrollRef = useRef<HTMLDivElement>(null)
+  const [candidateSelection, setCandidateSelection] = useState<{ documentIndex: number; statementIndex: number; revision: number } | null>(null)
 
   const working = phase === 'extracting' || phase === 'matching'
   const selectedExtraction = extractions[activeDocument] ?? DEMO_INVOICES[0]
@@ -308,18 +307,36 @@ export default function ReconciliationPage() {
     return () => window.clearInterval(timer)
   }, [working, phase])
 
-  const matchedRows = useMemo(
-    () => new Set(matches.filter((match) => match.matched && match.statementRecord).map((match) => statementRecordKey(match.statementRecord!))),
-    [matches],
-  )
+  const matchedRows = useMemo(() => new Map(savedRun
+    ? reviewedResults(savedRun).filter(result => result.matched && result.statementRecord).map(result => [savedRun.statements.indexOf(result.statementRecord!), result.original.documentIndex])
+    : matches.filter(match => match.matched && match.statementRecord).map(match => [statementRecords.indexOf(match.statementRecord!), match.invoice.documentIndex])), [savedRun, matches, statementRecords])
+  const candidatesByInvoice = useMemo(() => Object.fromEntries(matches.map(match => [match.invoice.documentIndex,
+    rankStatementCandidates(match.invoice, statementRecords, statementCurrency).map(candidate => {
+      const owner = matchedRows.get(candidate.statementIndex)
+      return owner !== undefined && owner !== match.invoice.documentIndex ? { ...candidate,
+        reason: `${candidate.reason} · Already matched to Invoice ${owner + 1}; resolve that assignment before reuse` } : candidate
+    })])), [matches, statementRecords, statementCurrency, matchedRows])
+  const activeCandidates = candidatesByInvoice[selectedExtraction.documentIndex] ?? []
+  const focusedStatementIndex = candidateFocus(activeCandidates,
+    candidateSelection?.documentIndex === selectedExtraction.documentIndex ? candidateSelection.statementIndex : null)
+  const candidateIndices = new Set(activeCandidates.map(candidate => candidate.statementIndex))
+
+  function inspectCandidate(documentIndex: number, statementIndex: number) {
+    const documentPosition = extractions.findIndex(invoice => invoice.documentIndex === documentIndex)
+    if (documentPosition < 0 || !statementRecords[statementIndex]) return
+    setActiveDocument(documentPosition)
+    setCandidateSelection(current => ({ documentIndex, statementIndex, revision: (current?.revision ?? 0) + 1 }))
+  }
 
   useEffect(() => {
-    if (phase !== 'complete' || !matchedRows.size) return
+    if (phase !== 'complete' || focusedStatementIndex === null) return
     const container = statementScrollRef.current
-    const target = container?.querySelector<HTMLElement>('[data-target-line="true"]')
+    const target = container?.querySelector<HTMLElement>(`[data-statement-index="${focusedStatementIndex}"]`)
     if (!container || !target) return
-    container.scrollTo({ top: Math.max(0, target.offsetTop - container.clientHeight / 2), behavior: 'smooth' })
-  }, [matchedRows, phase])
+    const top = container.scrollTop + target.getBoundingClientRect().top - container.getBoundingClientRect().top
+    container.scrollTo({ top: Math.max(0, top - container.clientHeight / 2 + target.offsetHeight / 2), behavior: 'smooth' })
+    container.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }, [focusedStatementIndex, selectedExtraction.documentIndex, candidateSelection?.revision, phase, savedRun?.id])
 
   function resetResults() {
     window.history.replaceState(null, '', '/reconciliation')
@@ -328,6 +345,7 @@ export default function ReconciliationPage() {
     setProgress(0)
     setError('')
     setMatches([])
+    setCandidateSelection(null)
   }
 
   function selectInvoiceFiles(files: File[]) {
@@ -355,9 +373,11 @@ export default function ReconciliationPage() {
     setPhase('matching')
     setProgress(68)
     await delay(1300)
-    setMatches(reconcileInvoices(DEMO_INVOICES, DEMO_STATEMENT))
+    const results = reconcileInvoices(DEMO_INVOICES, DEMO_STATEMENT)
+    setMatches(results)
     try { await persistRun(DEMO_INVOICES, DEMO_STATEMENT, 'UGX', true) }
     catch (error) { setError((error as Error).message); setPhase('error'); return }
+    setActiveDocument(Math.max(0, results.findIndex(match => !match.matched)))
     setProgress(100)
     setPhase('complete')
   }
@@ -406,8 +426,10 @@ export default function ReconciliationPage() {
       setPhase('matching')
       setProgress(70)
       await delay(1200)
-      setMatches(reconcileInvoices(loadedExtractions, loadedRecords, { currency: statementCurrency }))
+      const results = reconcileInvoices(loadedExtractions, loadedRecords, { currency: statementCurrency })
+      setMatches(results)
       await persistRun(loadedExtractions, loadedRecords, statementCurrency, false)
+      setActiveDocument(Math.max(0, results.findIndex(match => !match.matched)))
       setProgress(100)
       setPhase('complete')
     } catch (caught) {
@@ -418,7 +440,7 @@ export default function ReconciliationPage() {
 
   function exportAudit() {
     const blob = new Blob([JSON.stringify({ schemaVersion: 2, exportedAt: new Date().toISOString(), statementCurrency,
-      invoiceDocuments: extractions, statementRecords, matches, savedRun, reviewedResults: savedRun ? reviewedResults(savedRun) : null }, null, 2)], { type: 'application/json' })
+      invoiceDocuments: extractions, statementRecords, matches, reviewSuggestions: candidatesByInvoice, savedRun, reviewedResults: savedRun ? reviewedResults(savedRun) : null }, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
@@ -448,7 +470,8 @@ export default function ReconciliationPage() {
 
   const restoreRun = useCallback((run: ReconciliationRun) => {
     setSavedRun(run); setStatementRecords(run.statements); setExtractions(run.invoices); setStatementCurrency(run.currency); setMateriality(String(run.materiality))
-    setInvoiceFiles([]); setStatementFile(null); setPreviewUrls([]); setActiveDocument(0)
+    setInvoiceFiles([]); setStatementFile(null); setPreviewUrls([]); setCandidateSelection(null)
+    setActiveDocument(Math.max(0, reviewedResults(run).findIndex(result => !result.matched)))
     setMatches(reconcileInvoices(run.invoices, run.statements, { currency: run.currency })); setPhase('complete'); setProgress(100); setError('')
     window.history.replaceState(null, '', `/reconciliation#${run.id}`)
   }, [])
@@ -611,14 +634,21 @@ export default function ReconciliationPage() {
                 </thead>
                 <tbody>
                   {statementRecords.map((record, index) => {
-                    const matched = matchedRows.has(statementRecordKey(record))
+                    const owner = matchedRows.get(index)
+                    const matched = owner === selectedExtraction.documentIndex
+                    const candidate = phase === 'complete' && candidateIndices.has(index)
+                    const focused = phase === 'complete' && index === focusedStatementIndex
                     return (
                       <tr
-                        key={statementRecordKey(record)}
-                        data-target-line={matched ? 'true' : undefined}
+                        key={index}
+                        data-statement-index={index}
+                        data-target-line={focused ? 'true' : undefined}
+                        aria-selected={focused}
                         className={cn(
                           'border-b transition-colors',
-                          matched && 'bg-emerald-100 text-emerald-950 ring-1 ring-inset ring-emerald-400',
+                          matched && !focused && 'bg-emerald-50 text-emerald-950',
+                          candidate && !matched && 'bg-amber-50',
+                          focused && 'bg-amber-100 text-amber-950 ring-2 ring-inset ring-amber-500',
                           phase === 'matching' && 'animate-pulse',
                         )}
                         style={phase === 'matching' ? { animationDelay: `${index * 90}ms` } : undefined}
@@ -627,7 +657,10 @@ export default function ReconciliationPage() {
                         <td className="px-3 py-3 text-muted-foreground">{record.date || '—'}</td>
                         <td className="max-w-56 px-3 py-3 font-mono font-semibold">
                           <span className="block truncate">{statementIdentifiers(record).join(' · ') || record.invoiceNumber}</span>
-                          {matched && <span className="mt-1 inline-flex rounded bg-emerald-600 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-wide text-white">Target line</span>}
+                          {matched && <span className="mt-1 inline-flex rounded bg-emerald-600 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-wide text-white">Confirmed match</span>}
+                          {owner !== undefined && !matched && <span className="mt-1 inline-flex rounded bg-slate-200 px-1.5 py-0.5 font-sans text-[9px] text-slate-700">Assigned to Invoice {owner + 1}</span>}
+                          {candidate && !matched && <span className="mt-1 inline-flex rounded bg-amber-200 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-wide text-amber-950">Review candidate #{activeCandidates.findIndex(candidate => candidate.statementIndex === index) + 1}</span>}
+                          {focused && <span className="mt-1 ml-1 inline-flex rounded bg-amber-600 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-wide text-white">Viewing this line</span>}
                         </td>
                         <td className="px-3 py-3 text-muted-foreground">{record.description ?? 'Statement line'}</td>
                         <td className="px-4 py-3 text-right font-medium tabular-nums">{money(record.amount, statementCurrency)}</td>
@@ -637,6 +670,11 @@ export default function ReconciliationPage() {
                 </tbody>
               </table>
             </div>
+            {phase === 'complete' && <section aria-label="Active invoice review candidates" className="space-y-3 border-t border-amber-200 bg-white p-4">
+              <div><h3 className="text-sm font-semibold">Review candidates · Invoice {activeDocument + 1}</h3><p className="mt-1 break-all text-xs text-slate-500">{selectedExtraction.fileName} · Click a candidate to locate its original statement row.</p></div>
+              <ReconciliationCandidates candidates={activeCandidates} currency={statementCurrency} selectedIndex={focusedStatementIndex}
+                onSelect={index => inspectCandidate(selectedExtraction.documentIndex, index)} />
+            </section>}
             {working && (
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-blue-500/0 via-blue-400/10 to-blue-500/0">
                 <div className="reconciliation-scan-line absolute inset-x-0 top-0 h-14 border-b-2 border-violet-500 bg-violet-400/10" />
@@ -736,7 +774,11 @@ export default function ReconciliationPage() {
                       <td className="px-3 py-3">
                         {match.statementRecord ? <><span className="font-mono font-semibold">{statementIdentifiers(match.statementRecord).join(' · ')}</span><span className="ml-2 text-muted-foreground">{money(match.statementRecord.amount, statementCurrency)}</span></> : '—'}
                         {match.amountDifference !== null && match.amountDifference !== 0 && <p className="mt-1 text-rose-700">Difference: {money(match.amountDifference, statementCurrency)}</p>}
-                        {match.candidates.length > 0 && <details className="mt-1 text-muted-foreground"><summary>{match.candidates.length} candidate(s), not verified</summary>{match.candidates.map((candidate, i) => <p key={i}>Line {candidate.statementRecord.lineIndex ?? '?'}: {statementIdentifiers(candidate.statementRecord).join(' · ')} · {money(candidate.statementRecord.amount, statementCurrency)} · Δ {money(candidate.amountDifference, statementCurrency)}</p>)}</details>}
+                        {(candidatesByInvoice[match.invoice.documentIndex] ?? []).length > 0 && <div className="mt-2 space-y-1">{candidatesByInvoice[match.invoice.documentIndex].map((candidate, rank) => <button key={candidate.statementIndex} type="button"
+                          className="block rounded border border-amber-200 bg-amber-50 px-2 py-1 text-left text-amber-900 hover:bg-amber-100"
+                          onClick={() => inspectCandidate(match.invoice.documentIndex, candidate.statementIndex)}>
+                          Inspect #{rank + 1} · Row {candidate.statementRecord.lineIndex ?? candidate.statementIndex + 1} · {money(candidate.statementRecord.amount, statementCurrency)}
+                        </button>)}</div>}
                       </td>
                       <td className="px-3 py-3">
                         <span className={cn('rounded-full px-2 py-1 font-medium', match.matched ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700')}>
@@ -759,7 +801,8 @@ export default function ReconciliationPage() {
           </CardContent>
         </Card>
       )}
-      <ReconciliationReviewPanel key={savedRun?.id ?? 'no-run'} run={savedRun} onRun={setSavedRun} onRestore={restoreRun} />
+      <ReconciliationReviewPanel key={savedRun?.id ?? 'no-run'} run={savedRun} onRun={setSavedRun} onRestore={restoreRun}
+        candidatesByInvoice={candidatesByInvoice} onInspectCandidate={inspectCandidate} />
     </main>
   )
 }

@@ -7,8 +7,13 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { reviewedResults, type ReconciliationRun, type ReviewDecision } from '@/lib/reconciliation-review'
+import { ReconciliationCandidates } from './ReconciliationCandidates'
+import type { StatementCandidate } from '@/lib/reconciliation-candidates'
 const field = 'rounded border bg-white px-2 py-1 text-sm'
-export function ReconciliationReviewPanel({ run, onRun, onRestore }: { run: ReconciliationRun | null; onRun: (run: ReconciliationRun) => void; onRestore: (run: ReconciliationRun) => void }) {
+export function ReconciliationReviewPanel({ run, onRun, onRestore, candidatesByInvoice, onInspectCandidate }: {
+  run: ReconciliationRun | null; onRun: (run: ReconciliationRun) => void; onRestore: (run: ReconciliationRun) => void
+  candidatesByInvoice: Record<number, StatementCandidate[]>; onInspectCandidate: (documentIndex: number, statementIndex: number) => void
+}) {
   const [runs, setRuns] = useState<Array<{ id: string; createdAt: string; sample: boolean; count: number; currency: string }>>([])
   const [error, setError] = useState(''), [busy, setBusy] = useState(false)
   const [drafts, setDrafts] = useState<Record<string, ReviewDecision>>({})
@@ -51,8 +56,14 @@ export function ReconciliationReviewPanel({ run, onRun, onRestore }: { run: Reco
         const index = result.original.documentIndex, draft = draftFor(index)
         return <details className="rounded border p-3" key={index}><summary className="cursor-pointer text-sm font-semibold">{result.original.fileName} — {result.status.replace(/_/g, ' ')}{result.difference !== null ? ` · Difference ${result.difference} ${run.currency}` : ''}</summary>
           <div className="mt-3 space-y-3"><p className="text-xs">Original extraction: {result.original.invoiceNumber || 'Missing ID'} · {result.original.totalAmount} {result.original.currency} · {result.original.documentType}. Original values remain unchanged.</p>
+            <ReconciliationCandidates candidates={candidatesByInvoice[index] ?? []} currency={run.currency} selectedIndex={draft.statementIndex} disabled={busy}
+              action="Use for review" onSelect={statementIndex => { update(index, { statementIndex }); onInspectCandidate(index, statementIndex) }} />
+            <p className="text-xs text-amber-900">Choosing a candidate only prepares an unsaved assignment. Confirm the invoice fields and add a reason before saving; it never replaces the extracted ID or amount.</p>
             <div className="grid gap-3 md:grid-cols-3"><label className="text-sm">Confirmed invoice number<input aria-label={`Confirmed invoice ${index}`} className={`${field} w-full`} value={draft.invoiceNumber} onChange={event => update(index, { invoiceNumber: event.target.value })} /></label><label className="text-sm">Confirmed face amount ({run.currency})<input aria-label={`Confirmed amount ${index}`} className={`${field} w-full`} type="number" step="any" value={draft.amount} onChange={event => update(index, { amount: Number(event.target.value) })} /></label><label className="text-sm">Document kind<select aria-label={`Confirmed document kind ${index}`} className={`${field} w-full`} value={draft.documentType} onChange={event => update(index, { documentType: event.target.value as ReviewDecision['documentType'] })}><option value="invoice">Invoice</option><option value="credit_note">Credit note</option></select></label></div>
-            <label className="block text-sm">Statement candidate<select aria-label={`Statement candidate ${index}`} className={`${field} mt-1 w-full`} value={draft.statementIndex ?? ''} onChange={event => update(index, { statementIndex: event.target.value === '' ? null : Number(event.target.value) })}><option value="">No match / reject assignment</option>{run.statements.map((record, position) => <option key={position} value={position}>Row {record.lineIndex ?? position + 1}: {record.invoiceNumber} — {record.amount} {run.currency} — {record.description ?? ''}</option>)}</select></label>
+            <label className="block text-sm">Statement candidate (all lines)<select aria-label={`Statement candidate ${index}`} className={`${field} mt-1 w-full`} value={draft.statementIndex ?? ''} onChange={event => {
+              const statementIndex = event.target.value === '' ? null : Number(event.target.value)
+              update(index, { statementIndex }); if (statementIndex !== null) onInspectCandidate(index, statementIndex)
+            }}><option value="">No match / reject assignment</option>{run.statements.map((record, position) => <option key={position} value={position}>Row {record.lineIndex ?? position + 1}: {record.invoiceNumber} — {record.amount} {run.currency} — {record.description ?? ''}</option>)}</select></label>
             <label className="block text-sm">Reason / evidence checked<textarea aria-label={`Review reason ${index}`} className={`${field} mt-1 w-full`} value={draft.reason} onChange={event => update(index, { reason: event.target.value })} /></label>
             <div className="flex flex-wrap items-center gap-3"><select aria-label={`Review action ${index}`} className={field} value={draft.action} onChange={event => update(index, { action: event.target.value as ReviewDecision['action'] })}><option value="approve">Confirm fields and assignment</option><option value="reject">Reject assignment</option></select><Button size="sm" disabled={busy || !reviewer.trim() || !draft.reason.trim() || (!run.sample && run.files.some(file => !file.archived))} onClick={() => void save(index)}>Save review</Button><span className="text-xs">{drafts[String(index)] ? 'Unsaved changes' : result.review ? `Saved revision ${result.review.revision} by ${result.review.reviewer}` : 'No human decision'}</span></div>
             <p className="text-xs text-muted-foreground">A confirmed assignment with a nonzero difference remains an approved variance, not a matched invoice.</p>
