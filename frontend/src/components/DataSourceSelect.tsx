@@ -1,9 +1,9 @@
-import type { DataSource } from '@/lib/link-data'
+import type { ReportSource } from '@/lib/report-source'
 import { DATA_SOURCE_LABELS } from '@/lib/report-source'
 
 type Props = {
-  value: DataSource
-  onChange: (source: DataSource) => void
+  value: ReportSource
+  onChange: (source: ReportSource) => void
 }
 
 export function DataSourceSelect({ value, onChange }: Props) {
@@ -15,10 +15,10 @@ export function DataSourceSelect({ value, onChange }: Props) {
       <select
         id="report-data-source"
         value={value}
-        onChange={(event) => onChange(event.target.value as DataSource)}
+        onChange={(event) => onChange(event.target.value as ReportSource)}
         className="h-8 min-w-36 rounded-md border border-input bg-background px-2 text-sm font-medium outline-none focus:ring-2 focus:ring-blue-200"
       >
-        {(Object.keys(DATA_SOURCE_LABELS) as DataSource[]).map((source) => (
+        {(Object.keys(DATA_SOURCE_LABELS) as ReportSource[]).map((source) => (
           <option key={source} value={source}>{DATA_SOURCE_LABELS[source]}</option>
         ))}
       </select>

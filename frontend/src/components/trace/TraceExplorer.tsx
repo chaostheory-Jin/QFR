@@ -17,13 +17,15 @@ import { traceFilters, traceHref, type TraceReport, type TraceSource } from '@/l
 import { profitTraceGroups, balanceTraceGroups, traceLabel, type TraceGroup } from '@/lib/trace-model'
 import type { TraceEntry } from '@/lib/trace-data'
 import { DocumentPanel } from './DocumentPanel'
+import { PayrollReports } from '@/components/payroll/PayrollReports'
 
 type SceneProps = { source: TraceSource; query: string }
 export function TraceExplorer() {
   const searchParams = useSearchParams(), router = useRouter()
   const [storedSource, setSource] = useReportSource()
-  const source = searchParams.get('source') === 'xero' ? 'xero' : searchParams.get('source') === 'quickbooks' ? 'quickbooks' : storedSource
+  const source = searchParams.get('source') === 'payroll' ? 'payroll' : searchParams.get('source') === 'xero' ? 'xero' : searchParams.get('source') === 'quickbooks' ? 'quickbooks' : storedSource
   const report = searchParams.get('report') === 'balance-sheet' ? 'balance-sheet' : 'profit-loss'
+  if (source === 'payroll') return <PayrollReports key={`${report}-${searchParams.toString()}`} report={report} query={searchParams.toString()} onSource={next => { setSource(next); router.push(traceHref(report, next)) }} />
   return <div className="min-h-full bg-[#f6f7fb] px-4 py-6 lg:px-7">
     <div className="mx-auto max-w-[1600px]">
       <Link href={`/${report}`} onClick={() => setSource(source)} className="mb-5 inline-flex items-center gap-2 text-sm text-slate-500 hover:text-indigo-700"><ArrowLeft size={15} /> Back to {report === 'profit-loss' ? 'Profit & Loss' : 'Balance Sheet'}</Link>

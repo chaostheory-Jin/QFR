@@ -14,6 +14,9 @@ import type { ReportData } from '@/lib/report-data'
 import { useMappingReviews } from '@/lib/use-mapping-reviews'
 import { TraceLink } from '@/components/trace/TraceLink'
 import { traceHref } from '@/lib/trace-navigation'
+import { PayrollReports } from '@/components/payroll/PayrollReports'
+import type { ReportSource } from '@/lib/report-source'
+import type { DataSource } from '@/lib/link-data'
 
 function defaultFilters(data: ReportData): FilterState {
   return {
@@ -30,6 +33,11 @@ function defaultFilters(data: ReportData): FilterState {
 
 export default function ProfitLossPage() {
   const [source, setSource] = useReportSource()
+  if (source === 'payroll') return <PayrollReports report="profit-loss" onSource={setSource} />
+  return <AccountingProfitLoss source={source} setSource={setSource} />
+}
+
+function AccountingProfitLoss({ source, setSource }: { source: DataSource; setSource: (source: ReportSource) => void }) {
   const reportData = source === 'quickbooks' ? QUICKBOOKS_REPORT_DATA : REPORT_DATA
   const review = useMappingReviews(source, reportData)
   const [filtersBySource, setFiltersBySource] = useState<Record<typeof source, FilterState>>(() => ({
@@ -45,7 +53,7 @@ export default function ProfitLossPage() {
   const filteredRows = useMemo(() => getFilteredRows(review.rows, filters, reportData.review_threshold), [review.rows, reportData.review_threshold, filters])
   const metrics = useMemo(() => computeMetrics(filteredRows), [filteredRows])
 
-  function changeSource(nextSource: typeof source) {
+  function changeSource(nextSource: ReportSource) {
     setSource(nextSource)
   }
 

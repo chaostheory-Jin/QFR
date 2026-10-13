@@ -15,6 +15,9 @@ import { balanceReviewReport } from '@/lib/balance-sheet-review'
 import { useMappingReviews } from '@/lib/use-mapping-reviews'
 import { TraceLink } from '@/components/trace/TraceLink'
 import { traceHref } from '@/lib/trace-navigation'
+import { PayrollReports } from '@/components/payroll/PayrollReports'
+import type { ReportSource } from '@/lib/report-source'
+import type { DataSource } from '@/lib/link-data'
 import {
   buildQuickBooksBalanceSheet,
   buildQuickBooksCashPeriods,
@@ -33,6 +36,11 @@ function filtersForSource(source: 'xero' | 'quickbooks'): BSFilterState {
 
 export default function BalanceSheetPage() {
   const [source, setSource] = useReportSource()
+  if (source === 'payroll') return <PayrollReports report="balance-sheet" onSource={setSource} />
+  return <AccountingBalanceSheet source={source} setSource={setSource} />
+}
+
+function AccountingBalanceSheet({ source, setSource }: { source: DataSource; setSource: (source: ReportSource) => void }) {
   const [filtersBySource, setFiltersBySource] = useState<Record<typeof source, BSFilterState>>(() => ({
     xero: filtersForSource('xero'),
     quickbooks: filtersForSource('quickbooks'),
@@ -53,7 +61,7 @@ export default function BalanceSheetPage() {
   const review = useMappingReviews(source, reviewData, { reportKind: 'balance-sheet', startDate: filters.startDate, endDate: filters.endDate })
   const quickBooksCashPeriods = useMemo(() => buildQuickBooksCashPeriods(), [])
 
-  function changeSource(nextSource: typeof source) {
+  function changeSource(nextSource: ReportSource) {
     setSource(nextSource)
   }
 

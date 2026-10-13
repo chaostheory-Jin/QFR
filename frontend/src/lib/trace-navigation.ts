@@ -3,7 +3,7 @@ import type { BSFilterState } from './balance-sheet-filter'
 
 export type TraceReport = 'profit-loss' | 'balance-sheet'
 export type TraceSource = 'xero' | 'quickbooks'
-export function traceHref(report: TraceReport, source: TraceSource, filters?: FilterState | BSFilterState) {
+export function traceHref(report: TraceReport, source: TraceSource | 'payroll', filters?: FilterState | BSFilterState) {
   const query = new URLSearchParams({ report, source })
   if (filters) {
     query.set('from', filters.startDate); query.set('to', filters.endDate); query.set('search', filters.search)

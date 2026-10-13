@@ -12,6 +12,9 @@ import { requiresReview } from '@/lib/report-utils'
 import type { RawRow } from '@/lib/report-data'
 import { cn } from '@/lib/utils'
 import { PAYROLL_LINES, payrollAssistantContext } from '@/lib/payroll-mock'
+import { useReportSource } from '@/lib/report-source'
+import { loadPayrollState } from '@/lib/payroll-store'
+import { paidAmount, payrollReport, reconciliationStatus } from '@/lib/payroll-ledger'
 
 const PL_QUESTIONS = [
   'Summarise the top expense categories and any low-confidence mappings.',
@@ -174,6 +177,7 @@ function ThinkingState() {
 
 export function FloatingAssistant() {
   const pathname = usePathname()
+  const [reportSource] = useReportSource()
   const [isOpen, setIsOpen] = useState(false)
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('Ask a P&L or Balance Sheet question to generate an insight.')
@@ -199,18 +203,23 @@ export function FloatingAssistant() {
     setIsThinking(true)
     setStatus('Generating')
 
-    const isPayroll = pathname.includes('payroll')
-    const draft = isPayroll ? payrollAssistantContext() : localDraft(trimmed)
+    const explicitSource = new URLSearchParams(window.location.search).get('source')
+    const isPayroll = pathname.includes('payroll') || (['/profit-loss', '/balance-sheet', '/report-trace'].includes(pathname) && (explicitSource ?? reportSource) === 'payroll')
     setAnswer('Generating answer...')
 
     try {
+      let draft = isPayroll ? payrollAssistantContext() : localDraft(trimmed)
+      if (isPayroll) {
+        const workflow = await loadPayrollState(), report = payrollReport(workflow, '2026-01-01', '2026-09-30')
+        draft += ` Browser workflow snapshot, full Jan–Sep period (not UI filters), integer AUD cents: ${JSON.stringify({ revision: workflow.revision, postedIds: workflow.posted, expenses: report.expense, bank: report.bank, liabilities: report.liabilities, equity: report.equity, balanceDifference: report.balanceDifference, lines: PAYROLL_LINES.map(row => ({ id: row.id, review: workflow.reviews[row.id]?.status ?? 'Pending', posted: workflow.posted.includes(row.id), paid: paidAmount(workflow, row.id), reconciliation: reconciliationStatus(workflow, row) })) })}`
+      }
       const response = await fetch('/api/ai-insights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           question: trimmed,
           localDraft: draft,
-          datasetSummary: isPayroll ? payrollAssistantContext() : datasetSummary(),
+          datasetSummary: isPayroll ? draft : datasetSummary(),
           sampleRows: isPayroll ? PAYROLL_LINES : REPORT_DATA.raw_data.slice(0, 120),
         }),
       })
