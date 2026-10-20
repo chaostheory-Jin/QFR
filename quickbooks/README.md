@@ -1,5 +1,9 @@
 # QuickBooks Online connector
 
+Documentation reviewed: **2026-10-15T11:11:41+11:00** (AEDT), against `ec60f88`.
+See the [technical milestones](../docs/technical-progress-2026-10-15.md) for
+implementation timestamps and current integration boundaries.
+
 This package is a separate, read-only QuickBooks Online (QBO) integration. It
 does not change the existing Xero pipeline or feed QuickBooks rows into
 `run_mvp.py` yet.
@@ -173,7 +177,10 @@ Outputs are written to `output/quickbooks/ai_rebuild/`:
 - `quickbooks_pl_error_pairs.csv` and `.xlsx`
 - `quickbooks_pl_blind_summary.json`
 
-This experiment is not connected to `run_mvp.py` or the frontend.
+This experiment remains independent of `run_mvp.py`. Its reconstruction results,
+together with the Balance Sheet rebuild, can be bundled for the frontend using
+`python export_quickbooks_frontend_data.py`. The dashboard reads the generated
+snapshot, not a live QuickBooks connection or the raw download directory.
 
 ## 6. Balance Sheet record-by-record rebuild
 

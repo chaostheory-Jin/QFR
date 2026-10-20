@@ -1,93 +1,136 @@
-# 对账证据链修复与后续方案
+# Reconciliation Evidence Controls and Follow-up Plan
 
-第一、三阶段已在前端对账路径实施（2026-10-01）。第二阶段的持久化人工修订
-尚未实施；当前界面明确展示待审核和候选，不会把它们当成自动匹配。
+Status reviewed: **2026-10-15T11:11:41+11:00 (AEDT)**, code baseline `ec60f88`.
+Evidence isolation and global matching in Phases 1 and 3 are implemented.
+Phase 2 now includes demo-level persistent human review, but trusted user identity,
+server-side role authorization and cloud audit storage remain unimplemented.
+Key commits: `83865fe` (2026-10-02T09:32:28+10:00, evidence/review controls),
+`b88b669` (2026-10-06T13:51:39+11:00, browser storage), and
+`6dacc65` (2026-10-08T16:37:24+11:00, candidates/restoration).
+These are commit times, not deployment times. See the
+[technical progress report](technical-progress-2026-10-15.md).
+English translation: **2026-10-15**; the review baseline is unchanged.
 
-2026-10-01 补充 API 复现：保留上传原图，提供原色与增强局部视图，并独立读取
-总额区域。号码不再用模型重复自己的输出作为独立验证；本地 OCR 缺失、弱识别
-或冲突均需要人工审核。两次金额读数冲突，即便各自算术自洽也不能自动核对。
-完整测试过程与限制见 [reconciliation-api-reproduction.md](reconciliation-api-reproduction.md)。
+The 2026-10-01 API reproduction work preserved original uploads, added original-colour
+and enhanced crops, and independently read the total region. A model repeating its
+own ID is no longer treated as independent verification. Missing, weak or conflicting
+local OCR requires human review. Conflicting amount readings cannot be automatically
+verified even when each is arithmetically self-consistent. See the
+[API reproduction record](reconciliation-api-reproduction.md) for methods and limitations.
 
-## 修复前已确认的风险
+## Risks Confirmed Before the Fix
 
-`frontend/src/app/api/reconciliation/route.ts` 的
-`recoverAgainstFullStatement` 从同一份对账单中找到近似金额候选后，直接
-覆盖发票号码和金额。`verifyInvoice` 又允许
-`recoveredFromStatementLine` 绕过打印金额和净额加税额校验。随后
-`frontend/src/lib/reconciliation.ts` 用这些修改后的字段匹配该对账单。
-因此，“修正后相等”不能作为发票原始金额正确的独立证据。
+In `frontend/src/app/api/reconciliation/route.ts`,
+`recoverAgainstFullStatement` previously found nearby-amount candidates in the
+same statement and directly overwrote invoice IDs and amounts. `verifyInvoice`
+allowed `recoveredFromStatementLine` to bypass printed-amount and net-plus-tax
+checks. `frontend/src/lib/reconciliation.ts` then matched those modified fields
+against the same statement. Equality after this substitution was not independent
+evidence that the original invoice amount was correct.
 
-此外，运行时 `validateExtraction` 只校验对象、数组和数量，随后排序再
-重写 `documentIndex`。重复或越界索引可能被掩盖，字段类型和金额没有被
-完整检查。逐发票贪心匹配还可能让先处理的弱匹配占用后续发票的精确匹配。
+Runtime `validateExtraction` also checked only objects, arrays and counts before
+sorting and rewriting `documentIndex`. Duplicate/out-of-range indices could be
+hidden, and field types/amounts were not fully validated. Greedy invoice-by-invoice
+matching could let an earlier weak match occupy a later invoice's exact target.
 
-## 第一阶段（已实施）：保证差异不会被抹掉
+## Phase 1 (Implemented): Preserve Differences
 
-1. 原始提取不可变。保存文件哈希、原始打印文本、提取号码/金额、页面和
-   OCR 定位；对账单候选单独放在 `matchCandidates` 中，不覆盖发票字段。
-   可做去空格、标点等可追踪的格式标准化，不把候选号码或金额当作原文。
-2. 字段核验独立于对账单。号码要与发票原文标准化后相符，而不只是两个
-   字符串都非空；金额要与发票的最终应付金额原文一致。净额和税额均存在时，
-   必须校验算术，不能因为“恢复成功”跳过。模糊/缺失/相互冲突的证据进入审核。
-3. 精确号码对应但金额不同，输出 `amount_mismatch`，同时保留双方金额和
-   差额。仅金额唯一或模糊号码匹配只能输出候选，不能自动宣称已核对。
-4. 完整运行时校验：严格验证每个字段、字符串长度、有限数值及可空字段；
-   `documentIndex` 必须为整数、范围合法、唯一并完整覆盖上传文件。
-   按经过验证的原索引绑定服务端文件名，不排序后重编号。
-5. 金额采用十进制/最小货币单位计算，并设置币种和交易方向策略。
-   不再普遍取绝对值；发票、贷项和退款有明确的不同方向规则。
-   容差由币种和业务规则指定，界面币种也不再固定为 UGX。
+1. Preserve original extraction: file hashes, printed text, extracted IDs/amounts,
+   pages and OCR locations. Statement candidates belong separately in
+   `matchCandidates`, never overwriting invoice fields. Traceable whitespace/
+   punctuation normalization is allowed; candidate IDs/amounts are not source text.
+2. Verify fields independently of the statement. IDs must agree with normalized
+   invoice text, not merely be two nonempty strings. Amounts must agree with the
+   printed final payable. Check net plus tax when both exist; successful recovery
+   must not bypass arithmetic. Ambiguous, missing or conflicting evidence requires review.
+3. Exact IDs with unequal amounts produce `amount_mismatch`, preserving both
+   values and the difference. A unique amount alone or fuzzy ID supports a
+   candidate, not an automatic reconciliation claim.
+4. Validate every field, string length, finite number and nullable value at runtime.
+   `documentIndex` must be an in-range integer, unique and collectively cover all
+   uploaded files. Bind server filenames to validated original indices; do not
+   sort and renumber.
+5. Use decimal/minor-unit arithmetic with explicit currency and direction policies.
+   Do not universally take absolute values: invoices, credits and refunds have
+   different direction rules. Tolerances follow currency/business policy, and
+   the UI currency is no longer fixed to UGX.
 
-建议区分 `verified_match`、`amount_mismatch`、`needs_review`、`unmatched`
-和 `invalid_extraction`。启发式匹配分数不应展示成已经校准的正确概率。
+Keep `verified_match`, `amount_mismatch`, `needs_review`, `unmatched` and
+`invalid_extraction` conceptually distinct. Heuristic match scores must not be
+presented as calibrated correctness probabilities.
 
-## 第二阶段：恢复 OCR 与人工审核
+## Phase 2: Persistent Demo Review Implemented; Trusted Identity Still Required
 
-不清晰字段可触发独立的第二次 OCR/区域重读，但重读只看发票，不提供
-对账单目标值，也不要求它“读成某个候选”。保存两次证据和冲突原因，
-不能默默选择更接近对账单的一次。无法独立确认时交人工查看原件。
+Unclear fields can trigger a separate OCR/region reread that sees only the invoice,
+not statement targets or instructions to produce a preferred candidate. Retain both
+readings and conflict reasons rather than silently choosing the closer statement
+value. If independent confirmation is unavailable, a human must inspect the original.
 
-人工决定保存为单独的审计记录：原始提取、修订字段、选择的对账单行、
-修改原因、时间及真实用户身份。展示“人工确认”，不冒充自动验证。
-可复用本次映射审核的稳定 ID、版本冲突和保存机制，但对账证据仍保持独立。
-现有演示登录不能充当生产级审核人身份。
+Human decisions are separate browser audit records containing original extraction,
+revised fields, selected statement line, reason, time and self-declared reviewer/role.
+Human confirmation is not labelled automatic verification. Stable IDs, original-file
+hashes and same-transaction revision checks protect evidence binding and concurrent
+writes. Original extraction and historical decisions remain separate. Material
+variances have a demo manager-role gate, but self-declared roles are not production
+authorization. Trusted identity, server role checks and tamper-proof audit remain
+future work.
 
-## 第三阶段（已实施）：匹配不依赖上传顺序
+Candidate search covers all statement lines, not only current filtered rows.
+It lists up to five supported alternatives without adding irrelevant fillers.
+Selection locates/highlights the corresponding right-hand line; saving still
+requires explicit confirmation, a reason and field-consistency checks. Unresolved
+differences remain differences: source evidence is not rewritten to reach
+“100% matching.” Records belong only to the current browser and site origin;
+clearing data, changing domains or switching devices does not automatically
+restore them. Export beforehand.
 
-先构造全部候选关系，再在全局范围处理唯一精确号码加金额匹配，保留
-相同号码的金额差异。精确关系锁定后才处理 OCR/模糊候选，弱候选不抢占
-精确关系。多对一、一对多及重复发票进入显式审核，不强行一一分配。
-默认顺序改变不得改变自动核对结论。
+## Phase 3 (Implemented): Upload-Order-Independent Matching
 
-## 回归用例
+Construct all candidate relationships before processing globally unique exact
+ID-plus-amount matches. Preserve amount differences for identical IDs. Handle
+OCR/fuzzy candidates after reserving exact relationships, so weak candidates
+cannot take exact targets. Many-to-one, one-to-many and duplicate invoices require
+explicit review rather than forced one-to-one allocation. Reordering uploads
+must not change automatic reconciliation conclusions.
 
-- 发票与对账单真实金额不同，但在现有恢复容差内：仍显示差额。
-- OCR 原文、打印金额、净额加税额冲突：不得自动匹配。
-- 重复/缺失/负数/越界/非整数索引：拒绝提取结果，不错误绑定文件。
-- 金额字符串、非有限值、非法可空字段、空号码：拒绝或进入明确审核状态。
-- 同金额多候选、重复发票、贷项方向、不同币种：不得误自动核对。
-- 弱候选出现在精确发票之前：交换上传顺序后结论不变。
-- 人工修订重新加载后可复现，原始证据和所有历史决定保持可查。
+## Regression Cases
 
-除了持久化人工修订，其余上述行为已有本地回归测试。前端可导出完整审核 JSON，
-保留发票字段、上传字节哈希、模型、OCR 原文、候选行和差额。不会展示启发式分数
-为“正确概率”。模型使用 strict JSON Schema，同时进行独立的运行时字段/索引验证。
+- Different invoice/statement amounts within the former recovery tolerance still show a difference.
+- Conflicting OCR text, printed totals or net-plus-tax evidence cannot automatically match.
+- Duplicate, missing, negative, out-of-range or fractional indices are rejected without misbinding files.
+- String amounts, non-finite values, invalid nullable fields and empty IDs are rejected or explicitly reviewed.
+- Same-amount alternatives, duplicate invoices, credit direction and currency differences cannot cause false automatic matches.
+- Placing a weak candidate before an exact invoice does not change the result after reordering.
+- Saved human revisions reload with original evidence and historical decisions still available.
 
-## 原始扫描全量测试
+Local regression tests cover evidence validation, candidate review, browser
+persistence and revision conflicts. They do not establish trusted identity or
+correct recognition of arbitrary scans. Audit JSON preserves invoice fields,
+upload hashes, model/OCR evidence, candidate lines and differences. Heuristic
+scores are not described as correctness probabilities. Strict JSON Schema is
+supplemented by independent runtime field/index checks.
 
-`Cola_Reconciliation/invoice-ground-truth.json` 是原图视觉抄录基准，不是对账单导出的答案。
-10 张扫描中，9 张有可见的最终总额，`20260805114055_005.jpg` 未扫描到最终总额。
-`invoices/` 中另有 1 张发票截图与 2 张非发票截图；分别测试，不混进 UGX 对账统计。
+## Full Original-Scan Testing
 
-默认单元测试不调用付费 API。显式的全量测试入口为
-`QFR_RUN_LIVE=1 npm test -- src/lib/reconciliation-live.test.ts`（在 frontend 目录）。
-需先启动有现有 API Key 的本地服务，默认 `http://127.0.0.1:3107`，
-可用 `QFR_TEST_BASE_URL` 修改。对账单只在本地解析，模型仅接收发票/截图。
-运行会保存每个响应、耗时、错误、原图基准比较和全局匹配结果到
-`output/reconciliation/live-<timestamp>/report.md` 与 `report.json`；默认并发为 2。
-该测试涉及敏感财务图像出站，必须取得使用者明确同意后运行。
+`Cola_Reconciliation/invoice-ground-truth.json` is a visual transcription baseline
+from original images, not answers derived from the statement. Nine of ten scans
+contain a visible final total; `20260805114055_005.jpg` does not capture it.
+`invoices/` also contains one invoice screenshot and two non-invoice screenshots;
+these are tested separately, not included in UGX reconciliation statistics.
 
-识别正确率与自动匹配率分别统计。缺失总额不能算完整识别；相同金额、近似号码
-只算候选。AUD 发票没有对应的 AUD 对账单，只测试提取。准确率是本次样本结果，
-不代表后续新数据的保证。旧 `Cola_Reconciliation/reconcile.py` 的宽松唯一金额匹配
-不作为本实现的准确率或自动核对依据。
+Default unit tests do not call paid APIs. The explicit full-test entry point is
+`QFR_RUN_LIVE=1 npm test -- src/lib/reconciliation-live.test.ts` from `frontend`.
+First start a local service with an existing API key, by default at
+`http://127.0.0.1:3107`; override using `QFR_TEST_BASE_URL`. Statements are
+parsed locally, while the model receives only invoices/screenshots.
+Responses, timings, errors, visual-baseline comparisons and global match results
+are saved to `output/reconciliation/live-<timestamp>/report.md` and `report.json`;
+default concurrency is 2. Obtain explicit user consent before sending sensitive
+financial images outside the local environment.
+
+Recognition agreement and automatic match rate are separate measurements.
+A missing total is not complete extraction; same amounts and approximate IDs
+are candidates only. The AUD invoice has no corresponding AUD statement, so
+only extraction is tested. Sample results do not guarantee future performance.
+The permissive unique-amount matching in legacy `Cola_Reconciliation/reconcile.py`
+is not evidence of this implementation's accuracy or automatic verification.

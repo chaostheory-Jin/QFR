@@ -1,58 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# QFR frontend
 
-## Getting Started
+Documentation reviewed: **2026-10-15T11:11:41+11:00** (AEDT), code baseline `ec60f88`.
+Latest feature commit: **2026-10-13T14:27:16+11:00**. These are review/commit
+timestamps, not deployment timestamps.
 
-First, run the development server:
+See the [timestamped technical report](../docs/technical-progress-2026-10-15.md)
+for AI, feature and security changes by major milestone.
+
+## Run and verify
+
+Use Node.js 22.x. From this directory:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [localhost:3000](http://localhost:3000). Demo login is `admin` / `admin123`;
+it is not production authentication.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test
+npx tsc --noEmit
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Live AI tests are opt-in and may send financial images to a paid service.
+On **2026-10-15**, non-live tests passed: **27 files / 179 tests**, with **2 files /
+2 tests skipped**; TypeScript also passed. Build, browser and production deployment
+were not rechecked in this documentation-only update.
 
-## Learn More
+## Pages and data sources
 
-To learn more about Next.js, take a look at the following resources:
+| Page | Current behavior |
+| --- | --- |
+| `/`, `/link-data` | Root redirects to Link to Data; connector progress is simulated, not live OAuth; file intake leads to Imports |
+| `/profit-loss`, `/balance-sheet` | Source selection, deterministic totals, confidence review, exports |
+| `/report-trace` | Report Explorer: drill down to lines, journals, attachments and payroll evidence |
+| `/imports` | CSV/XLSX/XLS validation, mapping, independent category summaries and original-file archive |
+| `/payroll` | Fictional payroll register, payslips, review, ledger posting, simulated payments and bank matching |
+| `/reconciliation` | Invoice extraction, full-statement candidates, evidence highlights where supported, human review |
+| `/ai-insights` | Visual progress page, separate from the floating assistant's real AI requests |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+QuickBooks uses an exported downloaded snapshot. To refresh it, run the Python
+rebuilds and `python export_quickbooks_frontend_data.py` from the repository root.
+Xero dashboard data is demo data, not a live view of `run_mvp.py` output.
+Payroll Demo is a separate fictional AUD source: 12 employees, 9 months,
+108 payslips. Its ledger feeds both financial reports without altering Xero or
+QuickBooks totals. See [Payroll workflow](docs/payroll-demo.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Browser storage and Vercel
 
-## Deploy on Vercel
+Use `frontend` as the Vercel project root, Node.js 22.x and `npm run build`.
+The dashboard saves uploads, Blob originals, import batches, attachments, review
+history and payroll workflow in origin-scoped IndexedDB. No database or durable
+server path is required for this dashboard path. Do not treat `/tmp` as durable
+storage. Legacy filesystem APIs remain for local workflows, not dashboard storage.
 
-Use `frontend` as the project root, Node.js 22.x, and the normal Next.js build
-(`npm run build`). The dashboard uses browser IndexedDB for uploads, original
-files, import batches and review history; no database or server filesystem path
-needs configuring. Do **not** point durable storage at `/tmp`.
+Browser profiles and origins do not share records. Clearing site data, browser
+eviction, a new preview URL or a new device can make prior records unavailable.
+Export reports/audit JSON and download originals for backup; there is no cloud
+sync or general audit re-import interface. Existing server archives are not
+automatically migrated.
 
-Data is isolated by browser profile and site origin. Clearing site data, browser
-eviction or changing to a different deployment URL can make previous records
-unavailable. Download originals/export reports for backup. Existing server-side
-records are not automatically copied into browser storage.
+Statement text/coordinate parsing uses `unpdf`, without a system `pdftotext`
+dependency. Supported text layouts are not equivalent to arbitrary scanned-PDF
+OCR. Invoice bounding-box evidence uses optional macOS Vision; Linux/Vercel
+cannot assume that locator is available. Missing independent OCR keeps invoice
+IDs in human review.
 
-AI analysis is still a server request and needs a key supplied on login, or
-`OPENAI_API_KEY_QFR`/`OPENAI_API_KEY` in Vercel environment settings. Never use a
-`NEXT_PUBLIC_` variable for secrets. Selected documents are sent to the analysis
-service. Analysis upload batching respects the hosted request size budget;
-browser storage does not remove Vercel's 4.5 MB function request limit.
+AI analysis still uses server requests and sends selected invoice content to
+the analysis provider. Browser storage does not remove upload/request budgets.
 
-`/payroll` contains a clearly labelled deterministic mock register (12 employees,
-9 pay runs, 108 payslips), filtering, Excel exports, payslip calculations and
-local review decisions. It is not a payroll payment or statutory tax engine.
+## AI keys and security boundaries
 
-Verification: `npm test` (live AI tests opt-in), `npx tsc --noEmit`, `npm run build`.
+A key entered on login is submitted to `/api/session-key` and stored as an
+HttpOnly, SameSite=Strict session cookie, with Secure enabled in production.
+Server resolution is cookie → `OPENAI_API_KEY_QFR` → `OPENAI_API_KEY`.
+Never put secrets in `NEXT_PUBLIC_` variables or commit them. HttpOnly does not
+mean server-only storage: the browser still holds and transmits the cookie.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The floating assistant uses workflow-aware full-period Payroll Demo context.
+Its non-payroll context still primarily comes from static demo data; do not
+assume it reflects every QuickBooks source/filter. Errors are shown as AI
+unavailable. Invoice extraction is separate: statement candidates never become
+invoice ground truth, and review suggestions are not automatic approvals.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Production blockers:** demo login is client-side, reviewer roles are
+self-declared, and uniform API authentication, tenant isolation, rate/cost
+limits and trusted audit storage are not implemented. The route proxy is not
+a security boundary around every page/API. IndexedDB/hash/revision controls
+protect consistency, not verified identity or encrypted multi-tenant storage.
+See the [security milestone](../docs/technical-progress-2026-10-15.md#milestone-09-security-and-integrity---implemented-controls-and-gaps)
+before using server-funded AI keys or real approval workflows.

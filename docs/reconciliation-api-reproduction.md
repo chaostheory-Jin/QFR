@@ -1,90 +1,132 @@
-# 发票 API 复现记录（2026-10-01）
+# Invoice API Reproduction Record (2026-10-01)
 
-## 先纠正验收口径
+Document status reviewed: **2026-10-15T11:11:41+11:00 (AEDT)**, baseline `ec60f88`.
+The content below preserves the **2026-10-01 experiment record**. Test counts,
+model results and the execution path describe that version, not a new run,
+current deployment or guaranteed accuracy on new samples.
+The record later entered Git in `83865fe` (2026-10-02T09:32:28+10:00);
+“no Git commit or push” below refers only to actions at the time of the experiment.
+See the [timestamped technical report](technical-progress-2026-10-15.md) for later
+browser persistence, candidate review and Payroll changes. No paid API retest
+was performed for this documentation update. English translation: **2026-10-15**;
+historical measurements and limitations are unchanged.
 
-“10 张里 9 张完整”是指 9 张扫描包含最终总额，不是“9 张号码、金额已经正确识别”。
-之前的视觉抄录不是经过独立确认的权威答案。重新放大检查发现，部分点阵字符
-和抄录有疑点；这些旧值保留，不为了提高得分而改成模型输出。字段比较统计称为
-“与视觉基准一致”，不能称为已经确定的号码正确率。
+## Clarifying the Acceptance Criteria
 
-## 为什么整页调用与逐字段查看不等价
+“Nine of ten are complete” means nine scans contain a final total, not that nine
+IDs and amounts were already correctly extracted. The earlier visual transcription
+was not independently verified ground truth. Enlarged inspection revealed doubts
+about some dot-matrix characters and transcribed values. Those old values were
+retained rather than changed to model output to improve a score. Comparisons are
+called “agreement with the visual baseline,” not established ID accuracy.
 
-- 旧 API 默认 `gpt-5.6-luna`，只发送整页 `detail: high`；查看原图时使用了局部放大。
-  小字号、稀疏点阵、横线与高亮遮挡均增加读数难度。官方图像文档也说明小字应放大，
-  `original` 与 `high` 的分辨率处理不同：
-  [OpenAI Images and vision](https://developers.openai.com/api/docs/guides/images-vision)。
-- 页面以前对大于 900 KB 的图片缩到最长边 2200 并编码为质量 0.84 的 JPEG。
-  这 10 张原始扫描均约 1.4–1.7 MB，会触发该处理。基准测试直接上传原文件，
-  所以网页压缩是额外风险，不是直接 API 基准所有失败的唯一原因。
-- 仅换大模型不够。相同五视图输入的两张困难样本，Luna、Sol、Astra 的金额
-  均能读对，但号码均未与旧抄录一致。加入更紧的号码区域、单字段读取后有改善，
-  高亮与横线遮挡的号码仍有不确定性。
-- 之前安全审核阻止的是敏感财务图片出站，不能用它证明 API 没有识别能力。
-  使用者明确授权后，13 张图的真实请求均成功返回。
+## Why Whole-Page Calls Differ from Field-by-Field Inspection
 
-## 当前执行路径
+- The old API defaulted to `gpt-5.6-luna` with only a full-page `detail: high`
+  image, while visual inspection used magnified crops. Small text, sparse dot-matrix
+  characters, horizontal rules and highlighting made reading harder. The image
+  documentation referenced during that work discusses enlarging small text and
+  differing resolution handling for `original` and `high`:
+  [OpenAI Images and vision](https://developers.openai.com/api/docs/guides/images-vision).
+- The page previously resized images over 900 KB to a maximum edge of 2200 and
+  encoded JPEG at quality 0.84. All ten originals, approximately 1.4–1.7 MB each,
+  triggered this processing. The benchmark directly uploaded originals, so
+  browser compression was an additional risk, not the sole explanation for
+  direct-API failures.
+- Switching to a larger model alone was insufficient. With the same five-view
+  input, Luna, Sol and Astra read the amounts of two difficult samples correctly
+  but none matched the old ID transcription. Tighter ID crops and single-field
+  reads improved results, yet highlighted/ruled-over IDs remained uncertain.
+- The earlier safety review blocked outbound sensitive financial images; it did
+  not demonstrate that the API lacked recognition capability. After explicit
+  user authorization, real requests for all 13 images returned successfully.
 
-1. 浏览器按原始字节分批上传，超出托管限制明确拒绝，不有损缩图。
-2. 服务端保留整页，自动方向校正、限制超大尺寸；针对竖版提供原色和通道增强的
-   头部、紧号码条、带标签的总额区域与四倍放大的金额数字区域。坐标只依据页面几何，
-   不依据文件名或预设答案。全页加四个区域共九视图，独立总额读取只收总额相关视图。
-3. 默认 `gpt-6-astra`、high reasoning、`detail: original`，整页判断文档类型和币种。
-4. 竖版发票的总额区域另行读取，不提供整页第一次猜测、人工基准、对账单或候选值。
-   只有直接打印字符串、最终金额标签、净额加税额和已有本地 OCR 检查通过，才展示
-   新的字段读数。首次读数、重读、模型响应标识与冲突原因均保留。
-5. 两次金额不同或重读失败，金额仍标为待审核；不直接把净额加税额计算结果当原文。
-6. 号码必须与本地独立 OCR 相符，且 OCR 非弱识别（门槛 0.85），才允许号码验证通过。
-   这个门槛不是“85% 正确率”。同一模型两个相同字符串只是自洽，不是独立证明。
-7. 对账单仍只在本地解析，既不参与字段重读，也不能覆盖任何提取字段。
+## Execution Path at the Time of the Experiment
 
-重读受 45 秒及整条请求 110 秒总预算约束；失败保留首次结果交人工审核。
-该路径使用更多图像 token、更多请求，速度和费用不同于原来的轻量整页读取。
+1. The browser batches original bytes without lossy resizing and explicitly
+   rejects uploads beyond hosting limits.
+2. The server retains the full page, corrects orientation and bounds oversized
+   dimensions. Portrait documents receive original-colour/channel-enhanced header,
+   tight ID-strip, labelled-total and four-times-enlarged amount-digit regions.
+   Coordinates depend on page geometry, not filenames or preset answers.
+   The full page plus four regions produce nine views; independent total reading
+   receives only total-related views.
+3. Defaults are `gpt-6-astra`, high reasoning and `detail: original`; the full
+   page establishes document type and currency.
+4. The portrait invoice total is read separately without the first full-page
+   guess, human baseline, statement or candidates. New field readings are exposed
+   only after printed-string, final-amount-label, net-plus-tax and available local
+   OCR checks pass. First readings, rereads, response IDs and conflicts remain recorded.
+5. Unequal readings or reread failure keep the amount under review. Calculated
+   net plus tax is not substituted for printed text.
+6. ID verification requires agreement with independent, non-weak local OCR
+   (threshold 0.85). This is not “85% accuracy.” Two equal strings from one model
+   show self-consistency, not independent proof.
+7. The statement remains locally parsed, is not included in field rereading,
+   and cannot overwrite extracted fields.
 
-## 已保留的测试证据
+Rereading has a 45-second limit within the overall 110-second request budget.
+Failure retains the first result for human review. More image tokens and requests
+make this path slower and more costly than the earlier lightweight whole-page read.
 
-| 路径 | 总额与原图基准一致 | 备注 |
-|---|---:|---|
-| `live-2026-09-30T23-17-30-279Z` | 5/9 | 旧轻量模型、整页 high |
-| `live-2026-09-30T23-41-46-726Z` | 9/9 | 原图七视图，13 图均 HTTP 200 |
-| `live-2026-09-30T23-48-06-428Z` | 8/9 | 复跑有一次错误，错误净额与错误总额仍算术自洽 |
-| `live-2026-09-30T23-52-36-177Z` | 9/9 | 再次复跑；号码继续待审核 |
-| `live-2026-09-30T23-58-05-587Z` | 8/9 | 独立总额读取仍有同一位数字波动，不能宣称稳定 9/9 |
-| `amount-replay-2026-09-30T23-58-01-682Z` | 错误样本恢复 | 从原图独立读取 23264888；首次错误 23264688 保留，冲突不自动验证 |
-| `amount-replay-2026-10-01T00-02-57-517Z` | 紧金额区域重读 | 四倍放大数字区域，再次读取 23264888，保留首次不同读数 |
-| `live-2026-10-01T00-05-04-523Z` | 9/9 | 最终九视图＋独立总额读取；13 图 HTTP 200，号码 4 张与旧抄录一致，10 张扫描全部保留审核 |
+## Preserved Test Evidence
 
-路径均在 `output/reconciliation/`，时间戳为 UTC。它们记录真实请求，不是缓存
-基准答案的演示。最新最终路径验收报告另附；单次 9/9 不构成每次请求必定 9/9 的保证。
-部分早期报告字段名含 `Correct`，其含义仍只是与原始视觉抄录一致；当前测试入口已
-将这类统计显式命名为 `AgreeWithVisualBaseline`。不能把历史字段名解释为权威正确率。
-最后全量运行 321 秒，并发为 2；扫描单图耗时约 46–80 秒。缺总额扫描保留 0 和未验证
-状态，另 1 张 AUD 发票截图读取 ORC1009 / 550，2 张非发票截图识别为 unknown。
+| Run directory | Total agreement with visual baseline | Notes |
+| --- | ---: | --- |
+| `live-2026-09-30T23-17-30-279Z` | 5/9 | Earlier lightweight model, full-page high |
+| `live-2026-09-30T23-41-46-726Z` | 9/9 | Seven original-image views; all 13 images HTTP 200 |
+| `live-2026-09-30T23-48-06-428Z` | 8/9 | One rerun error; incorrect net and total remained arithmetically consistent |
+| `live-2026-09-30T23-52-36-177Z` | 9/9 | Another rerun; IDs remained under review |
+| `live-2026-09-30T23-58-05-587Z` | 8/9 | Independent total reading still varied on one digit; stable 9/9 cannot be claimed |
+| `amount-replay-2026-09-30T23-58-01-682Z` | Erroneous sample reread | Independently read 23264888 from the original; initial error 23264688 retained, conflict not automatically verified |
+| `amount-replay-2026-10-01T00-02-57-517Z` | Tight amount-region reread | Four-times-enlarged digits again yielded 23264888; differing first reading retained |
+| `live-2026-10-01T00-05-04-523Z` | 9/9 | Final nine-view path plus independent total read; 13 images HTTP 200, 4 IDs agreed with old transcription, all 10 scans retained for review |
 
-本次验证：85 个普通前端测试通过（2 个付费入口默认跳过）、实际全量测试通过、
-独立总额重读回放通过，以及 lint、TypeScript 与生产构建通过。全量测试通过验证的是
-调用/证据保留/匹配不修改原值，不代表所有识别字段都正确。没有提交或推送 Git。
+Directories are under `output/reconciliation/`, with UTC timestamps. They record
+real requests, not a demo returning cached baseline answers. A separate final-path
+acceptance report accompanies the recorded experiment. One 9/9 run does not
+guarantee 9/9 on every request. Some earlier report field names contain `Correct`;
+their meaning is still agreement with the original visual transcription. The
+test entry point renamed such statistics `AgreeWithVisualBaseline`. Historical
+field names must not be interpreted as authoritative accuracy.
 
-## 可复现入口
+The final full run took 321 seconds at concurrency 2; individual scans took about
+46–80 seconds. The scan without a total retained 0 and a status requiring review.
+The separate AUD invoice screenshot yielded ORC1009 / 550; the two non-invoice
+screenshots were classified as unknown.
 
-先在明确取得财务图像出站授权的前提下启动服务（有有效项目 API Key），默认端口 3107。
-在 `frontend` 目录运行：
+Verification at that time: 85 ordinary frontend tests passed (two paid entry
+points skipped by default), the live full test and independent amount-reread
+replay passed, and lint, TypeScript and the production build passed. Full-test
+success validated requests, evidence preservation and non-mutation by matching;
+it did not establish correctness of every extracted field. No Git commit or push
+was performed during that experiment.
+
+## Reproduction Entry Points
+
+After obtaining explicit authorization for outbound financial images, start the
+service with a valid project API key; the default port is 3107. From `frontend`:
 
 ```sh
 QFR_RUN_LIVE=1 npm test -- src/lib/reconciliation-live.test.ts
 ```
 
-可用 `QFR_LIVE_FILES` 指定逗号分隔的文件 basename 做子集验证。所有文件数、源字节
-SHA-256、响应、字段、匹配和耗时均保存。普通测试跳过付费入口。
+Use `QFR_LIVE_FILES` with comma-separated basenames to test a subset. File counts,
+source-byte SHA-256 hashes, responses, fields, matches and timings are retained.
+Ordinary tests skip paid entry points.
 
-独立重读已出现过的错误读数：
+To independently reread a previously recorded error:
 
 ```sh
 QFR_REREAD_LIVE=1 QFR_REREAD_AUDIT=/absolute/path/to/recorded-response.json npm test -- src/lib/invoice-amount-reread-live.test.ts
 ```
 
-重读只上传与记录哈希相同的发票总额图；第一次读数、基准与对账单不出站。
-此外 `scripts/probe-invoice-id.mjs` 可单独读取号码图，允许 `?` 表示不确定字符，
-不默默回写主提取。
+The reread uploads only total-region imagery from the invoice matching the recorded
+hash. The first reading, baseline and statement are not sent. Additionally,
+`scripts/probe-invoice-id.mjs` reads ID crops separately, permits `?` for uncertain
+characters and does not silently rewrite the main extraction.
 
-最终验收仍需要独立确认的电子发票字段清单或更清晰的原件。不能为了达到
-“9 张完整正确”而把对账单候选灌入模型、修改旧基准或移除不确定性检查。
+Final acceptance still requires an independently confirmed electronic-invoice
+field list or clearer originals. Achieving “nine completely correct invoices”
+must not involve feeding statement candidates into the model, changing the old
+baseline or removing uncertainty checks.

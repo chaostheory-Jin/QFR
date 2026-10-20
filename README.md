@@ -1,5 +1,10 @@
 # QFR Xero AI Mapping
 
+Documentation reviewed: **2026-10-15T11:11:41+11:00** (AEDT), against `ec60f88`.
+See the [timestamped technical progress report](docs/technical-progress-2026-10-15.md)
+for major milestones, AI changes, feature changes, security controls and remaining gaps.
+This review timestamp is not a deployment timestamp.
+
 Python batch pipeline that authenticates with Xero, pulls Profit & Loss and
 Balance Sheet evidence, maps P&L transaction lines into a controlled QFR
 taxonomy, and generates Excel, CSV, JSON, and HTML reports.
@@ -70,10 +75,11 @@ connects to a QuickBooks Online sandbox company, downloads paginated raw
 accounting entities, and downloads standard reports as JSON. It does not alter
 or feed into the existing Xero `run_mvp.py` pipeline.
 
-The connector layer proves authentication and raw extraction. Its JSON is not
-normalized into the main QFR evidence model, mapped into QFR categories, or
-consumed by the frontend. A separate experimental runner can use the raw P&L
-files for blind source-account reconstruction.
+The connector layer handles authentication and raw extraction. Its raw JSON is
+not normalized into the Xero pipeline's main QFR evidence model. Separate P&L
+and Balance Sheet runners reconstruct source-account reports, and
+`export_quickbooks_frontend_data.py` bundles their results for the frontend.
+This snapshot integration does not merge QuickBooks into `run_mvp.py`.
 
 After registering `http://localhost:51790/callback` in an Intuit app and adding
 the development Client ID/Secret to `.env`, run:
@@ -305,7 +311,7 @@ Dashboard review exports include only saved decisions, not unsaved drafts.
   verified RBAC. Do not deploy this approval prototype for production financial
   authorization until server authentication, tenant isolation and role checks exist.
 
-### Payroll mock register
+### Payroll Demo finance workflow
 
 - `/payroll` is integrated into the sidebar and floating AI assistant. It uses
   12 fictional employees, nine monthly pay runs (Jan–Sep 2026), and 108 stable
@@ -317,11 +323,20 @@ Dashboard review exports include only saved decisions, not unsaved drafts.
 - Date, department, employee, payment-status and confidence filters feed cards,
   monthly chart, run summary, by-line register and Excel exports. A payslip view
   explains each calculation. Draft September runs are included unless filtered.
-- Three mock low-confidence cases support notes and review decisions, saved to
-  this browser with history and optimistic revisions. Approval never marks pay
-  as paid or changes the original amounts. No payments are initiated and no mock
-  amounts are added to existing P&L/Balance Sheet reports. The AI assistant is
-  given the explicitly labelled full mock register, not the page's filters.
+- Review, ledger posting, payment and bank reconciliation are separate states.
+  Approved September payslips can be posted to the demo ledger; simulated
+  payments settle only the remaining net wages and do not recognize expense again.
+  Partial, split, batch, failed and ambiguous bank-match fixtures support review.
+- A separate **Payroll Demo** source feeds P&L, Balance Sheet and Report Explorer
+  from the same balanced ledger. It never changes Xero/QuickBooks snapshots.
+  Payslips link recognized expenses and liabilities to payment/bank evidence.
+- Workflow and audit history persist in browser IndexedDB with atomic revision
+  checks and cross-tab notifications. Legacy reviews are migrated without deleting
+  originals. The assistant receives the full-period payroll ledger/workflow
+  context, not just visible filtered rows.
+- This is not real payroll, bank execution, statutory calculation or employee
+  access. Reviewer identity is self-declared; posted-journal reversal is not yet
+  implemented. See [Payroll workflow](frontend/docs/payroll-demo.md).
 
 ### Invoice reconciliation evidence
 
@@ -335,8 +350,12 @@ fuzzy candidates require review. Exact IDs with different amounts retain both
 values and the difference. Select the statement currency before uploading;
 the default UGX dataset uses integer currency units, not universal absolute
 amounts or a fixed one-shilling tolerance. Download **Export audit JSON** for
-the original evidence and candidate decisions. This is an audit export, not
-a persisted human reconciliation approval workflow.
+the original evidence and candidate decisions. Human review decisions are saved
+separately in browser IndexedDB with revisions, reasons and timestamps; original
+extraction remains unchanged. Reviewer roles are self-declared, not verified
+authorization. Candidate search considers all statement lines and offers up to
+five supported alternatives; selection scrolls/highlights the target line and
+does not itself approve the match. See the [evidence plan](docs/reconciliation-evidence-plan.md).
 
 The optional macOS Vision locator runs locally; Linux deployments still use
 invoice-only model evidence, without local bounding-box highlights. A failed
@@ -361,7 +380,7 @@ crop only, without the first guess, baseline or statement. A reread can replace
 the displayed total only when its directly transcribed gross string, final label,
 net-plus-tax arithmetic and any available local OCR checks pass. Both readings
 and provider traces remain in the audit; failed/timed-out rereads retain the first
-reading for review. Disagreements are explicitly unverified even if either read
+reading for review. Disagreements explicitly require review even if either read
 is internally arithmetically consistent. No amount is computed as a substitute
 for missing pixels.
 See [reconciliation-evidence-plan.md](docs/reconciliation-evidence-plan.md)

@@ -1,5 +1,9 @@
 # Payroll Demo finance workflow
 
+Documentation reviewed: **2026-10-15T11:11:41+11:00** (AEDT).
+Finance-workflow milestone: `ec60f88`, **2026-10-13T14:27:16+11:00** (commit time,
+not deployment time). See the [technical progress report](../../docs/technical-progress-2026-10-15.md).
+
 This is a fictional AUD company, isolated from downloaded Xero/QuickBooks data. It has no employee portal, real payments, tax engine, or production identity/role enforcement.
 
 ## Try the workflow
