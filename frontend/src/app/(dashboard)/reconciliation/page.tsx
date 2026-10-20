@@ -19,6 +19,7 @@ import {
   Sparkles,
   UploadCloud,
 } from 'lucide-react'
+import { WorkspaceTabs, WorkspacePanel, workspaceAction } from '@/components/WorkspaceTabs'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -152,6 +153,7 @@ function UploadPanel({
   multiple,
   files,
   onFiles,
+  disabled = false,
 }: {
   title: string
   description: string
@@ -159,6 +161,7 @@ function UploadPanel({
   multiple?: boolean
   files: File[]
   onFiles: (files: File[]) => void
+  disabled?: boolean
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = useState(false)
@@ -166,33 +169,36 @@ function UploadPanel({
   return (
     <button
       type="button"
+      disabled={disabled}
       onClick={() => inputRef.current?.click()}
       onDragOver={(event) => { event.preventDefault(); setDragging(true) }}
       onDragLeave={() => setDragging(false)}
       onDrop={(event) => {
         event.preventDefault()
         setDragging(false)
-        onFiles(Array.from(event.dataTransfer.files))
+        if (!disabled) onFiles(Array.from(event.dataTransfer.files))
       }}
       className={cn(
-        'w-full rounded-xl border border-dashed px-4 py-3 text-left transition-colors',
-        dragging ? 'border-blue-500 bg-blue-50' : 'border-slate-300 bg-slate-50/70 hover:border-blue-300 hover:bg-blue-50/50',
+        'min-h-24 w-full rounded-xl border-2 border-dashed px-4 py-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:opacity-50',
+        dragging ? 'border-blue-500 bg-blue-50' : 'border-blue-300 bg-blue-50/50 hover:border-blue-600 hover:bg-blue-100',
       )}
     >
       <input
         ref={inputRef}
         type="file"
+        disabled={disabled}
+        tabIndex={-1}
         accept={accept}
         multiple={multiple}
         className="sr-only"
         onChange={(event) => onFiles(Array.from(event.target.files ?? []))}
       />
       <span className="flex items-center gap-3">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white text-blue-700 shadow-sm ring-1 ring-slate-200">
+        <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-white shadow-sm ring-1 ring-slate-200">
           <UploadCloud className="size-4" />
         </span>
         <span className="min-w-0">
-          <span className="block text-sm font-semibold text-slate-900">{title}</span>
+          <span className="block text-base font-semibold text-blue-900">{title}</span>
           <span className="block truncate text-xs text-muted-foreground">
             {files.length ? files.map((file) => file.name).join(', ') : description}
           </span>
@@ -267,6 +273,9 @@ export default function ReconciliationPage() {
   const [invoiceFiles, setInvoiceFiles] = useState<File[]>([])
   const [statementFile, setStatementFile] = useState<File | null>(null)
   const [statementCurrency, setStatementCurrency] = useState('UGX')
+  const [view, setView] = useState<'evidence' | 'results' | 'review'>('evidence')
+  const workspaceRef = useRef<HTMLDivElement>(null)
+  function navigate(next: typeof view) { setView(next); requestAnimationFrame(() => workspaceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })) }
   const [phase, setPhase] = useState<Phase>('idle')
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
@@ -324,21 +333,23 @@ export default function ReconciliationPage() {
   function inspectCandidate(documentIndex: number, statementIndex: number) {
     const documentPosition = extractions.findIndex(invoice => invoice.documentIndex === documentIndex)
     if (documentPosition < 0 || !statementRecords[statementIndex]) return
+    setView('evidence')
     setActiveDocument(documentPosition)
     setCandidateSelection(current => ({ documentIndex, statementIndex, revision: (current?.revision ?? 0) + 1 }))
   }
 
   useEffect(() => {
-    if (phase !== 'complete' || focusedStatementIndex === null) return
+    if (view !== 'evidence' || phase !== 'complete' || focusedStatementIndex === null) return
     const container = statementScrollRef.current
     const target = container?.querySelector<HTMLElement>(`[data-statement-index="${focusedStatementIndex}"]`)
     if (!container || !target) return
     const top = container.scrollTop + target.getBoundingClientRect().top - container.getBoundingClientRect().top
     container.scrollTo({ top: Math.max(0, top - container.clientHeight / 2 + target.offsetHeight / 2), behavior: 'smooth' })
     container.scrollIntoView({ block: 'center', behavior: 'smooth' })
-  }, [focusedStatementIndex, selectedExtraction.documentIndex, candidateSelection?.revision, phase, savedRun?.id])
+  }, [focusedStatementIndex, selectedExtraction.documentIndex, candidateSelection?.revision, phase, savedRun?.id, view])
 
   function resetResults() {
+    setView('evidence')
     window.history.replaceState(null, '', '/reconciliation')
     setSavedRun(null)
     setPhase('idle')
@@ -469,6 +480,7 @@ export default function ReconciliationPage() {
   }
 
   const restoreRun = useCallback((run: ReconciliationRun) => {
+    setView('evidence')
     setSavedRun(run); setStatementRecords(run.statements); setExtractions(run.invoices); setStatementCurrency(run.currency); setMateriality(String(run.materiality))
     setInvoiceFiles([]); setStatementFile(null); setPreviewUrls([]); setCandidateSelection(null)
     setActiveDocument(Math.max(0, reviewedResults(run).findIndex(result => !result.matched)))
@@ -499,11 +511,74 @@ export default function ReconciliationPage() {
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 ring-1 ring-emerald-100">
-          <ShieldCheck className="size-3.5" /> API key stays server-side
+          <ShieldCheck className="size-3.5" /> Session key protected with HttpOnly
         </div>
       </div>
 
-      <div className="mb-5 grid gap-4 lg:grid-cols-[1fr_76px_1fr]">
+      <div ref={workspaceRef} className="sticky top-0 z-20 scroll-mt-2 bg-background py-2">
+        <WorkspaceTabs id="reconciliation" label="Reconciliation workspace" value={view} onChange={navigate} items={[
+          { id: 'evidence', label: '1. Documents & matching' },
+          { id: 'results', label: '2. Match results', count: matches.length, disabled: working },
+          { id: 'review', label: '3. Human review', count: savedRun?.invoices.length, disabled: working },
+        ]} />
+      </div>
+      <Card className="mb-4 border-blue-200 bg-white shadow-sm">
+        <CardContent className="flex flex-wrap items-center gap-4 p-4">
+          <div className="min-w-[220px] flex-1">
+            <div className="mb-2 flex items-center justify-between text-xs">
+              <span className="flex items-center gap-2 font-semibold text-slate-700">
+                {working && <Loader2 className="size-3.5 animate-spin text-blue-700" />}
+                {phase === 'extracting' && 'Reading invoice and statement evidence'}
+                {phase === 'matching' && 'Applying ID and amount matching rules'}
+                {phase === 'complete' && <><CheckCircle2 className="size-3.5 text-emerald-600" />Reconciliation complete</>}
+                {phase === 'error' && <><AlertCircle className="size-3.5 text-rose-600" />Reconciliation needs attention</>}
+                {phase === 'idle' && <><ScanLine className="size-3.5 text-blue-700" />Ready to reconcile</>}
+              </span>
+              <span className="font-semibold tabular-nums">{progress}%</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+              <div className={cn('h-full rounded-full transition-[width] duration-300', phase === 'error' ? 'bg-rose-500' : phase === 'complete' ? 'bg-emerald-500' : 'bg-blue-700')} style={{ width: `${progress}%` }} />
+            </div>
+            {working && (
+              <div className="mt-3 flex items-start gap-3 rounded-lg bg-blue-50 px-3 py-2.5 text-xs ring-1 ring-blue-100">
+                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-700 text-[10px] font-bold text-white">{activeProcessStepIndex + 1}</span>
+                <span>
+                  <span className="block font-semibold text-blue-950">Processing now: {activeProcessStep.label}</span>
+                  <span className="mt-0.5 block text-blue-800/75">{activeProcessStep.detail}</span>
+                </span>
+              </div>
+            )}
+            {working && (
+              <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
+                {PROCESSING_STEPS.map((step, index) => (
+                  <span key={step.label} className={cn(
+                    'shrink-0 rounded-full px-2 py-1 text-[10px] font-medium',
+                    index < activeProcessStepIndex && 'bg-emerald-50 text-emerald-700',
+                    index === activeProcessStepIndex && 'bg-blue-700 text-white',
+                    index > activeProcessStepIndex && 'bg-slate-100 text-slate-400',
+                  )}>
+                    {index < activeProcessStepIndex && <Check className="mr-1 inline size-2.5" />}{step.label}
+                  </span>
+                ))}
+              </div>
+            )}
+            {error && <p className="mt-2 text-xs text-rose-600">{error}</p>}
+          </div>
+          <Button type="button" className={workspaceAction} variant="outline" onClick={runDemo} disabled={working}>
+            <Sparkles className="size-4" /> Run sample animation
+          </Button>
+          <Button type="button" className={cn(workspaceAction, "min-h-12 bg-blue-700 text-white hover:bg-blue-800")} onClick={reconcileUploads} disabled={working}>
+            {working ? <Loader2 className="size-4 animate-spin" /> : <FileSearch className="size-4" />}
+            Reconcile uploaded files
+          </Button>
+          {(phase === 'complete' || phase === 'error') && (
+            <Button type="button" variant="outline" className={workspaceAction} aria-label="Reset reconciliation" onClick={resetResults}><RotateCcw className="size-4" />Reset</Button>
+          )}
+        </CardContent>
+      </Card>
+
+      <WorkspacePanel id="reconciliation" value="evidence" active={view}>
+      <div className="mb-5 grid items-start gap-4 lg:grid-cols-[1fr_48px_1fr]">
         <Card className="overflow-hidden border-slate-200 shadow-sm">
           <CardHeader className="border-b bg-slate-50/70 pb-4">
             <div className="flex items-center justify-between gap-3">
@@ -514,6 +589,7 @@ export default function ReconciliationPage() {
               <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-700">Evidence</span>
             </div>
             <UploadPanel
+              disabled={working}
               title="Upload invoice documents"
               description="JPG, PNG, WebP or PDF"
               accept="image/jpeg,image/png,image/webp,application/pdf"
@@ -531,7 +607,7 @@ export default function ReconciliationPage() {
                     type="button"
                     onClick={() => setActiveDocument(index)}
                     className={cn(
-                      'shrink-0 rounded-lg border px-2.5 py-1.5 text-xs transition-colors',
+                      'min-h-11 shrink-0 rounded-xl border px-4 py-2 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-blue-500',
                       index === activeDocument ? 'border-blue-600 bg-blue-600 text-white' : 'bg-white text-slate-600 hover:border-blue-300',
                     )}
                   >
@@ -540,7 +616,7 @@ export default function ReconciliationPage() {
                 ))}
               </div>
             )}
-            <div className="relative">
+            <div className="relative max-h-[60vh] overflow-auto">
               {previewUrl ? (
                 <div className="relative mx-auto w-full max-w-[390px] overflow-hidden rounded-md bg-white shadow-inner">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -589,7 +665,7 @@ export default function ReconciliationPage() {
           </CardContent>
         </Card>
 
-        <div className="hidden items-center justify-center lg:flex">
+        <div className="hidden items-center justify-center self-center lg:flex">
           <div className="relative h-px w-full overflow-hidden bg-slate-200">
             <span className="reconciliation-flow-dot absolute -top-1.5 left-0 size-3 rounded-full bg-blue-600 shadow-[0_0_14px_rgba(37,99,235,0.7)]" />
           </div>
@@ -608,6 +684,7 @@ export default function ReconciliationPage() {
               <span className="rounded-full bg-violet-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-violet-700">Master</span>
             </div>
             <UploadPanel
+              disabled={working}
               title="Upload master statement"
               description="PDF, CSV or text statement"
               accept="application/pdf,text/csv,text/plain"
@@ -627,7 +704,7 @@ export default function ReconciliationPage() {
               <span className="font-semibold text-slate-700">{statementFile?.name ?? savedRun?.files.find(file => file.index === -1)?.name ?? 'COLA customer statement · sample'}</span>
               <span className="text-muted-foreground">All {statementRecords.length.toLocaleString()} lines loaded</span>
             </div>
-            <div ref={statementScrollRef} className="max-h-[560px] overflow-auto">
+            <div ref={statementScrollRef} className="max-h-[60vh] overflow-auto">
               <table className="w-full min-w-[620px] text-left text-xs">
                 <thead className="sticky top-0 z-10 bg-slate-900 text-slate-200">
                   <tr><th className="px-3 py-2.5 font-medium">Line</th><th className="px-3 py-2.5 font-medium">Date</th><th className="px-3 py-2.5 font-medium">All references</th><th className="px-3 py-2.5 font-medium">Type</th><th className="px-4 py-2.5 text-right font-medium">Incl. VAT</th></tr>
@@ -670,7 +747,7 @@ export default function ReconciliationPage() {
                 </tbody>
               </table>
             </div>
-            {phase === 'complete' && <section aria-label="Active invoice review candidates" className="space-y-3 border-t border-amber-200 bg-white p-4">
+            {phase === 'complete' && <section aria-label="Active invoice review candidates" className="max-h-80 space-y-3 overflow-auto border-t border-amber-200 bg-white p-4">
               <div><h3 className="text-sm font-semibold">Review candidates · Invoice {activeDocument + 1}</h3><p className="mt-1 break-all text-xs text-slate-500">{selectedExtraction.fileName} · Click a candidate to locate its original statement row.</p></div>
               <ReconciliationCandidates candidates={activeCandidates} currency={statementCurrency} selectedIndex={focusedStatementIndex}
                 onSelect={index => inspectCandidate(selectedExtraction.documentIndex, index)} />
@@ -684,61 +761,11 @@ export default function ReconciliationPage() {
         </Card>
       </div>
 
-      <Card className="mb-5 border-slate-200 shadow-sm">
-        <CardContent className="flex flex-wrap items-center gap-4 p-4">
-          <div className="min-w-[220px] flex-1">
-            <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="flex items-center gap-2 font-semibold text-slate-700">
-                {working && <Loader2 className="size-3.5 animate-spin text-blue-700" />}
-                {phase === 'extracting' && 'Reading invoice and statement evidence'}
-                {phase === 'matching' && 'Applying ID and amount matching rules'}
-                {phase === 'complete' && <><CheckCircle2 className="size-3.5 text-emerald-600" />Reconciliation complete</>}
-                {phase === 'error' && <><AlertCircle className="size-3.5 text-rose-600" />Reconciliation needs attention</>}
-                {phase === 'idle' && <><ScanLine className="size-3.5 text-blue-700" />Ready to reconcile</>}
-              </span>
-              <span className="font-semibold tabular-nums">{progress}%</span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-              <div className={cn('h-full rounded-full transition-[width] duration-300', phase === 'error' ? 'bg-rose-500' : phase === 'complete' ? 'bg-emerald-500' : 'bg-blue-700')} style={{ width: `${progress}%` }} />
-            </div>
-            {working && (
-              <div className="mt-3 flex items-start gap-3 rounded-lg bg-blue-50 px-3 py-2.5 text-xs ring-1 ring-blue-100">
-                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-700 text-[10px] font-bold text-white">{activeProcessStepIndex + 1}</span>
-                <span>
-                  <span className="block font-semibold text-blue-950">Processing now: {activeProcessStep.label}</span>
-                  <span className="mt-0.5 block text-blue-800/75">{activeProcessStep.detail}</span>
-                </span>
-              </div>
-            )}
-            {working && (
-              <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
-                {PROCESSING_STEPS.map((step, index) => (
-                  <span key={step.label} className={cn(
-                    'shrink-0 rounded-full px-2 py-1 text-[10px] font-medium',
-                    index < activeProcessStepIndex && 'bg-emerald-50 text-emerald-700',
-                    index === activeProcessStepIndex && 'bg-blue-700 text-white',
-                    index > activeProcessStepIndex && 'bg-slate-100 text-slate-400',
-                  )}>
-                    {index < activeProcessStepIndex && <Check className="mr-1 inline size-2.5" />}{step.label}
-                  </span>
-                ))}
-              </div>
-            )}
-            {error && <p className="mt-2 text-xs text-rose-600">{error}</p>}
-          </div>
-          <Button type="button" variant="outline" onClick={runDemo} disabled={working}>
-            <Sparkles className="size-4" /> Run sample animation
-          </Button>
-          <Button type="button" className="bg-blue-700 text-white hover:bg-blue-600" onClick={reconcileUploads} disabled={working}>
-            {working ? <Loader2 className="size-4 animate-spin" /> : <FileSearch className="size-4" />}
-            Reconcile uploaded files
-          </Button>
-          {(phase === 'complete' || phase === 'error') && (
-            <Button type="button" variant="ghost" size="icon" aria-label="Reset reconciliation" onClick={resetResults}><RotateCcw className="size-4" /></Button>
-          )}
-        </CardContent>
-      </Card>
 
+      {phase === 'complete' && <div className="mb-4 flex flex-wrap justify-end gap-3"><Button className={workspaceAction} variant="outline" onClick={() => navigate('results')}>View all results<ArrowRight className="size-4" /></Button><Button className={workspaceAction} onClick={() => navigate('review')}>Review & confirm assignments<ArrowRight className="size-4" /></Button></div>}
+      </WorkspacePanel>
+      <WorkspacePanel id="reconciliation" value="results" active={view}>
+      {!matches.length && <Card><CardContent className="space-y-4 p-6"><p>No results yet. Upload your documents or run the sample to begin.</p><Button className={workspaceAction} onClick={() => navigate('evidence')}>Go to documents<ArrowRight className="size-4" /></Button></CardContent></Card>}
       {matches.length > 0 && (
         <Card className="overflow-hidden border-slate-200 shadow-sm">
           <CardHeader className="border-b bg-slate-50/70 py-4">
@@ -748,14 +775,15 @@ export default function ReconciliationPage() {
                 <CardDescription className="mt-1">Original automated results below remain unchanged. Saved human decisions and manager gates are shown in the review panel.</CardDescription>
               </div>
               <div className="flex items-center gap-2 text-xs">
-                <Button variant="outline" size="sm" onClick={exportAudit}>Export audit JSON</Button>
+                <Button variant="outline" className={workspaceAction} onClick={exportAudit}>Export audit JSON</Button>
+                <Button className={workspaceAction} onClick={() => navigate('review')}>Open human review<ArrowRight className="size-4" /></Button>
                 <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700">{matchedCount} matched</span>
                 <span className="rounded-full bg-rose-50 px-2.5 py-1 font-semibold text-rose-700">{matches.length - matchedCount} review</span>
               </div>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
+            <div className="max-h-[65vh] overflow-auto">
               <table className="w-full min-w-[860px] text-left text-xs">
                 <thead className="bg-white text-muted-foreground">
                   <tr>
@@ -775,7 +803,7 @@ export default function ReconciliationPage() {
                         {match.statementRecord ? <><span className="font-mono font-semibold">{statementIdentifiers(match.statementRecord).join(' · ')}</span><span className="ml-2 text-muted-foreground">{money(match.statementRecord.amount, statementCurrency)}</span></> : '—'}
                         {match.amountDifference !== null && match.amountDifference !== 0 && <p className="mt-1 text-rose-700">Difference: {money(match.amountDifference, statementCurrency)}</p>}
                         {(candidatesByInvoice[match.invoice.documentIndex] ?? []).length > 0 && <div className="mt-2 space-y-1">{candidatesByInvoice[match.invoice.documentIndex].map((candidate, rank) => <button key={candidate.statementIndex} type="button"
-                          className="block rounded border border-amber-200 bg-amber-50 px-2 py-1 text-left text-amber-900 hover:bg-amber-100"
+                          className="block min-h-11 rounded-lg border-2 border-amber-300 bg-amber-50 px-3 py-2 text-left font-semibold text-amber-900 hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-amber-500"
                           onClick={() => inspectCandidate(match.invoice.documentIndex, candidate.statementIndex)}>
                           Inspect #{rank + 1} · Row {candidate.statementRecord.lineIndex ?? candidate.statementIndex + 1} · {money(candidate.statementRecord.amount, statementCurrency)}
                         </button>)}</div>}
@@ -801,8 +829,11 @@ export default function ReconciliationPage() {
           </CardContent>
         </Card>
       )}
+      </WorkspacePanel>
+      <WorkspacePanel id="reconciliation" value="review" active={view}>
       <ReconciliationReviewPanel key={savedRun?.id ?? 'no-run'} run={savedRun} onRun={setSavedRun} onRestore={restoreRun}
         candidatesByInvoice={candidatesByInvoice} onInspectCandidate={inspectCandidate} />
+      </WorkspacePanel>
     </main>
   )
 }

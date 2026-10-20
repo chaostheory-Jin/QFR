@@ -4,12 +4,13 @@ import { browserDataRequest } from '@/lib/browser-data'
 import { BrowserFileLink } from '@/components/BrowserFileLink'
 
 import { useEffect, useState } from 'react'
+import { workspaceAction } from '@/components/WorkspaceTabs'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { reviewedResults, type ReconciliationRun, type ReviewDecision } from '@/lib/reconciliation-review'
 import { ReconciliationCandidates } from './ReconciliationCandidates'
 import type { StatementCandidate } from '@/lib/reconciliation-candidates'
-const field = 'rounded border bg-white px-2 py-1 text-sm'
+const field = 'min-h-11 rounded-lg border bg-white px-3 py-2 text-sm'
 export function ReconciliationReviewPanel({ run, onRun, onRestore, candidatesByInvoice, onInspectCandidate }: {
   run: ReconciliationRun | null; onRun: (run: ReconciliationRun) => void; onRestore: (run: ReconciliationRun) => void
   candidatesByInvoice: Record<number, StatementCandidate[]>; onInspectCandidate: (documentIndex: number, statementIndex: number) => void
@@ -45,7 +46,7 @@ export function ReconciliationReviewPanel({ run, onRun, onRestore, candidatesByI
     } catch (error) { setError((error as Error).message) } finally { setBusy(false) }
   }
   return <Card className="my-5"><CardHeader><CardTitle>Saved reconciliation and human review</CardTitle></CardHeader><CardContent className="space-y-4">
-    <div className="flex flex-wrap items-center gap-3"><select aria-label="Saved reconciliation runs" className={`${field} max-w-full`} value={run?.id ?? ''} disabled={busy} onChange={event => void restore(event.target.value)}><option value="">Restore a saved run</option>{runs.map(item => <option key={item.id} value={item.id}>{item.sample ? '[MOCK] ' : ''}{item.createdAt} — {item.count} invoices ({item.currency})</option>)}</select>{run && <Button size="sm" variant="outline" disabled={busy} onClick={() => void restore(run.id)}>Reload saved decisions</Button>}</div>
+    <div className="flex flex-wrap items-center gap-3"><select aria-label="Saved reconciliation runs" className={`${field} max-w-full`} value={run?.id ?? ''} disabled={busy} onChange={event => event.target.value && void restore(event.target.value)}><option value="">Restore a saved run</option>{runs.map(item => <option key={item.id} value={item.id}>{item.sample ? '[MOCK] ' : ''}{item.createdAt} — {item.count} invoices ({item.currency})</option>)}</select>{run && <Button className={workspaceAction} variant="outline" disabled={busy} onClick={() => void restore(run.id)}>Reload saved decisions</Button>}</div>
     {error && <p role="alert" className="text-sm text-red-800">{error}</p>}
     {run && <>
       <p className="break-all text-xs text-muted-foreground">{run.sample ? 'MOCK fixture — not live customer data' : 'Archived extraction'} · Batch {run.id} · {run.createdAt} · Materiality threshold {run.materiality} {run.currency}. Amounts at or above this threshold require manager approval regardless of AI confidence.</p>
@@ -54,7 +55,7 @@ export function ReconciliationReviewPanel({ run, onRun, onRestore, candidatesByI
       <div className="flex flex-wrap gap-4"><label className="text-sm">Reviewer <input aria-label="Reconciliation reviewer" className={field} value={reviewer} onChange={event => setReviewer(event.target.value)} /></label><label className="text-sm">Declared role <select aria-label="Reconciliation reviewer role" className={field} value={role} onChange={event => setRole(event.target.value as 'finance' | 'manager')}><option value="finance">Finance reviewer</option><option value="manager">Finance manager</option></select></label></div>
       <div className="space-y-3">{reviewedResults(run).map(result => {
         const index = result.original.documentIndex, draft = draftFor(index)
-        return <details className="rounded border p-3" key={index}><summary className="cursor-pointer text-sm font-semibold">{result.original.fileName} — {result.status.replace(/_/g, ' ')}{result.difference !== null ? ` · Difference ${result.difference} ${run.currency}` : ''}</summary>
+        return <details className="rounded border p-3" key={index}><summary className="min-h-12 cursor-pointer rounded-lg bg-slate-50 p-3 text-sm font-semibold text-indigo-800 hover:bg-indigo-50">{result.original.fileName} — {result.status.replace(/_/g, ' ')}{result.difference !== null ? ` · Difference ${result.difference} ${run.currency}` : ''}</summary>
           <div className="mt-3 space-y-3"><p className="text-xs">Original extraction: {result.original.invoiceNumber || 'Missing ID'} · {result.original.totalAmount} {result.original.currency} · {result.original.documentType}. Original values remain unchanged.</p>
             <ReconciliationCandidates candidates={candidatesByInvoice[index] ?? []} currency={run.currency} selectedIndex={draft.statementIndex} disabled={busy}
               action="Use for review" onSelect={statementIndex => { update(index, { statementIndex }); onInspectCandidate(index, statementIndex) }} />
@@ -65,7 +66,7 @@ export function ReconciliationReviewPanel({ run, onRun, onRestore, candidatesByI
               update(index, { statementIndex }); if (statementIndex !== null) onInspectCandidate(index, statementIndex)
             }}><option value="">No match / reject assignment</option>{run.statements.map((record, position) => <option key={position} value={position}>Row {record.lineIndex ?? position + 1}: {record.invoiceNumber} — {record.amount} {run.currency} — {record.description ?? ''}</option>)}</select></label>
             <label className="block text-sm">Reason / evidence checked<textarea aria-label={`Review reason ${index}`} className={`${field} mt-1 w-full`} value={draft.reason} onChange={event => update(index, { reason: event.target.value })} /></label>
-            <div className="flex flex-wrap items-center gap-3"><select aria-label={`Review action ${index}`} className={field} value={draft.action} onChange={event => update(index, { action: event.target.value as ReviewDecision['action'] })}><option value="approve">Confirm fields and assignment</option><option value="reject">Reject assignment</option></select><Button size="sm" disabled={busy || !reviewer.trim() || !draft.reason.trim() || (!run.sample && run.files.some(file => !file.archived))} onClick={() => void save(index)}>Save review</Button><span className="text-xs">{drafts[String(index)] ? 'Unsaved changes' : result.review ? `Saved revision ${result.review.revision} by ${result.review.reviewer}` : 'No human decision'}</span></div>
+            <div className="flex flex-wrap items-center gap-3"><select aria-label={`Review action ${index}`} className={field} value={draft.action} onChange={event => update(index, { action: event.target.value as ReviewDecision['action'] })}><option value="approve">Confirm fields and assignment</option><option value="reject">Reject assignment</option></select><Button className={workspaceAction} disabled={busy || !reviewer.trim() || !draft.reason.trim() || (!run.sample && run.files.some(file => !file.archived))} onClick={() => void save(index)}>Save review</Button><span className="text-xs">{drafts[String(index)] ? 'Unsaved changes' : result.review ? `Saved revision ${result.review.revision} by ${result.review.reviewer}` : 'No human decision'}</span></div>
             <p className="text-xs text-muted-foreground">A confirmed assignment with a nonzero difference remains an approved variance, not a matched invoice.</p>
             <details><summary className="cursor-pointer text-xs">Immutable extraction and review history</summary><pre className="max-h-64 overflow-auto whitespace-pre-wrap text-xs">{JSON.stringify({ original: result.original, history: run.history.filter(item => item.after.invoiceIndex === index) }, null, 2)}</pre></details>
           </div></details>
