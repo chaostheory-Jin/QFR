@@ -36,14 +36,14 @@ const SOURCE_META: Record<DataSource, {
     description: 'Connect an organisation and prepare its accounting records for QFR mapping.',
     icon: Cloud,
     iconClass: 'bg-blue-50 text-blue-700 ring-blue-100',
-    buttonClass: 'bg-blue-700 text-white hover:bg-blue-600',
+    buttonClass: 'bg-indigo-700 text-white hover:bg-indigo-800',
   },
   quickbooks: {
     name: 'QuickBooks',
     description: 'Connect a QuickBooks Online company and load P&L and Balance Sheet evidence.',
     icon: Database,
     iconClass: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
-    buttonClass: 'bg-emerald-700 text-white hover:bg-emerald-600',
+    buttonClass: 'bg-indigo-700 text-white hover:bg-indigo-800',
   },
 }
 
@@ -205,7 +205,7 @@ export default function LinkDataPage() {
               <div
                 className={cn(
                   'h-full rounded-full transition-[width] duration-300',
-                  phase === 'success' ? 'bg-emerald-500' : 'bg-blue-700',
+                  phase === 'success' ? 'bg-emerald-500' : 'bg-indigo-700',
                 )}
                 style={{ width: `${progress}%` }}
               />

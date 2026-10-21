@@ -194,7 +194,7 @@ function UploadPanel({
         onChange={(event) => onFiles(Array.from(event.target.files ?? []))}
       />
       <span className="flex items-center gap-3">
-        <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-white shadow-sm ring-1 ring-slate-200">
+        <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-indigo-700 text-white shadow-sm ring-1 ring-slate-200">
           <UploadCloud className="size-4" />
         </span>
         <span className="min-w-0">
@@ -537,11 +537,11 @@ export default function ReconciliationPage() {
               <span className="font-semibold tabular-nums">{progress}%</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-              <div className={cn('h-full rounded-full transition-[width] duration-300', phase === 'error' ? 'bg-rose-500' : phase === 'complete' ? 'bg-emerald-500' : 'bg-blue-700')} style={{ width: `${progress}%` }} />
+              <div className={cn('h-full rounded-full transition-[width] duration-300', phase === 'error' ? 'bg-rose-500' : phase === 'complete' ? 'bg-emerald-500' : 'bg-indigo-700')} style={{ width: `${progress}%` }} />
             </div>
             {working && (
               <div className="mt-3 flex items-start gap-3 rounded-lg bg-blue-50 px-3 py-2.5 text-xs ring-1 ring-blue-100">
-                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-700 text-[10px] font-bold text-white">{activeProcessStepIndex + 1}</span>
+                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-indigo-700 text-[10px] font-bold text-white">{activeProcessStepIndex + 1}</span>
                 <span>
                   <span className="block font-semibold text-blue-950">Processing now: {activeProcessStep.label}</span>
                   <span className="mt-0.5 block text-blue-800/75">{activeProcessStep.detail}</span>
@@ -554,7 +554,7 @@ export default function ReconciliationPage() {
                   <span key={step.label} className={cn(
                     'shrink-0 rounded-full px-2 py-1 text-[10px] font-medium',
                     index < activeProcessStepIndex && 'bg-emerald-50 text-emerald-700',
-                    index === activeProcessStepIndex && 'bg-blue-700 text-white',
+                    index === activeProcessStepIndex && 'bg-indigo-700 text-white',
                     index > activeProcessStepIndex && 'bg-slate-100 text-slate-400',
                   )}>
                     {index < activeProcessStepIndex && <Check className="mr-1 inline size-2.5" />}{step.label}
@@ -567,7 +567,7 @@ export default function ReconciliationPage() {
           <Button type="button" className={workspaceAction} variant="outline" onClick={runDemo} disabled={working}>
             <Sparkles className="size-4" /> Run sample animation
           </Button>
-          <Button type="button" className={cn(workspaceAction, "min-h-12 bg-blue-700 text-white hover:bg-blue-800")} onClick={reconcileUploads} disabled={working}>
+          <Button type="button" className={cn(workspaceAction, "min-h-12 bg-indigo-700 text-white hover:bg-indigo-800")} onClick={reconcileUploads} disabled={working}>
             {working ? <Loader2 className="size-4 animate-spin" /> : <FileSearch className="size-4" />}
             Reconcile uploaded files
           </Button>

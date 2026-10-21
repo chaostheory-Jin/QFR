@@ -1,16 +1,14 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { Bot, ChevronDown, Loader2, Send, Sparkles, X } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Loader2, Send, Sparkles, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { REPORT_DATA } from '@/lib/report-data-mock'
 import { BALANCE_SHEET_DATA } from '@/lib/balance-sheet-mock'
 import { liquidityMetrics } from '@/lib/balance-sheet-metrics'
 import { requiresReview } from '@/lib/report-utils'
 import type { RawRow } from '@/lib/report-data'
-import { cn } from '@/lib/utils'
 import { PAYROLL_LINES, payrollAssistantContext } from '@/lib/payroll-mock'
 import { useReportSource } from '@/lib/report-source'
 import { loadPayrollState } from '@/lib/payroll-store'
@@ -148,37 +146,17 @@ function datasetSummary(): string {
 }
 
 function ThinkingState() {
-  return (
-    <div className="relative overflow-hidden rounded-lg bg-slate-950 p-3 text-slate-100">
-      <div className="absolute inset-0 opacity-60">
-        {[10, 24, 38, 52, 70, 84].map((left, index) => (
-          <span
-            key={left}
-            className="absolute size-1.5 animate-bounce rounded-full bg-cyan-300"
-            style={{ left: `${left}%`, top: `${22 + (index % 3) * 22}%`, animationDelay: `${index * 120}ms` }}
-          />
-        ))}
-      </div>
-      <div className="relative flex items-center gap-2 text-sm font-medium">
-        <Loader2 className="size-4 animate-spin text-cyan-300" />
-        AI is thinking
-      </div>
-      <div className="relative mt-3 grid gap-1.5 text-xs text-slate-300">
-        {THINKING_STEPS.map((step) => (
-          <div key={step} className="flex items-center gap-2">
-            <span className="size-1 rounded-full bg-cyan-300" />
-            {step}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+  return <div role="status" className="rounded-xl border border-indigo-100 bg-indigo-50 p-4 text-indigo-900">
+    <p className="flex items-center gap-2 text-sm font-semibold"><Loader2 className="size-4 animate-spin motion-reduce:animate-none" />Preparing your answer</p>
+    <p className="mt-2 text-xs leading-5 text-indigo-700">{THINKING_STEPS.join(' · ')}</p>
+  </div>
 }
 
-export function FloatingAssistant() {
+export function FloatingAssistant({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname()
   const [reportSource] = useReportSource()
-  const [isOpen, setIsOpen] = useState(false)
+  const questionInput = useRef<HTMLTextAreaElement>(null)
+  useEffect(() => { if (open) questionInput.current?.focus() }, [open])
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('Ask a P&L or Balance Sheet question to generate an insight.')
   const [status, setStatus] = useState('Ready')
@@ -199,7 +177,6 @@ export function FloatingAssistant() {
     }
 
     setQuestion(trimmed)
-    setIsOpen(true)
     setIsThinking(true)
     setStatus('Generating')
 
@@ -240,70 +217,28 @@ export function FloatingAssistant() {
     }
   }
 
-  return (
-    <div className="fixed bottom-5 right-5 z-50">
-      {isOpen && (
-        <Card className="mb-3 w-[min(420px,calc(100vw-2.5rem))] overflow-hidden border-blue-200 shadow-2xl">
-          <CardHeader className="border-b bg-gradient-to-r from-blue-700 to-slate-900 px-4 py-3 text-white">
-            <div className="flex items-center justify-between gap-3">
-              <CardTitle className="flex items-center gap-2 text-sm">
-                <Sparkles className="size-4" />
-                AI Financial Assistant
-              </CardTitle>
-              <button type="button" onClick={() => setIsOpen(false)} className="rounded p-1 hover:bg-white/10" aria-label="Close assistant">
-                <X className="size-4" />
-              </button>
-            </div>
-            <p className="text-xs text-blue-100">Available across P&L and Balance Sheet pages.</p>
-          </CardHeader>
-          <CardContent className="flex max-h-[70vh] flex-col gap-3 overflow-auto p-4">
-            <div className="grid gap-2">
-              {quickQuestions.map((quickQuestion) => (
-                <button
-                  key={quickQuestion}
-                  type="button"
-                  onClick={() => void ask(quickQuestion)}
-                  disabled={isThinking}
-                  className="rounded-lg border bg-blue-50 px-3 py-2 text-left text-xs text-blue-950 transition-colors hover:border-blue-300 hover:bg-blue-100 disabled:opacity-60"
-                >
-                  {quickQuestion}
-                </button>
-              ))}
-            </div>
-
-            <textarea
-              value={question}
-              onChange={(event) => setQuestion(event.target.value)}
-              placeholder="Ask about P&L, Balance Sheet, liquidity, suppliers..."
-              className="min-h-20 resize-none rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-            />
-
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-muted-foreground">{status}</span>
-              <Button size="sm" onClick={() => void ask()} disabled={isThinking} className="bg-blue-700 text-white hover:bg-blue-600">
-                <Send className="size-3.5" />
-                Ask
-              </Button>
-            </div>
-
-            {isThinking && <ThinkingState />}
-
-            <pre className="max-h-72 whitespace-pre-wrap rounded-lg border border-slate-200 bg-white p-3 font-sans text-sm leading-relaxed text-slate-900 shadow-inner">
-              {answer}
-            </pre>
-          </CardContent>
-        </Card>
-      )}
-
-      <button
-        type="button"
-        onClick={() => setIsOpen((value) => !value)}
-        className="flex items-center gap-2 rounded-full bg-blue-700 px-4 py-3 text-sm font-semibold text-white shadow-xl transition-colors hover:bg-blue-600"
-      >
-        <Bot className="size-5" />
-        AI Assistant
-        <ChevronDown className={cn('size-4 transition-transform', !isOpen && 'rotate-180')} />
-      </button>
+  return <aside id="financial-assistant" aria-label="AI Financial Assistant" hidden={!open} onKeyDown={event => { if (event.key === 'Escape') { event.stopPropagation(); onClose() } }}
+    className="h-full w-full min-w-0 shrink-0 border-l border-slate-200 bg-white xl:w-[360px] 2xl:w-[400px]">
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-indigo-100 bg-indigo-50 px-4 py-3">
+        <div><h2 className="flex items-center gap-2 text-sm font-semibold text-indigo-950"><Sparkles className="size-4" />AI Financial Assistant</h2><p className="mt-1 text-xs text-indigo-700">P&L, balance sheet and payroll questions</p></div>
+        <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close AI panel"><X className="size-4" /></Button>
+      </div>
+      <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
+        <details className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+          <summary className="cursor-pointer text-sm font-medium text-slate-700">Suggested questions</summary>
+          <div className="mt-3 grid gap-2">{quickQuestions.map(quickQuestion => <button key={quickQuestion} type="button" onClick={() => setQuestion(quickQuestion)} disabled={isThinking}
+            className="min-h-11 rounded-lg border border-slate-200 bg-white px-3 py-3 text-left text-sm text-slate-700 hover:border-indigo-300 hover:bg-indigo-50 focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:opacity-50">{quickQuestion}</button>)}</div>
+        </details>
+        <div className="space-y-2"><label htmlFor="assistant-question" className="text-sm font-semibold">Your question</label>
+          <textarea ref={questionInput} id="assistant-question" value={question} onChange={event => setQuestion(event.target.value)} placeholder="Ask about financial results or a payroll question…"
+            className="min-h-28 w-full resize-y rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-100" />
+          <div className="flex flex-wrap items-center justify-between gap-2"><span role="status" className="text-xs text-slate-500">{status}</span><Button onClick={() => void ask()} disabled={isThinking || !question.trim()}><Send className="size-4" />Ask assistant</Button></div>
+        </div>
+        <p className="text-xs leading-5 text-slate-500">Uses the existing analysis dataset, not necessarily your current page filters. Check source records before acting on an answer.</p>
+        {isThinking && <ThinkingState />}
+        <section aria-label="Assistant answer" className="rounded-xl border border-slate-200 bg-slate-50 p-4"><h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Response</h3><p className="whitespace-pre-wrap break-words text-sm leading-6 text-slate-700">{answer}</p></section>
+      </div>
     </div>
-  )
+  </aside>
 }

@@ -129,6 +129,32 @@
   }
 }
 
+/* Shared workspace palette; authentication pages retain their own theme. */
+.portal-shell {
+  --primary: #4338ca;
+  --primary-foreground: #ffffff;
+  --foreground: #0f172a;
+  --card-foreground: #0f172a;
+  --secondary: #eef2ff;
+  --secondary-foreground: #3730a3;
+  --accent: #eef2ff;
+  --accent-foreground: #3730a3;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #cbd5e1;
+  --ring: #6366f1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-shell *, .portal-shell *::before, .portal-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @keyframes reconciliation-scan {
   0% { transform: translateY(-10%); opacity: 0; }
   12% { opacity: 1; }
