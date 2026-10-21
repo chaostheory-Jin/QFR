@@ -1,210 +1,41 @@
 'use client'
 
-import { Fragment, createContext, useContext } from 'react'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { ExportControls, type ExportMode } from '@/components/ExportControls'
 import { exportRowsToExcel, type ExportRow } from '@/lib/excel-export'
-import { cn } from '@/lib/utils'
-import type { BalanceSheetData, BSLineItem } from '@/lib/balance-sheet-mock'
-import { flattenBalanceLines, type BalanceLine } from '@/lib/balance-sheet-review'
-import type { ReviewDraft, ReviewMap } from '@/lib/mapping-reviews'
+import type { BalanceSheetData } from '@/lib/balance-sheet-mock'
+import { flattenBalanceLines, balanceNeedsReview, type BalanceLine } from '@/lib/balance-sheet-review'
+import type { ReviewDraft, ReviewMap, ReviewStatus } from '@/lib/mapping-reviews'
+import { WorkspacePanel } from '@/components/WorkspaceTabs'
+import { ReportPagination, useReportPagination, type ReportTab } from '@/components/report/ReportWorkspace'
 
-const CurrencyContext = createContext('AUD')
-
-function fmtAUD(value: number, currency = 'AUD'): string {
-  return new Intl.NumberFormat('en-AU', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 2,
-  }).format(value)
-}
-
-function AmountCell({ value, className }: { value: number; className?: string }) {
-  const currency = useContext(CurrencyContext)
-  return (
-    <td className={cn(
-      'px-4 py-2 text-right tabular-nums',
-      value < 0 ? 'text-red-600' : value > 0 ? 'text-green-600' : 'text-muted-foreground',
-      className,
-    )}>
-      {fmtAUD(value, currency)}
-    </td>
-  )
-}
-
-function ChangeCell({ current, prior }: { current: number; prior: number }) {
-  const currency = useContext(CurrencyContext)
-  const change = current - prior
-  return (
-    <td className={cn(
-      'px-4 py-2 text-right tabular-nums',
-      change < 0 ? 'text-red-600' : change > 0 ? 'text-green-600' : 'text-muted-foreground',
-    )}>
-      {fmtAUD(change, currency)}
-    </td>
-  )
-}
-
-type ReviewStatus = 'Pending' | 'Approved' | 'Needs changes' | 'Rejected'
-type ReviewState = Record<string, { status: ReviewStatus; note: string }>
-
-function ReviewCell({
-  rowId,
-  review,
-  onUpdate,
-}: {
-  rowId: string
-  review: { status: ReviewStatus; note: string }
-  onUpdate: (rowId: string, patch: Partial<{ status: ReviewStatus; note: string }>) => void
-}) {
-  return (
-    <td className="min-w-72 px-4 py-2">
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-wrap gap-1">
-          {(['Pending', 'Approved', 'Needs changes', 'Rejected'] as ReviewStatus[]).map((status) => (
-            <Button
-              key={status}
-              type="button"
-              size="xs"
-              variant={review.status === status ? 'default' : 'outline'}
-              onClick={() => onUpdate(rowId, { status })}
-              className={review.status === status ? 'bg-blue-700 text-white hover:bg-blue-600' : undefined}
-            >
-              {status}
-            </Button>
-          ))}
-        </div>
-        <input
-          value={review.note}
-          onChange={(event) => onUpdate(rowId, { note: event.target.value })}
-          placeholder="Reviewer note..."
-          className="h-8 rounded-lg border border-input bg-background px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        />
-      </div>
-    </td>
-  )
-}
-
-function SectionHeader({ title }: { title: string }) {
-  return (
-    <tr className="bg-slate-100">
-      <td colSpan={5} className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-600">
-        {title}
-      </td>
-    </tr>
-  )
-}
-
-function SubsectionHeader({ title }: { title: string }) {
-  return (
-    <tr>
-      <td colSpan={5} className="px-6 py-1.5 text-xs font-medium text-muted-foreground">
-        {title}
-      </td>
-    </tr>
-  )
-}
-
-function LineItemRow({
-  item,
-  rowId,
-  review,
-  onUpdateReview,
-}: {
-  item: BSLineItem
-  rowId: string
-  review: { status: ReviewStatus; note: string }
-  onUpdateReview: (rowId: string, patch: Partial<{ status: ReviewStatus; note: string }>) => void
-}) {
-  return (
-    <tr className="hover:bg-slate-50">
-      <td className="px-4 py-2 pl-10 text-sm">{item.name}</td>
-      <AmountCell value={item.current} className="text-sm" />
-      <AmountCell value={item.prior} className="text-sm" />
-      <ChangeCell current={item.current} prior={item.prior} />
-      <ReviewCell rowId={rowId} review={review} onUpdate={onUpdateReview} />
-    </tr>
-  )
-}
-
-function SummaryRow({
-  item,
-  rowId,
-  review,
-  onUpdateReview,
-}: {
-  item: BSLineItem
-  rowId: string
-  review: { status: ReviewStatus; note: string }
-  onUpdateReview: (rowId: string, patch: Partial<{ status: ReviewStatus; note: string }>) => void
-}) {
-  return (
-    <tr className="border-t">
-      <td className="px-4 py-2 pl-6 text-sm font-medium">{item.name}</td>
-      <AmountCell value={item.current} className="text-sm font-medium" />
-      <AmountCell value={item.prior} className="text-sm font-medium" />
-      <ChangeCell current={item.current} prior={item.prior} />
-      <ReviewCell rowId={rowId} review={review} onUpdate={onUpdateReview} />
-    </tr>
-  )
-}
-
-function TotalRow({
-  item,
-  rowId,
-  review,
-  onUpdateReview,
-  className,
-}: {
-  item: BSLineItem
-  rowId: string
-  review: { status: ReviewStatus; note: string }
-  onUpdateReview: (rowId: string, patch: Partial<{ status: ReviewStatus; note: string }>) => void
-  className?: string
-}) {
-  return (
-    <tr className={cn('border-t-2 border-slate-300', className)}>
-      <td className="px-4 py-2.5 text-sm font-bold">{item.name}</td>
-      <AmountCell value={item.current} className="text-sm font-bold" />
-      <AmountCell value={item.prior} className="text-sm font-bold" />
-      <ChangeCell current={item.current} prior={item.prior} />
-      <ReviewCell rowId={rowId} review={review} onUpdate={onUpdateReview} />
-    </tr>
-  )
-}
-
-export function BalanceTable({ data, reviewThreshold = 0.7, reviews, onSaveReview, reviewReady, saving }: {
-  data: BalanceSheetData; reviewThreshold?: number; reviews: ReviewMap;
+export function BalanceTable({ data, allData = data, reviewThreshold = 0.7, reviews, onSaveReview, reviewReady, saving, active, resetKey, movements }: {
+  data: BalanceSheetData; allData?: BalanceSheetData; reviewThreshold?: number; reviews: ReviewMap;
   onSaveReview: (lineId: string, draft: ReviewDraft) => Promise<void>; reviewReady: boolean; saving: boolean;
+  active: ReportTab; resetKey: string; movements: ReactNode;
 }) {
-  const [reviewState, setReviewState] = useState<ReviewState>({})
+  const [reviewState, setReviewState] = useState<Record<string, ReviewDraft>>({})
   const [exportMode, setExportMode] = useState<ExportMode>('summary')
+  const [showAll, setShowAll] = useState(false)
+  const [detail, setDetail] = useState<'balances' | 'movements'>('balances')
   const flattenedRows = useMemo(() => flattenBalanceLines(data), [data])
-  const lowConfidenceRows = flattenedRows
-    .filter((row) => row.kind === 'Line' && row.confidence !== null && row.confidence <= reviewThreshold)
-    .sort((left, right) => (left.confidence ?? 1) - (right.confidence ?? 1))
+  const allRows = useMemo(() => flattenBalanceLines(allData), [allData])
+  const reviewRows = flattenedRows.filter(row => showAll || balanceNeedsReview(row, reviews))
+    .sort((a, b) => (a.confidence ?? 1) - (b.confidence ?? 1))
+  const balancesPage = useReportPagination(flattenedRows, resetKey)
+  const reviewsPage = useReportPagination(reviewRows, resetKey + showAll)
+  const money = (value: number) => value.toLocaleString('en-AU', { style: 'currency', currency: data.currency ?? 'AUD' })
 
-  function updateReview(rowId: string, patch: Partial<ReviewState[string]>) {
-    const base = reviewFor(rowId)
-    setReviewState((current) => ({
-      ...current,
-      [rowId]: {
-        ...base,
-        ...patch,
-      },
-    }))
+  function reviewFor(row: BalanceLine): ReviewDraft {
+    return reviewState[row.key] ?? reviews[row.key] ?? { status: 'Pending', note: '', category: row.account }
   }
-
-  function reviewFor(rowId: string): ReviewState[string] {
-    return reviewState[rowId] ?? reviews[rowId] ?? { status: 'Pending', note: '' }
+  function updateReview(row: BalanceLine, patch: Partial<ReviewDraft>) {
+    setReviewState(current => ({ ...current, [row.key]: { ...reviewFor(row), ...patch } }))
   }
-
   async function saveAllReviews() {
     for (const [lineId, draft] of Object.entries(reviewState)) {
-      const row = flattenedRows.find(line => line.key === lineId)
+      const row = allRows.find(line => line.key === lineId)
       if (!row) continue
       try {
         await onSaveReview(lineId, { ...draft, category: row.account })
@@ -212,7 +43,6 @@ export function BalanceTable({ data, reviewThreshold = 0.7, reviews, onSaveRevie
       } catch { break }
     }
   }
-
   function lineToExport(row: BalanceLine): ExportRow {
     const review = reviews[row.key] ?? { status: 'Pending', note: '' }
     return {
@@ -248,151 +78,28 @@ export function BalanceTable({ data, reviewThreshold = 0.7, reviews, onSaveRevie
     )
   }
 
-  return (
-    <CurrencyContext.Provider value={data.currency ?? 'AUD'}>
-    <div className="flex flex-col gap-5">
-      <div className="overflow-hidden rounded-lg border">
-      <div className="flex flex-col gap-2 border-b bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-sm font-semibold">Balance Sheet Detail</h2>
-          <p className="text-xs text-muted-foreground">Save decisions before exporting. Balance reviews are audit-only and do not change ledger amounts.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button size="sm" disabled={!reviewReady || saving || !Object.keys(reviewState).length} onClick={() => void saveAllReviews()}>Save reviews ({Object.keys(reviewState).length})</Button>
-          <ExportControls mode={exportMode} onModeChange={setExportMode} onExport={handleExport} disabled={!reviewReady || saving} />
-        </div>
+
+  return <>
+    <WorkspacePanel id="bs-report" value="transactions" active={active}>
+      <div className="flex flex-wrap items-center justify-between gap-3"><div className="flex flex-wrap gap-2"><Button variant={detail === 'balances' ? 'secondary' : 'outline'} aria-pressed={detail === 'balances'} onClick={() => setDetail('balances')}>Account balances</Button><Button variant={detail === 'movements' ? 'secondary' : 'outline'} aria-pressed={detail === 'movements'} onClick={() => setDetail('movements')}>Source movements</Button></div><ExportControls mode={exportMode} onModeChange={setExportMode} onExport={handleExport} disabled={!reviewReady || saving} /></div>
+      <div hidden={detail !== 'balances'} className="rounded-xl border bg-white p-4">
+        <h2 className="font-semibold">Balance Sheet Detail</h2><p className="mt-2 text-xs leading-5 text-slate-500">Current and comparison balances retain the existing report basis. Exports include every filtered balance, subtotal and total, not just this page. Review decisions are audit-only and do not change ledger amounts.</p>
+        <ReportPagination {...balancesPage} label="Account balances" />
+        <div className="max-h-[60vh] overflow-auto"><table className="w-full min-w-[750px] text-left text-sm"><thead className="border-b text-slate-500"><tr><th className="p-3">Account / section</th><th>Type</th><th className="text-right">{data.priorPeriod}</th><th className="text-right">Change</th><th className="text-right">{data.asAt}</th></tr></thead><tbody>{balancesPage.rows.map(row => <tr key={row.key} className={row.kind === 'Line' ? 'border-b' : 'border-b bg-slate-50 font-semibold'}><td className="p-3">{row.account}<p className="text-xs font-normal text-slate-500">{row.section} · {row.group}</p></td><td>{row.kind}</td><td className="text-right tabular-nums">{money(row.prior)}</td><td className="text-right tabular-nums">{money(row.current - row.prior)}</td><td className="text-right tabular-nums">{money(row.current)}</td></tr>)}</tbody></table></div>
       </div>
-      <table className="w-full">
-        <thead>
-          <tr className="border-b bg-slate-50">
-            <th className="w-1/2 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Account
-            </th>
-            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {data.asAt}
-            </th>
-            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {data.priorPeriod}
-            </th>
-            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Change
-            </th>
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Human Review
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-slate-100">
-          {/* ASSETS */}
-          <SectionHeader title="Assets" />
-          {data.assets.subsections.map((sub) => (
-            <Fragment key={sub.title}>
-              <SubsectionHeader title={sub.title} />
-              {sub.items.map((item) => {
-                const id = `assets|${sub.title}|line|${item.name}`
-                return <LineItemRow key={item.name} item={item} rowId={id} review={reviewFor(id)} onUpdateReview={updateReview} />
-              })}
-              <SummaryRow item={sub.total} rowId={`assets|${sub.title}|subtotal|${sub.total.name}`} review={reviewFor(`assets|${sub.title}|subtotal|${sub.total.name}`)} onUpdateReview={updateReview} />
-            </Fragment>
-          ))}
-          <TotalRow item={data.assets.total} rowId={`assets|total|${data.assets.total.name}`} review={reviewFor(`assets|total|${data.assets.total.name}`)} onUpdateReview={updateReview} />
-
-          {/* LIABILITIES */}
-          <SectionHeader title="Liabilities" />
-          {data.liabilities.subsections.map((sub) => (
-            <Fragment key={sub.title}>
-              <SubsectionHeader title={sub.title} />
-              {sub.items.map((item) => {
-                const id = `liabilities|${sub.title}|line|${item.name}`
-                return <LineItemRow key={item.name} item={item} rowId={id} review={reviewFor(id)} onUpdateReview={updateReview} />
-              })}
-              <SummaryRow item={sub.total} rowId={`liabilities|${sub.title}|subtotal|${sub.total.name}`} review={reviewFor(`liabilities|${sub.title}|subtotal|${sub.total.name}`)} onUpdateReview={updateReview} />
-            </Fragment>
-          ))}
-          <TotalRow item={data.liabilities.total} rowId={`liabilities|total|${data.liabilities.total.name}`} review={reviewFor(`liabilities|total|${data.liabilities.total.name}`)} onUpdateReview={updateReview} />
-
-          {/* NET ASSETS */}
-          <TotalRow item={data.netAssets} rowId={`net-assets|${data.netAssets.name}`} review={reviewFor(`net-assets|${data.netAssets.name}`)} onUpdateReview={updateReview} className="border-t-2 border-slate-400 bg-slate-50" />
-
-          {/* EQUITY */}
-          <SectionHeader title="Equity" />
-          {data.equity.items.map((item) => {
-            const id = `equity|line|${item.name}`
-            return <LineItemRow key={item.name} item={item} rowId={id} review={reviewFor(id)} onUpdateReview={updateReview} />
-          })}
-          <TotalRow item={data.equity.total} rowId={`equity|total|${data.equity.total.name}`} review={reviewFor(`equity|total|${data.equity.total.name}`)} onUpdateReview={updateReview} />
-        </tbody>
-        </table>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Human-in-the-loop Review (Low Confidence)</CardTitle>
-          <CardDescription>
-            Balance-sheet lines at or below confidence {reviewThreshold.toFixed(2)}. Save reviews to persist decisions and include them in exports.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="max-h-80 overflow-auto">
-            {lowConfidenceRows.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No items below threshold.</p>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Section</TableHead>
-                    <TableHead>Account</TableHead>
-                    <TableHead className="text-right">{data.asAt}</TableHead>
-                    <TableHead className="text-right">Confidence</TableHead>
-                    <TableHead>Reason</TableHead>
-                    <TableHead>Decision</TableHead>
-                    <TableHead>Reviewer Note</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {lowConfidenceRows.map((row) => {
-                    const review = reviewFor(row.key)
-                    return (
-                      <TableRow key={row.key}>
-                        <TableCell>{row.section}</TableCell>
-                        <TableCell>{row.account}</TableCell>
-                        <TableCell className="text-right tabular-nums">{fmtAUD(row.current, data.currency)}</TableCell>
-                        <TableCell className="text-right tabular-nums">{row.confidence?.toFixed(2)}</TableCell>
-                        <TableCell className="max-w-64 text-xs text-muted-foreground">{row.reason}</TableCell>
-                        <TableCell>
-                          <div className="flex min-w-40 flex-wrap gap-1">
-                            {(['Approved', 'Needs changes', 'Rejected'] as ReviewStatus[]).map((status) => (
-                              <Button
-                                key={status}
-                                type="button"
-                                size="xs"
-                                variant={review.status === status ? 'default' : 'outline'}
-                                onClick={() => updateReview(row.key, { status })}
-                                className={review.status === status ? 'bg-blue-700 text-white hover:bg-blue-600' : undefined}
-                              >
-                                {status}
-                              </Button>
-                            ))}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <input
-                            value={review.note}
-                            onChange={(event) => updateReview(row.key, { note: event.target.value })}
-                            placeholder="Add note..."
-                            className="h-8 min-w-48 rounded-lg border border-input bg-background px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-                          />
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })}
-                </TableBody>
-              </Table>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-    </CurrencyContext.Provider>
-  )
+      <div hidden={detail !== 'movements'}>{movements}</div>
+    </WorkspacePanel>
+    <WorkspacePanel id="bs-report" value="review" active={active}>
+      <section className="rounded-xl border bg-white p-4">
+        <div className="flex flex-wrap items-start justify-between gap-4"><div><h2 className="font-semibold">Balance-sheet review</h2><p className="mt-2 max-w-2xl text-sm text-slate-500">Unconfirmed account balances, including low-confidence lines (≤ {reviewThreshold.toFixed(2)}). Save decisions to browser audit history; amounts remain unchanged.</p></div><Button disabled={!reviewReady || saving || !Object.keys(reviewState).length} onClick={() => void saveAllReviews()}>Save reviews ({Object.keys(reviewState).length})</Button></div>
+        <label className="mt-4 flex items-center gap-2 text-sm"><input type="checkbox" checked={showAll} onChange={event => setShowAll(event.target.checked)} />Show all balances, including approved and calculated totals</label>
+        <ReportPagination {...reviewsPage} label="Balance review" />
+        <div className="max-h-[60vh] overflow-auto"><table className="w-full min-w-[1000px] text-left text-sm"><thead className="border-b text-slate-500"><tr><th className="p-3">Account</th><th className="text-right">{data.asAt}</th><th className="p-3">Confidence / evidence</th><th>Decision</th><th>Reviewer note</th></tr></thead><tbody>{reviewsPage.rows.map(row => {
+          const draft = reviewFor(row)
+          return <tr key={row.key} className="border-b"><td className="p-3">{row.account}<p className="text-xs text-slate-500">{row.section} · {row.kind}</p></td><td className="text-right tabular-nums">{money(row.current)}</td><td className="max-w-72 p-3 text-xs"><p className={row.confidence !== null && row.confidence <= reviewThreshold ? 'font-semibold text-amber-700' : ''}>{row.confidence === null ? 'Calculated total' : row.confidence.toFixed(2)}</p>{row.reason}</td><td className="p-2"><select aria-label={`Decision for ${row.account}`} value={draft.status} onChange={event => updateReview(row, { status: event.target.value as ReviewStatus })} className="min-h-11 rounded-lg border bg-white px-2">{(['Pending', 'Approved', 'Needs changes', 'Rejected'] as const).map(status => <option key={status}>{status}</option>)}</select><p className="mt-1 text-xs text-slate-500">{reviewState[row.key] ? 'Unsaved changes' : reviews[row.key] ? `Saved · revision ${reviews[row.key].revision}` : 'Not reviewed'}</p></td><td><input aria-label={`Review note for ${row.account}`} value={draft.note} onChange={event => updateReview(row, { note: event.target.value })} className="min-h-11 w-64 rounded-lg border px-3" placeholder="Add evidence note…" /></td></tr>
+        })}</tbody></table></div>
+        {!reviewRows.length && <p className="py-4 text-sm text-slate-500">No unconfirmed balances in this selection. Enable Show all to see saved decisions.</p>}
+      </section>
+    </WorkspacePanel>
+  </>
 }

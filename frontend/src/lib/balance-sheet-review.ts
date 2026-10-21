@@ -1,5 +1,10 @@
 import type { BalanceSheetData } from "./balance-sheet-mock"
 import type { ReportData } from "./report-data"
+import type { ReviewMap } from './mapping-reviews'
+
+export function balanceNeedsReview(line: BalanceLine, reviews: ReviewMap): boolean {
+  return line.kind === 'Line' && reviews[line.key]?.status !== 'Approved'
+}
 
 export function balanceReviewReport(data: BalanceSheetData, from: string, to: string): ReportData {
   const lines = flattenBalanceLines(data)

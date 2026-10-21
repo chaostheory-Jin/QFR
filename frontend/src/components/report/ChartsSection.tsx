@@ -25,7 +25,7 @@ function ChartCard({ title, children }: { title: string; children: ReactNode }) 
   )
 }
 
-export function ChartsSection({ rows, topN, incomeCategories }: { rows: RawRow[]; topN: number; incomeCategories: string[] }) {
+export function ChartsSection({ rows, topN, incomeCategories, mode = 'all' }: { mode?: 'all' | 'financial' | 'quality'; rows: RawRow[]; topN: number; incomeCategories: string[] }) {
   const top10Data = buildCategoryChartData(rows, Math.min(10, topN))
   const salesMonthlyTrend = buildSalesMonthlyTrend(rows, incomeCategories)
   const allSalesFiltered = rows.length > 0 && rows.every((r) => incomeCategories.includes(r.MappedCategory))
@@ -55,7 +55,7 @@ export function ChartsSection({ rows, topN, incomeCategories }: { rows: RawRow[]
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-    <ChartCard title="Mapped vs Unmapped">
+    {mode !== 'financial' && <><ChartCard title="Mapped vs Unmapped">
         <ResponsiveContainer width="100%" height={380}>
           <PieChart>
             <Pie data={donutData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius="45%" outerRadius="70%" label={({ name, percent }: { name?: string; percent?: number }) => `${name ?? ''} ${((percent ?? 0) * 100).toFixed(0)}%`}>
@@ -80,7 +80,8 @@ export function ChartsSection({ rows, topN, incomeCategories }: { rows: RawRow[]
         </ResponsiveContainer>
       </ChartCard>
 
-      <ChartCard title={
+      </>}
+      {mode !== 'quality' && <><ChartCard title={
         isSingleCategory && allSalesFiltered
           ? `Monthly Trend: ${top10Data[0]?.name} — Actual vs Budget`
           : isSingleCategory
@@ -142,6 +143,7 @@ export function ChartsSection({ rows, topN, incomeCategories }: { rows: RawRow[]
           </ResponsiveContainer>
         </ChartCard>
       )}
+    </>}
     </div>
   )
 }

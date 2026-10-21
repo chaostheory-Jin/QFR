@@ -2,8 +2,12 @@
 
 import { useMemo, useState } from 'react'
 import { REPORT_DATA } from '@/lib/report-data-mock'
-import { getFilteredRows, computeMetrics, type FilterState } from '@/lib/report-utils'
+import { getFilteredRows, computeMetrics, type FilterState, requiresReview } from '@/lib/report-utils'
 import { FilterPanel } from '@/components/report/FilterPanel'
+import { WorkspacePanel } from '@/components/WorkspaceTabs'
+import { ReportNavigation, ReportFilters, type ReportTab } from '@/components/report/ReportWorkspace'
+import { ProfitOverview } from '@/components/report/ProfitOverview'
+import { Button } from '@/components/ui/button'
 import { MetricCards } from '@/components/report/MetricCards'
 import { ChartsSection } from '@/components/report/ChartsSection'
 import { DataTables } from '@/components/report/DataTables'
@@ -38,6 +42,7 @@ export default function ProfitLossPage() {
 }
 
 function AccountingProfitLoss({ source, setSource }: { source: DataSource; setSource: (source: ReportSource) => void }) {
+  const [tab, setTab] = useState<ReportTab>('overview')
   const reportData = source === 'quickbooks' ? QUICKBOOKS_REPORT_DATA : REPORT_DATA
   const review = useMappingReviews(source, reportData)
   const [filtersBySource, setFiltersBySource] = useState<Record<typeof source, FilterState>>(() => ({
@@ -51,6 +56,8 @@ function AccountingProfitLoss({ source, setSource }: { source: DataSource; setSo
   const allTypes = useMemo(() => Array.from(new Set(reportData.raw_data.map((row) => row.Type))).sort(), [reportData])
   const allAccounts = useMemo(() => Array.from(new Set(reportData.raw_data.map((row) => row.AccountName))).sort(), [reportData])
   const filteredRows = useMemo(() => getFilteredRows(review.rows, filters, reportData.review_threshold), [review.rows, reportData.review_threshold, filters])
+  const resetKey = JSON.stringify([source, filters.startDate, filters.endDate, filters.search, [...filters.selectedTypes], [...filters.selectedAccounts], filters.onlyUnmapped, filters.onlyLowConf])
+  const reviewCount = filteredRows.filter(row => requiresReview(row, reportData.review_threshold) && row.ReviewStatus !== 'Approved').length
   const metrics = useMemo(() => computeMetrics(filteredRows), [filteredRows])
 
   function changeSource(nextSource: ReportSource) {
@@ -66,18 +73,22 @@ function AccountingProfitLoss({ source, setSource }: { source: DataSource; setSo
         <div>
           <h1 className="text-2xl font-bold">Profit and Loss Report</h1>
           <p className="text-sm text-muted-foreground">
-            {company} — {source === 'quickbooks' ? 'QuickBooks downloaded data' : 'Xero demo data'} — {reportData.meta.report_from} to {reportData.meta.report_to} ({currency})
+            {company} — {source === 'quickbooks' ? 'QuickBooks downloaded data' : 'Xero demo data'} — {filters.startDate} to {filters.endDate} ({currency})
           </p>
         </div>
         <DataSourceSelect value={source} onChange={changeSource} />
       </div>
       <div className="flex flex-col gap-5">
         {review.error && <p role="alert" className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800">{review.error}</p>}
-        <FilterPanel filters={filters} allTypes={allTypes} allAccounts={allAccounts} onChange={setFilters} onReset={() => setFilters(defaultFilters(reportData))} />
-        <MetricCards metrics={metrics} />
-        <TraceLink href={traceHref('profit-loss', source, filters)} />
-        <ChartsSection rows={filteredRows} topN={filters.topN} incomeCategories={reportData.income_categories} />
-        <DataTables key={`tables-${source}`} rows={filteredRows} reviewThreshold={reportData.review_threshold} categories={reportData.allowed_categories} reviews={review.reviews} onSaveReview={review.save} reviewReady={review.ready} saving={review.saving} />
+        <ReportNavigation id="pl-report" value={tab} onChange={setTab} reviewCount={reviewCount} />
+        <ReportFilters summary={`${filters.startDate} → ${filters.endDate} · ${filteredRows.length} lines`}><FilterPanel filters={filters} allTypes={allTypes} allAccounts={allAccounts} onChange={setFilters} onReset={() => setFilters(defaultFilters(reportData))} /></ReportFilters>
+<WorkspacePanel id="pl-report" value="overview" active={tab}>
+          <ProfitOverview rows={filteredRows} allRows={review.rows} incomeCategories={reportData.income_categories} filters={filters} coverage={reportData.meta} threshold={reportData.review_threshold} currency={currency} />
+          <div className="flex flex-wrap gap-3"><Button onClick={() => setTab('transactions')}>View transactions</Button><Button variant="outline" onClick={() => setTab('review')}>Review {reviewCount} flagged lines</Button></div>
+          <TraceLink href={traceHref('profit-loss', source, filters)} />
+        </WorkspacePanel>
+        <WorkspacePanel id="pl-report" value="analysis" active={tab}>{tab === 'analysis' && <ChartsSection mode="financial" rows={filteredRows} topN={filters.topN} incomeCategories={reportData.income_categories} />}</WorkspacePanel>
+        <DataTables active={tab} resetKey={resetKey} currency={currency} reviewSummary={<><MetricCards metrics={metrics} /><details className="rounded-xl border bg-white p-4"><summary className="cursor-pointer text-sm font-semibold">Mapping quality & confidence charts</summary>{tab === 'review' && <ChartsSection mode="quality" rows={filteredRows} topN={filters.topN} incomeCategories={reportData.income_categories} />}</details></>} key={`tables-${source}`} rows={filteredRows} reviewThreshold={reportData.review_threshold} categories={reportData.allowed_categories} reviews={review.reviews} onSaveReview={review.save} reviewReady={review.ready} saving={review.saving} />
       </div>
     </main>
   )

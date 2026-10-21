@@ -2,6 +2,11 @@
 import { useMemo, useState } from 'react'
 import { filterBalanceSheet, defaultBSFilters, type BSFilterState } from '@/lib/balance-sheet-filter'
 import { BalanceSheetFilterPanel } from '@/components/balance-sheet/BalanceSheetFilterPanel'
+import { WorkspacePanel } from '@/components/WorkspaceTabs'
+import { ReportNavigation, ReportFilters, type ReportTab } from '@/components/report/ReportWorkspace'
+import { Button } from '@/components/ui/button'
+import { BalanceMovements } from '@/components/balance-sheet/BalanceMovements'
+import { flattenBalanceLines, balanceNeedsReview } from '@/lib/balance-sheet-review'
 import { SummaryCards } from '@/components/balance-sheet/SummaryCards'
 import { BalanceTable } from '@/components/balance-sheet/BalanceTable'
 import { FinancialAnalysisTables } from '@/components/balance-sheet/FinancialAnalysisTables'
@@ -41,6 +46,8 @@ export default function BalanceSheetPage() {
 }
 
 function AccountingBalanceSheet({ source, setSource }: { source: DataSource; setSource: (source: ReportSource) => void }) {
+  const [tab, setTab] = useState<ReportTab>('overview')
+  const [analysis, setAnalysis] = useState<'figures' | 'ratios' | 'aging'>('figures')
   const [filtersBySource, setFiltersBySource] = useState<Record<typeof source, BSFilterState>>(() => ({
     xero: filtersForSource('xero'),
     quickbooks: filtersForSource('quickbooks'),
@@ -59,6 +66,8 @@ function AccountingBalanceSheet({ source, setSource }: { source: DataSource; set
   const data = useMemo(() => filterBalanceSheet(baseData, filters), [baseData, filters])
   const reviewData = useMemo(() => balanceReviewReport(baseData, filters.startDate, filters.endDate), [baseData, filters.startDate, filters.endDate])
   const review = useMappingReviews(source, reviewData, { reportKind: 'balance-sheet', startDate: filters.startDate, endDate: filters.endDate })
+  const resetKey = JSON.stringify([source, filters.startDate, filters.endDate, filters.search, [...filters.selectedAccounts], filters.showAssets, filters.showLiabilities, filters.showEquity])
+  const reviewCount = flattenBalanceLines(data).filter(row => balanceNeedsReview(row, review.reviews)).length
   const quickBooksCashPeriods = useMemo(() => buildQuickBooksCashPeriods(), [])
 
   function changeSource(nextSource: ReportSource) {
@@ -77,31 +86,39 @@ function AccountingBalanceSheet({ source, setSource }: { source: DataSource; set
         <DataSourceSelect value={source} onChange={changeSource} />
       </div>
       <div className="flex flex-col gap-5">
-        <BalanceSheetFilterPanel
+        <ReportNavigation id="bs-report" value={tab} onChange={setTab} reviewCount={reviewCount} />
+        <ReportFilters summary={`${filters.startDate} → ${filters.endDate} · Current account selection`}><BalanceSheetFilterPanel
         filters={filters}
         data={baseData}
         onChange={setFilters}
         onReset={() => setFilters(filtersForSource(source))}
-      />
-        <CashPosition
+      /></ReportFilters>
+        <WorkspacePanel id="bs-report" value="overview" active={tab}>
+        <SummaryCards data={data} />
+        <p className="rounded-xl border bg-white p-4 text-sm text-slate-600">Current filtered balances · {data.currency ?? 'AUD'}. Changes compare {data.priorPeriod} with {data.asAt}. {source === 'quickbooks' ? 'Comparison is the opening before the selected start date.' : 'Xero demo comparison uses its fixed 31 Dec 2024 snapshot, not a calculated opening for each selected date.'}</p>
+        <div className="flex flex-wrap gap-3"><Button onClick={() => setTab('transactions')}>View balances & movements</Button><Button variant="outline" onClick={() => setTab('review')}>Review {reviewCount} unconfirmed balances</Button></div>
+        <TraceLink href={traceHref('balance-sheet', source, filters)} />
+        </WorkspacePanel>
+        <WorkspacePanel id="bs-report" value="analysis" active={tab}>
+        <div className="flex flex-wrap gap-2">{(['figures', 'ratios', 'aging'] as const).map(item => <Button key={item} variant={analysis === item ? 'secondary' : 'outline'} aria-pressed={analysis === item} onClick={() => setAnalysis(item)}>{item === 'figures' ? 'Balance composition' : item === 'ratios' ? 'Financial ratios' : 'Cash & aging'}</Button>)}</div>
+        {tab === 'analysis' && analysis === 'figures' && <BalanceSheetFigures data={data} />}
+        {tab === 'analysis' && analysis === 'ratios' && <FinancialAnalysisTables data={data} />}
+        {tab === 'analysis' && analysis === 'aging' && <><p className="text-xs text-slate-500">Cash and aging use the source-level period/snapshot; account search and section filters do not narrow these panels.</p><CashPosition
           startDate={filters.startDate}
           endDate={filters.endDate}
           periods={source === 'quickbooks' ? quickBooksCashPeriods : undefined}
           currency={baseData.currency}
           isIllustrative={source === 'xero'}
         />
-        <SummaryCards data={data} />
-        <TraceLink href={traceHref('balance-sheet', source, filters)} />
-        <BalanceSheetFigures data={data} />
-        <FinancialAnalysisTables data={data} />
         <AgingAnalysis
           startDate={filters.startDate}
           endDate={filters.endDate}
           buckets={source === 'quickbooks' ? QUICKBOOKS_AGING : undefined}
           currency={baseData.currency}
-        />
+        /></>}
+        </WorkspacePanel>
         {review.error && <p role="alert" className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800">{review.error}</p>}
-        <BalanceTable key={`${source}-${filters.startDate}-${filters.endDate}`} data={data} reviews={review.reviews} onSaveReview={review.save} reviewReady={review.ready} saving={review.saving} />
+        <BalanceTable active={tab} resetKey={resetKey} allData={baseData} movements={<BalanceMovements data={data} source={source} from={filters.startDate} to={filters.endDate} />} key={`${source}-${filters.startDate}-${filters.endDate}`} data={data} reviews={review.reviews} onSaveReview={review.save} reviewReady={review.ready} saving={review.saving} />
       </div>
     </main>
   )

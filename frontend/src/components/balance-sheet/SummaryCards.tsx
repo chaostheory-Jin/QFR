@@ -21,7 +21,7 @@ export function SummaryCards({ data }: { data: BalanceSheetData }) {
   ]
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {cards.map(({ label, item, warn }) => (
         <Card key={label}>
           <CardHeader className="pb-1 pt-4">
@@ -31,12 +31,12 @@ export function SummaryCards({ data }: { data: BalanceSheetData }) {
             </CardTitle>
           </CardHeader>
           <CardContent className="pb-4">
-            <p className={cn('text-2xl font-bold', item.current < 0 && 'text-red-600')}>
+            <p className={cn('break-words text-2xl font-bold', item.current < 0 && 'text-red-600')}>
               {fmtCurrency(item.current, currency)}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {item.prior === 0 ? `Opening at ${data.priorPeriod}: zero` : `Prior: ${fmtCurrency(item.prior, currency)}`}
-            </p>
+            </p><p className="mt-2 text-xs text-slate-500">Change: {fmtCurrency(item.current - item.prior, currency)}</p>
           </CardContent>
         </Card>
       ))}

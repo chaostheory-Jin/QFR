@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button'
 import { ExportControls, type ExportMode } from '@/components/ExportControls'
 import { exportRowsToExcel, type ExportRow } from '@/lib/excel-export'
 import type { RawRow } from '@/lib/report-data'
+import { WorkspacePanel } from '@/components/WorkspaceTabs'
+import { ReportPagination, useReportPagination, type ReportTab } from './ReportWorkspace'
+import type { ReactNode } from 'react'
 import { requiresReview } from '@/lib/report-utils'
 import type { ReviewDraft, ReviewMap, ReviewStatus } from '@/lib/mapping-reviews'
 
@@ -15,6 +18,10 @@ function fmt(v: number) {
 }
 
 type Props = {
+  active: ReportTab
+  resetKey: string
+  reviewSummary?: ReactNode
+  currency?: string
   rows: RawRow[]
   reviewThreshold: number
   categories: string[]
@@ -24,7 +31,7 @@ type Props = {
   saving: boolean
 }
 
-export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveReview, reviewReady, saving }: Props) {
+export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveReview, reviewReady, saving, active, resetKey, reviewSummary, currency = 'AUD' }: Props) {
   const [drafts, setDrafts] = useState<Record<string, ReviewDraft>>({})
   const [showAll, setShowAll] = useState(false)
   const [exportMode, setExportMode] = useState<ExportMode>('summary')
@@ -32,6 +39,9 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
   const reviewRows = rowsWithKeys
     .filter(({ row, key }) => showAll || requiresReview(row, reviewThreshold) || Boolean(reviews[key]))
     .sort((a, b) => a.row.Confidence - b.row.Confidence)
+
+  const transactionsPage = useReportPagination(rows, resetKey)
+  const reviewPage = useReportPagination(reviewRows, resetKey + showAll)
 
   function reviewFor(key: string): ReviewDraft {
     const row = rowsWithKeys.find(item => item.key === key)?.row
@@ -150,16 +160,18 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
 
   return (
     <div className="flex flex-col gap-4">
-      <Card>
+      <WorkspacePanel id="pl-report" value="transactions" active={active}><Card>
         <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <CardTitle>Profit &amp; Loss Detail</CardTitle>
-            <CardDescription>Saved review categories drive this report. Unsaved drafts do not affect totals. Showing first 200 rows.</CardDescription>
+            <CardDescription>Saved review categories drive this report. Unsaved drafts do not affect totals. Exports include all filtered rows, not just this page.</CardDescription>
           </div>
           <ExportControls mode={exportMode} onModeChange={setExportMode} onExport={handleExport} disabled={!reviewReady || saving} />
         </CardHeader>
         <CardContent>
-          <div className="max-h-80 overflow-auto">
+          <ReportPagination {...transactionsPage} label="Transactions" />
+          {!rows.length && <p className="py-4 text-sm text-slate-500">No transactions match these filters.</p>}
+          <div className="max-h-[60vh] overflow-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -169,7 +181,7 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {rows.slice(0, 200).map((r, i) => (
+                {transactionsPage.rows.map((r, i) => (
                   <TableRow key={i}>
                     <TableCell>{r.Type}</TableCell>
                     <TableCell className="max-w-[100px] truncate">{String(r.InvoiceNumber)}</TableCell>
@@ -177,8 +189,8 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                     <TableCell>{r.Contact}</TableCell>
                     <TableCell>{r.AccountName}</TableCell>
                     <TableCell>{r.MappedCategory}</TableCell>
-                    <TableCell className="text-right">${fmt(r.Amount)}</TableCell>
-                    <TableCell className="text-right">{r.Budget !== undefined ? `$${fmt(r.Budget)}` : '—'}</TableCell>
+                    <TableCell className="text-right">{currency} {fmt(r.Amount)}</TableCell>
+                    <TableCell className="text-right">{r.Budget !== undefined ? `${currency} ${fmt(r.Budget)}` : '—'}</TableCell>
                     <TableCell className="max-w-[200px] truncate text-xs text-muted-foreground">{r.Reason}</TableCell>
                   </TableRow>
                 ))}
@@ -186,18 +198,19 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
             </Table>
           </div>
         </CardContent>
-      </Card>
+      </Card></WorkspacePanel>
 
-      <Card>
+      <WorkspacePanel id="pl-report" value="review" active={active}>{reviewSummary}<Card>
         <CardHeader>
           <CardTitle>Human-in-the-loop Review</CardTitle>
           <CardDescription>
-            Source-flagged, unmapped or confidence ≤ {reviewThreshold.toFixed(2)} lines. Save a decision to update the report and its server-side audit history.
+            Source-flagged, unmapped or confidence ≤ {reviewThreshold.toFixed(2)} lines. Save a decision to update the report and its browser-stored audit history.
           </CardDescription>
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={showAll} onChange={event => setShowAll(event.target.checked)} />Review all lines</label>
         </CardHeader>
         <CardContent>
-          <div className="max-h-80 overflow-auto">
+          <ReportPagination {...reviewPage} label="Review" />
+          <div className="max-h-[60vh] overflow-auto">
             {reviewRows.length === 0 ? (
               <p className="text-sm text-muted-foreground">No items below threshold.</p>
             ) : (
@@ -215,7 +228,7 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {reviewRows.map(({ row: r, key }) => {
+                  {reviewPage.rows.map(({ row: r, key }) => {
                     const review = reviewFor(key)
                     return (
                     <TableRow key={key}>
@@ -224,7 +237,7 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                       <TableCell>{r.Contact}</TableCell>
                       <TableCell>{r.AccountName}</TableCell>
                       <TableCell>{r.ProposedCategory ?? r.MappedCategory}<p className="mt-1 max-w-64 text-xs text-muted-foreground">{r.ReviewReason}</p></TableCell>
-                      <TableCell className="text-right">${fmt(r.Amount)}</TableCell>
+                      <TableCell className="text-right">{currency} {fmt(r.Amount)}</TableCell>
                       <TableCell className="text-right">{r.Confidence.toFixed(2)}</TableCell>
                       <TableCell>
                         <div className="flex min-w-40 flex-wrap gap-1">
@@ -244,6 +257,7 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                       </TableCell>
                       <TableCell>
                         <input
+                          aria-label={`Review note for ${key}`}
                           value={review.note}
                           onChange={(event) => updateReview(key, { note: event.target.value })}
                           placeholder="Add note..."
@@ -267,7 +281,7 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
             )}
           </div>
         </CardContent>
-      </Card>
+      </Card></WorkspacePanel>
     </div>
   )
 }
