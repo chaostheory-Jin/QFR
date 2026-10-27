@@ -3,7 +3,8 @@
 import { useMemo, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
+import { DraftActionBar, SaveButton, useReviewDrafts } from '@/components/ReviewSave'
+import { CopyReference, ExpandableText, TableViewport } from '@/components/TableReading'
 import { ExportControls, type ExportMode } from '@/components/ExportControls'
 import { exportRowsToExcel, type ExportRow } from '@/lib/excel-export'
 import type { RawRow } from '@/lib/report-data'
@@ -32,7 +33,9 @@ type Props = {
 }
 
 export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveReview, reviewReady, saving, active, resetKey, reviewSummary, currency = 'AUD' }: Props) {
-  const [drafts, setDrafts] = useState<Record<string, ReviewDraft>>({})
+  const editor = useReviewDrafts<ReviewDraft>()
+  const { drafts } = editor
+  const locked = saving || editor.busy
   const [showAll, setShowAll] = useState(false)
   const [exportMode, setExportMode] = useState<ExportMode>('summary')
   const rowsWithKeys = useMemo(() => rows.map(row => ({ row, key: row.LineID! })), [rows])
@@ -50,21 +53,11 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
 
   function updateReview(key: string, patch: Partial<ReviewDraft>) {
     const base = reviewFor(key)
-    setDrafts((current) => ({
-      ...current,
-      [key]: { ...base, ...patch },
-    }))
+    editor.update(key, { ...base, ...patch })
   }
 
-  async function saveReview(key: string) {
-    try {
-      await onSaveReview(key, reviewFor(key))
-      setDrafts(current => {
-        const next = { ...current }
-        delete next[key]
-        return next
-      })
-    } catch { /* The page displays the server error; keep the unsaved draft. */ }
+  function saveReview(key: string) {
+    return editor.save([[key, reviewFor(key)]], onSaveReview)
   }
 
   function buildSummaryExport(): ExportRow[] {
@@ -171,7 +164,7 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
         <CardContent>
           <ReportPagination {...transactionsPage} label="Transactions" />
           {!rows.length && <p className="py-4 text-sm text-slate-500">No transactions match these filters.</p>}
-          <div className="max-h-[60vh] overflow-auto">
+          <TableViewport label="Profit and loss transactions" resetKey={resetKey + transactionsPage.page}>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -181,22 +174,22 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {transactionsPage.rows.map((r, i) => (
-                  <TableRow key={i}>
+                {transactionsPage.rows.map((r) => (
+                  <TableRow key={r.LineID}>
                     <TableCell>{r.Type}</TableCell>
-                    <TableCell className="max-w-[100px] truncate">{String(r.InvoiceNumber)}</TableCell>
+                    <TableCell><CopyReference value={String(r.InvoiceNumber)} /></TableCell>
                     <TableCell>{r.Date}</TableCell>
                     <TableCell>{r.Contact}</TableCell>
                     <TableCell>{r.AccountName}</TableCell>
                     <TableCell>{r.MappedCategory}</TableCell>
                     <TableCell className="text-right">{currency} {fmt(r.Amount)}</TableCell>
                     <TableCell className="text-right">{r.Budget !== undefined ? `${currency} ${fmt(r.Budget)}` : '—'}</TableCell>
-                    <TableCell className="max-w-[200px] truncate text-xs text-muted-foreground">{r.Reason}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground"><ExpandableText text={r.Reason} /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          </div>
+          </TableViewport>
         </CardContent>
       </Card></WorkspacePanel>
 
@@ -210,21 +203,21 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
         </CardHeader>
         <CardContent>
           <ReportPagination {...reviewPage} label="Review" />
-          <div className="max-h-[60vh] overflow-auto">
+          <TableViewport label="Profit and loss reviews" resetKey={resetKey + reviewPage.page}>
             {reviewRows.length === 0 ? (
               <p className="text-sm text-muted-foreground">No items below threshold.</p>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Type</TableHead><TableHead>Date</TableHead><TableHead>Contact</TableHead>
+                    <TableHead>Type</TableHead><TableHead>Invoice</TableHead><TableHead>Date</TableHead><TableHead>Contact</TableHead>
                     <TableHead>Account</TableHead><TableHead>AI proposal / Review reason</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
                     <TableHead className="text-right">Confidence</TableHead>
                     <TableHead>Decision</TableHead>
                     <TableHead>Reviewer Note</TableHead>
                     <TableHead>Reviewed Category</TableHead>
-                    <TableHead>Save</TableHead>
+                    <TableHead className="row-action">Save</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -233,6 +226,7 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                     return (
                     <TableRow key={key}>
                       <TableCell>{r.Type}</TableCell>
+                      <TableCell><CopyReference value={String(r.InvoiceNumber)} /></TableCell>
                       <TableCell>{r.Date}</TableCell>
                       <TableCell>{r.Contact}</TableCell>
                       <TableCell>{r.AccountName}</TableCell>
@@ -240,37 +234,27 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                       <TableCell className="text-right">{currency} {fmt(r.Amount)}</TableCell>
                       <TableCell className="text-right">{r.Confidence.toFixed(2)}</TableCell>
                       <TableCell>
-                        <div className="flex min-w-40 flex-wrap gap-1">
-                          {(['Pending', 'Approved', 'Needs changes', 'Rejected'] as ReviewStatus[]).map((status) => (
-                            <Button
-                              key={status}
-                              type="button"
-                              size="xs"
-                              variant={review.status === status ? 'default' : 'outline'}
-                              onClick={() => updateReview(key, { status })}
-                              className={review.status === status ? 'bg-blue-700 text-white hover:bg-blue-600' : undefined}
-                            >
-                              {status}
-                            </Button>
-                          ))}
-                        </div>
+                        <select disabled={locked} aria-label={`Decision for ${key}`} value={review.status} onChange={event => updateReview(key, { status: event.target.value as ReviewStatus })} className="min-h-9 rounded-lg border bg-white px-3">
+                          {(['Pending', 'Approved', 'Needs changes', 'Rejected'] as const).map(status => <option key={status}>{status}</option>)}
+                        </select>
                       </TableCell>
                       <TableCell>
                         <input
+                          disabled={locked}
                           aria-label={`Review note for ${key}`}
                           value={review.note}
                           onChange={(event) => updateReview(key, { note: event.target.value })}
                           placeholder="Add note..."
-                          className="h-8 min-w-48 rounded-lg border border-input bg-background px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                          className="min-h-9 min-w-48 rounded-lg border border-input bg-background px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                         />
                       </TableCell>
                       <TableCell>
-                        <select aria-label={`Reviewed category for ${r.InvoiceNumber}`} value={review.category} onChange={event => updateReview(key, { category: event.target.value })} className="max-w-72 rounded border p-2 text-sm">
+                        <select disabled={locked} aria-label={`Reviewed category for ${r.InvoiceNumber}`} value={review.category} onChange={event => updateReview(key, { category: event.target.value })} className="max-w-72 rounded border p-2 text-sm">
                           {categories.map(category => <option key={category} value={category}>{category}</option>)}
                         </select>
                       </TableCell>
-                      <TableCell>
-                        <Button type="button" size="xs" disabled={!reviewReady || saving} onClick={() => void saveReview(key)}>Save review</Button>
+                      <TableCell className="row-action">
+                        <SaveButton phase={editor.activeKey === key ? editor.phase : 'idle'} disabled={!reviewReady || locked} onClick={() => void saveReview(key)} />
                         <p className="mt-1 text-xs text-muted-foreground">{drafts[key] ? 'Unsaved changes' : reviews[key] ? `Saved · revision ${reviews[key].revision}` : 'Not reviewed'}</p>
                       </TableCell>
                     </TableRow>
@@ -279,7 +263,8 @@ export function DataTables({ rows, reviewThreshold, categories, reviews, onSaveR
                 </TableBody>
               </Table>
             )}
-          </div>
+          </TableViewport>
+          <DraftActionBar onDiscard={() => editor.discard()} count={editor.count} phase={editor.phase} message={editor.message} disabledReason={!reviewReady ? 'Wait for saved reviews to load.' : saving && !editor.busy ? 'Another save is in progress.' : undefined} onSave={() => void editor.save(Object.entries(drafts), onSaveReview)} />
         </CardContent>
       </Card></WorkspacePanel>
     </div>

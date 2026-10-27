@@ -1,5 +1,6 @@
 'use client'
 
+import { CopyReference, ExpandableText, TableViewport } from '@/components/TableReading'
 import { browserDataRequest } from '@/lib/browser-data'
 import { BrowserFileLink, useBrowserFileUrl } from '@/components/BrowserFileLink'
 
@@ -35,6 +36,8 @@ import { cn } from '@/lib/utils'
 import { ReconciliationReviewPanel } from '@/components/ReconciliationReviewPanel'
 import { reviewedResults, type ReconciliationRun } from '@/lib/reconciliation-review'
 import { candidateFocus, rankStatementCandidates } from '@/lib/reconciliation-candidates'
+import { reconciliationExceptions, filterExceptions, EXCEPTION_TYPES, type ExceptionFilter } from '@/lib/reconciliation-exceptions'
+import { ReconciliationExceptionFilters } from '@/components/ReconciliationExceptionFilters'
 import { ReconciliationCandidates } from '@/components/ReconciliationCandidates'
 
 type Phase = 'idle' | 'extracting' | 'matching' | 'complete' | 'error'
@@ -275,7 +278,9 @@ export default function ReconciliationPage() {
   const [statementCurrency, setStatementCurrency] = useState('UGX')
   const [view, setView] = useState<'evidence' | 'results' | 'review'>('evidence')
   const workspaceRef = useRef<HTMLDivElement>(null)
-  function navigate(next: typeof view) { setView(next); requestAnimationFrame(() => workspaceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })) }
+  function navigate(next: typeof view) { setView(next); requestAnimationFrame(() => workspaceRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })) }
+  const [exceptionFilter, setExceptionFilter] = useState<ExceptionFilter>('pending')
+  const [reviewFocus, setReviewFocus] = useState<{ documentIndex: number; revision: number } | null>(null)
   const [phase, setPhase] = useState<Phase>('idle')
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
@@ -316,6 +321,21 @@ export default function ReconciliationPage() {
     return () => window.clearInterval(timer)
   }, [working, phase])
 
+  const exceptionEntries = useMemo(() => reconciliationExceptions(matches, statementRecords, statementCurrency, savedRun), [matches, statementRecords, statementCurrency, savedRun])
+  const visibleExceptions = filterExceptions(exceptionEntries, exceptionFilter)
+  const pendingCount = exceptionEntries.filter(entry => entry.pending).length
+  const queueLabel = exceptionFilter === 'all' ? 'All results' : exceptionFilter === 'pending' ? 'All pending' : exceptionFilter === 'other' ? 'Other review' : EXCEPTION_TYPES.find(type => type.id === exceptionFilter)!.label
+  function openInvoiceReview(documentIndex: number) {
+    setReviewFocus(current => ({ documentIndex, revision: (current?.revision ?? 0) + 1 }))
+    setView('review')
+  }
+  function inspectInvoice(documentIndex: number) {
+    const position = extractions.findIndex(invoice => invoice.documentIndex === documentIndex)
+    if (position < 0) return
+    setActiveDocument(position)
+    navigate('evidence')
+  }
+
   const matchedRows = useMemo(() => new Map(savedRun
     ? reviewedResults(savedRun).filter(result => result.matched && result.statementRecord).map(result => [savedRun.statements.indexOf(result.statementRecord!), result.original.documentIndex])
     : matches.filter(match => match.matched && match.statementRecord).map(match => [statementRecords.indexOf(match.statementRecord!), match.invoice.documentIndex])), [savedRun, matches, statementRecords])
@@ -343,12 +363,22 @@ export default function ReconciliationPage() {
     const container = statementScrollRef.current
     const target = container?.querySelector<HTMLElement>(`[data-statement-index="${focusedStatementIndex}"]`)
     if (!container || !target) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const behavior = reduced ? 'auto' : 'smooth'
     const top = container.scrollTop + target.getBoundingClientRect().top - container.getBoundingClientRect().top
-    container.scrollTo({ top: Math.max(0, top - container.clientHeight / 2 + target.offsetHeight / 2), behavior: 'smooth' })
-    container.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    container.scrollTo({ top: Math.max(0, top - container.clientHeight / 2 + target.offsetHeight / 2), behavior })
+    container.scrollIntoView({ block: 'nearest', behavior })
+    // Highlight after positioning, once; the selected-row outline remains afterwards.
+    let animation: Animation | undefined
+    const timer = window.setTimeout(() => {
+      if (!reduced) animation = target.animate([{ backgroundColor: '#fde68a' }, { backgroundColor: '#fef3c7' }], { duration: 1000, easing: 'ease-out' })
+    }, reduced ? 0 : 450)
+    return () => { window.clearTimeout(timer); animation?.cancel() }
   }, [focusedStatementIndex, selectedExtraction.documentIndex, candidateSelection?.revision, phase, savedRun?.id, view])
 
   function resetResults() {
+    setExceptionFilter('pending')
+    setReviewFocus(null)
     setView('evidence')
     window.history.replaceState(null, '', '/reconciliation')
     setSavedRun(null)
@@ -480,13 +510,14 @@ export default function ReconciliationPage() {
   }
 
   const restoreRun = useCallback((run: ReconciliationRun) => {
+    setExceptionFilter('pending'); setReviewFocus(null)
     setView('evidence')
     setSavedRun(run); setStatementRecords(run.statements); setExtractions(run.invoices); setStatementCurrency(run.currency); setMateriality(String(run.materiality))
     setInvoiceFiles([]); setStatementFile(null); setPreviewUrls([]); setCandidateSelection(null)
     setActiveDocument(Math.max(0, reviewedResults(run).findIndex(result => !result.matched)))
     setMatches(reconcileInvoices(run.invoices, run.statements, { currency: run.currency })); setPhase('complete'); setProgress(100); setError('')
     window.history.replaceState(null, '', `/reconciliation#${run.id}`)
-  }, [])
+  }, [setSavedRun])
 
   useEffect(() => {
     const id = window.location.hash.slice(1)
@@ -519,7 +550,7 @@ export default function ReconciliationPage() {
         <WorkspaceTabs id="reconciliation" label="Reconciliation workspace" value={view} onChange={navigate} items={[
           { id: 'evidence', label: '1. Documents & matching' },
           { id: 'results', label: '2. Match results', count: matches.length, disabled: working },
-          { id: 'review', label: '3. Human review', count: savedRun?.invoices.length, disabled: working },
+          { id: 'review', label: '3. Human review', count: pendingCount, disabled: working },
         ]} />
       </div>
       <Card className="mb-4 border-blue-200 bg-white shadow-sm">
@@ -726,20 +757,18 @@ export default function ReconciliationPage() {
                           matched && !focused && 'bg-emerald-50 text-emerald-950',
                           candidate && !matched && 'bg-amber-50',
                           focused && 'bg-amber-100 text-amber-950 ring-2 ring-inset ring-amber-500',
-                          phase === 'matching' && 'animate-pulse',
                         )}
-                        style={phase === 'matching' ? { animationDelay: `${index * 90}ms` } : undefined}
                       >
                         <td className="px-3 py-3 text-muted-foreground">{record.lineIndex ?? index + 1}</td>
                         <td className="px-3 py-3 text-muted-foreground">{record.date || '—'}</td>
                         <td className="max-w-56 px-3 py-3 font-mono font-semibold">
-                          <span className="block truncate">{statementIdentifiers(record).join(' · ') || record.invoiceNumber}</span>
+                          <CopyReference value={statementIdentifiers(record).join(' · ') || record.invoiceNumber} />
                           {matched && <span className="mt-1 inline-flex rounded bg-emerald-600 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-wide text-white">Confirmed match</span>}
                           {owner !== undefined && !matched && <span className="mt-1 inline-flex rounded bg-slate-200 px-1.5 py-0.5 font-sans text-[9px] text-slate-700">Assigned to Invoice {owner + 1}</span>}
                           {candidate && !matched && <span className="mt-1 inline-flex rounded bg-amber-200 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-wide text-amber-950">Review candidate #{activeCandidates.findIndex(candidate => candidate.statementIndex === index) + 1}</span>}
                           {focused && <span className="mt-1 ml-1 inline-flex rounded bg-amber-600 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-wide text-white">Viewing this line</span>}
                         </td>
-                        <td className="px-3 py-3 text-muted-foreground">{record.description ?? 'Statement line'}</td>
+                        <td className="px-3 py-3 text-muted-foreground"><ExpandableText text={record.description ?? 'Statement line'} /></td>
                         <td className="px-4 py-3 text-right font-medium tabular-nums">{money(record.amount, statementCurrency)}</td>
                       </tr>
                     )
@@ -766,47 +795,50 @@ export default function ReconciliationPage() {
       </WorkspacePanel>
       <WorkspacePanel id="reconciliation" value="results" active={view}>
       {!matches.length && <Card><CardContent className="space-y-4 p-6"><p>No results yet. Upload your documents or run the sample to begin.</p><Button className={workspaceAction} onClick={() => navigate('evidence')}>Go to documents<ArrowRight className="size-4" /></Button></CardContent></Card>}
-      {matches.length > 0 && (
+      {matches.length > 0 && (<>
+        <ReconciliationExceptionFilters entries={exceptionEntries} value={exceptionFilter} onChange={setExceptionFilter} />
         <Card className="overflow-hidden border-slate-200 shadow-sm">
           <CardHeader className="border-b bg-slate-50/70 py-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <CardTitle className="text-base">Match results</CardTitle>
-                <CardDescription className="mt-1">Original automated results below remain unchanged. Saved human decisions and manager gates are shown in the review panel.</CardDescription>
+                <CardDescription className="mt-1">Original extracted evidence is preserved below. Status and pending queues reflect saved human decisions and manager gates. Candidate suggestions are not approvals.</CardDescription>
               </div>
               <div className="flex items-center gap-2 text-xs">
                 <Button variant="outline" className={workspaceAction} onClick={exportAudit}>Export audit JSON</Button>
                 <Button className={workspaceAction} onClick={() => navigate('review')}>Open human review<ArrowRight className="size-4" /></Button>
                 <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700">{matchedCount} matched</span>
-                <span className="rounded-full bg-rose-50 px-2.5 py-1 font-semibold text-rose-700">{matches.length - matchedCount} review</span>
+                <span className="rounded-full bg-rose-50 px-2.5 py-1 font-semibold text-rose-700">{pendingCount} pending</span>
               </div>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="max-h-[65vh] overflow-auto">
-              <table className="w-full min-w-[860px] text-left text-xs">
+            <div className="p-4"><p role="status" className="text-sm font-medium">{queueLabel} · {visibleExceptions.length} invoice{visibleExceptions.length === 1 ? '' : 's'}</p>{!visibleExceptions.length && <div className="mt-3 space-y-3"><p className="text-sm text-slate-500">No invoices in this queue. Choose another category or view all results.</p><Button variant="outline" onClick={() => setExceptionFilter('all')}>Show all results</Button></div>}</div>
+            <TableViewport label="Reconciliation queue results" resetKey={`${savedRun?.id}-${exceptionFilter}`}>
+              <table id="reconciliation-result-list" className="w-full min-w-[860px] text-left text-xs">
                 <thead className="bg-white text-muted-foreground">
                   <tr>
                     <th className="px-4 py-3 font-medium">Invoice file</th>
                     <th className="px-3 py-3 font-medium">Extracted evidence</th>
-                    <th className="px-3 py-3 font-medium">Statement record</th>
-                    <th className="px-3 py-3 font-medium">Method</th>
+                    <th className="px-3 py-3 font-medium">Original statement / candidates</th>
+                    <th className="px-3 py-3 font-medium">Original method</th>
                     <th className="px-4 py-3 font-medium">Result</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {matches.map((match, index) => (
-                    <tr key={`${match.invoice.fileName}-${index}`} className="border-t">
-                      <td className="max-w-48 truncate px-4 py-3 font-medium">{match.invoice.fileName}</td>
+                  {visibleExceptions.map(({ match, status, matched, kinds, sharedLines, candidates, usesReviewedFields }) => (
+                    <tr key={match.invoice.documentIndex} className="border-t">
+                      <td className="max-w-48 whitespace-normal break-words px-4 py-3 font-medium">{match.invoice.fileName}</td>
                       <td className="px-3 py-3"><span className="font-mono font-semibold">{match.invoice.invoiceNumber || 'Missing ID'}</span><span className="ml-2 text-muted-foreground">{match.invoice.currency === 'UNKNOWN' ? `${match.invoice.totalAmount} (unknown currency)` : money(match.invoice.totalAmount, match.invoice.currency)}</span></td>
                       <td className="px-3 py-3">
                         {match.statementRecord ? <><span className="font-mono font-semibold">{statementIdentifiers(match.statementRecord).join(' · ')}</span><span className="ml-2 text-muted-foreground">{money(match.statementRecord.amount, statementCurrency)}</span></> : '—'}
                         {match.amountDifference !== null && match.amountDifference !== 0 && <p className="mt-1 text-rose-700">Difference: {money(match.amountDifference, statementCurrency)}</p>}
-                        {(candidatesByInvoice[match.invoice.documentIndex] ?? []).length > 0 && <div className="mt-2 space-y-1">{candidatesByInvoice[match.invoice.documentIndex].map((candidate, rank) => <button key={candidate.statementIndex} type="button"
-                          className="block min-h-11 rounded-lg border-2 border-amber-300 bg-amber-50 px-3 py-2 text-left font-semibold text-amber-900 hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-amber-500"
+                        {usesReviewedFields && <p className="mt-2 text-xs text-slate-500">Candidates below use saved review fields; original evidence above is unchanged.</p>}
+                        {candidates.length > 0 && <div className="mt-2 space-y-1">{candidates.slice(0, 5).map((candidate, rank) => <Button key={candidate.statementIndex} type="button" size="sm" variant="outline"
+                          className="w-full justify-start whitespace-normal text-left"
                           onClick={() => inspectCandidate(match.invoice.documentIndex, candidate.statementIndex)}>
                           Inspect #{rank + 1} · Row {candidate.statementRecord.lineIndex ?? candidate.statementIndex + 1} · {money(candidate.statementRecord.amount, statementCurrency)}
-                        </button>)}</div>}
+                        </Button>)}</div>}
                       </td>
                       <td className="px-3 py-3">
                         <span className={cn('rounded-full px-2 py-1 font-medium', match.matched ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700')}>
@@ -814,24 +846,29 @@ export default function ReconciliationPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={cn('inline-flex items-center gap-1 font-semibold', match.matched ? 'text-emerald-700' : 'text-rose-700')}>
-                          {match.matched ? <CheckCircle2 className="size-4" /> : <AlertCircle className="size-4" />}
-                          {match.matched ? 'Matched' : 'Review'}
+                        <span className={cn('inline-flex items-center gap-1 font-semibold', matched ? 'text-emerald-700' : 'text-amber-800')}>
+                          {matched ? <CheckCircle2 className="size-4" /> : <AlertCircle className="size-4" />}
+                          {status.replace(/_/g, ' ')}
                         </span>
-                        {match.matched && <span className="ml-2 text-[10px] font-semibold text-slate-500">Exact ID + amount</span>}
-                        <p className="mt-1 max-w-xs text-[11px] font-normal text-muted-foreground">{match.reason}</p>
+                        {matched && <span className="ml-2 text-[10px] font-semibold text-slate-500">Exact ID + amount</span>}
+                        <p className="mt-1 max-w-xs text-[11px] font-normal text-muted-foreground">Original check: {match.reason}</p>
+                        <div className="mt-2 flex max-w-xs flex-wrap gap-1">{kinds.map(kind => <span key={kind} className="rounded bg-amber-50 px-2 py-1 text-amber-900">{EXCEPTION_TYPES.find(type => type.id === kind)?.label ?? 'Other review'}</span>)}</div>
+                        {sharedLines.length > 0 && <div className="mt-2 max-w-xs space-y-2 text-xs text-amber-900"><p>{sharedLines.length} shared statement reference{sharedLines.length === 1 ? '' : 's'}. This flags a potential conflict, not a confirmed duplicate payment.</p><div className="flex flex-wrap gap-2">{sharedLines.slice(0, 5).map(index => <Button key={index} size="sm" variant="outline" onClick={() => inspectCandidate(match.invoice.documentIndex, index)}>Inspect shared row {statementRecords[index].lineIndex ?? index + 1}</Button>)}</div>{sharedLines.length > 5 && <p>First 5 shown. All statement lines are available in human review.</p>}</div>}
+                        {candidates.length > 5 && <p className="mt-2 text-xs text-slate-500">{candidates.length} related lines found; the top 5 are shown. All lines are available in human review.</p>}
+                        <div className="mt-3 flex flex-wrap gap-2"><Button size="sm" variant="outline" onClick={() => inspectInvoice(match.invoice.documentIndex)}>View invoice</Button><Button size="sm" disabled={!savedRun} onClick={() => openInvoiceReview(match.invoice.documentIndex)}>Open this review</Button></div>
+                        {!savedRun && <p className="mt-1 text-xs text-amber-800">Save the reconciliation run before reviewing.</p>}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            </div>
+            </TableViewport>
           </CardContent>
         </Card>
-      )}
+      </>)}
       </WorkspacePanel>
       <WorkspacePanel id="reconciliation" value="review" active={view}>
-      <ReconciliationReviewPanel key={savedRun?.id ?? 'no-run'} run={savedRun} onRun={setSavedRun} onRestore={restoreRun}
+      <ReconciliationReviewPanel key={savedRun?.id ?? 'no-run'} run={savedRun} focusInvoice={reviewFocus} active={view === 'review'} onRun={setSavedRun} onRestore={restoreRun}
         candidatesByInvoice={candidatesByInvoice} onInspectCandidate={inspectCandidate} />
       </WorkspacePanel>
     </main>

@@ -19,7 +19,7 @@ function PayslipLink({ id, children, className }: { id: string; children: ReactN
   }}>{children}</Link>
 }
 export function JournalTable({ lines }: { lines: JournalLine[] }) {
-  return <div className="max-h-96 overflow-auto rounded-lg border"><table className="w-full min-w-[780px] text-left text-xs"><thead className="sticky top-0 bg-slate-100"><tr>{['Date', 'Journal / evidence', 'Account', 'Debit', 'Credit', 'Payslip'].map(label => <th key={label} className="p-3">{label}</th>)}</tr></thead><tbody>{lines.map(line => <tr className="border-t" key={line.id}><td className="p-3 whitespace-nowrap">{line.date}</td><td className="max-w-72 break-words p-3"><p>{line.description}</p><p className="mt-1 text-slate-500">{line.journalId}</p></td><td className="p-3">{ACCOUNTS[line.account]}</td><td className="p-3 tabular-nums">{payrollMoney(line.debit)}</td><td className="p-3 tabular-nums">{payrollMoney(line.credit)}</td><td className="p-3">{line.lineId ? <PayslipLink id={line.lineId} className={workspaceLink}>View payslip</PayslipLink> : 'Opening funding'}</td></tr>)}</tbody></table>{!lines.length && <p className="p-5 text-sm text-slate-500">No journal movements in this selection.</p>}</div>
+  return <div className="reading-table max-h-96 overflow-auto rounded-lg border"><table className="w-full min-w-[780px] text-left text-xs"><thead className="sticky top-0 bg-slate-100"><tr>{['Date', 'Journal / evidence', 'Account', 'Debit', 'Credit', 'Payslip'].map(label => <th key={label} className="p-3">{label}</th>)}</tr></thead><tbody>{lines.map(line => <tr className="border-t" key={line.id}><td className="p-3 whitespace-nowrap">{line.date}</td><td className="max-w-72 break-words p-3"><p>{line.description}</p><p className="mt-1 text-slate-500">{line.journalId}</p></td><td className="p-3">{ACCOUNTS[line.account]}</td><td className="p-3 text-right tabular-nums">{payrollMoney(line.debit)}</td><td className="p-3 tabular-nums">{payrollMoney(line.credit)}</td><td className="p-3">{line.lineId ? <PayslipLink id={line.lineId} className={workspaceLink}>View payslip</PayslipLink> : 'Opening funding'}</td></tr>)}</tbody></table>{!lines.length && <p className="p-5 text-sm text-slate-500">No journal movements in this selection.</p>}</div>
 }
 
 export function PayrollBankReview({ state, payment, reviewer, busy, act }: {
@@ -32,7 +32,7 @@ export function PayrollBankReview({ state, payment, reviewer, busy, act }: {
   useEffect(() => {
     const container = scroll.current
     const target = container?.querySelector('[aria-selected="true"]') as HTMLElement | null
-    if (container && target) container.scrollTo({ top: container.scrollTop + target.getBoundingClientRect().top - container.getBoundingClientRect().top - container.clientHeight / 2 + target.clientHeight / 2, behavior: 'smooth' })
+    if (container && target) container.scrollTo({ top: container.scrollTop + target.getBoundingClientRect().top - container.getBoundingClientRect().top - container.clientHeight / 2 + target.clientHeight / 2, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
   }, [selected])
   const bank = state.banks.find(b => b.id === selected), owner = selected ? bankOwner(state, selected, payment.id) : undefined
   const difference = bank ? bank.amount - payment.amount : null

@@ -42,7 +42,8 @@ describe('report workspace sections', () => {
     expect(html).toMatch(/id="bs-report-panel-transactions"[^>]*hidden=""/)
     const review = html.split('id="bs-report-panel-review"')[1]
     expect(review).not.toMatch(/^[^>]*hidden=""/)
-    expect(review).toContain('Save reviews')
+    expect(review).toContain('Decision for')
+    expect(review).not.toContain('Unsaved review actions')
     expect(review).toContain('Unconfirmed account balances')
   })
   it('never invents Xero demo transactions', () => {

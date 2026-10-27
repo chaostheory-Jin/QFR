@@ -12,7 +12,7 @@ export type StatementCandidate = {
 
 // Review suggestions only. This intentionally does NOT require OCR verification
 // and never changes extracted fields, auto-match gates or row assignments.
-export function rankStatementCandidates(invoice: InvoiceExtraction, records: StatementRecord[], currency: string): StatementCandidate[] {
+export function allStatementCandidates(invoice: InvoiceExtraction, records: StatementRecord[], currency: string): StatementCandidate[] {
   if (invoice.currency && invoice.currency !== 'UNKNOWN' && invoice.currency !== currency) return []
   const id = normaliseInvoiceNumber(invoice.invoiceNumber)
   const knownKind = invoice.documentType === 'invoice' || invoice.documentType === 'credit_note'
@@ -40,7 +40,11 @@ export function rankStatementCandidates(invoice: InvoiceExtraction, records: Sta
     return [{ statementIndex, statementRecord: record, priority, reason: reasons.join(' · '), similarity, amountDifference }]
   }).sort((a, b) => a.priority - b.priority || b.similarity - a.similarity
     || Math.abs(a.amountDifference ?? Infinity) - Math.abs(b.amountDifference ?? Infinity)
-    || a.statementIndex - b.statementIndex).slice(0, 5)
+    || a.statementIndex - b.statementIndex)
+}
+
+export function rankStatementCandidates(invoice: InvoiceExtraction, records: StatementRecord[], currency: string): StatementCandidate[] {
+  return allStatementCandidates(invoice, records, currency).slice(0, 5)
 }
 
 // Preserve row identity by array position, including duplicate-looking rows.

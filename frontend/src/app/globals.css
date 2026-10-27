@@ -176,3 +176,19 @@
 .reconciliation-flow-dot {
   animation: reconciliation-flow 1.65s ease-in-out infinite;
 }
+
+/* Compact desktop controls retain comfortable touch targets. */
+@media (pointer: coarse) {
+  .portal-shell [data-slot="button"], .portal-shell select, .portal-shell input:not([type="checkbox"]) { min-height: 44px; }
+  .portal-shell [data-slot="button"] { min-width: 44px; }
+}
+.reading-table [data-slot="table-container"] { overflow: visible; }
+.reading-table table { border-collapse: separate; border-spacing: 0; }
+.reading-table thead { position: sticky; top: 0; z-index: 10; background: #f1f5f9; color: #334155; box-shadow: 0 1px 0 #cbd5e1; }
+.reading-table th { white-space: nowrap; padding: 12px; }
+.reading-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; }
+.reading-table td.text-right { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.reading-table tbody tr:hover { background-color: #eef2ff; }
+.reading-table tbody tr:focus-within { background-color: #eef2ff; }
+.reading-table .row-action { position: sticky; right: 0; background: #fff; border-left: 1px solid #e2e8f0; }
+.reading-table th.row-action { background: #f1f5f9; z-index: 11; }
