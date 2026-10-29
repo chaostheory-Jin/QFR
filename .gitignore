@@ -1,6 +1,19 @@
 # Generated outputs & reports (not versioned)
 output/
 
+# Locally generated company mock datasets and archives (do not upload)
+/outputs/company-mock-data-*/
+/outputs/company-mock-data-*.zip
+/outputs/company-operations-mock-*/
+/outputs/company-operations-mock-*.zip
+/outputs/company-operations-expanded-*/
+/outputs/company-operations-expanded-*.zip
+
+# Mock dataset builders, intermediate data and previews
+/tmp/company-mock-build-*/
+/tmp/company-operations-build-*/
+/tmp/company-expanded-build-*/
+
 # Secrets & local OAuth / mapping cache
 .env
 xero_token.json
