@@ -1,0 +1,74 @@
+[
+  {
+    "n": "01",
+    "title": "COLA RECONCILIATION · Evidence first",
+    "copy": "Compare invoices on the left with the master statement on the right, keeping evidence in view.",
+    "seconds": 0
+  },
+  {
+    "n": "02",
+    "title": "Run the built-in sample",
+    "copy": "This walkthrough uses the built-in sample animation and matching rules, not live AI or OCR.",
+    "seconds": 13.926
+  },
+  {
+    "n": "03",
+    "title": "Invoice ID & final payable amount",
+    "copy": "Locate the invoice number and final payable amount, preserving the original extracted values.",
+    "seconds": 21.458
+  },
+  {
+    "n": "04",
+    "title": "Search every statement line",
+    "copy": "Find candidates across all statement lines. Inspect a suggestion to highlight its source row.",
+    "seconds": 31.94
+  },
+  {
+    "n": "05",
+    "title": "Suggestions are not approvals",
+    "copy": "Equal amounts may belong to different invoices. A possible O / 0 error still requires review.",
+    "seconds": 41.807
+  },
+  {
+    "n": "06",
+    "title": "Exception queues",
+    "copy": "Triage amount differences, ID issues, multiple candidates, missing matches and shared lines.",
+    "seconds": 48.949
+  },
+  {
+    "n": "07",
+    "title": "Open the invoice review",
+    "copy": "Open the relevant review directly from the queue. Keep extraction and human decisions separate.",
+    "seconds": 62.21
+  },
+  {
+    "n": "08",
+    "title": "Choose a candidate, then confirm",
+    "copy": "Choose statement row 2 and inspect its location. Selecting a candidate does not change the ID.",
+    "seconds": 68.889
+  },
+  {
+    "n": "09",
+    "title": "A documented manual decision",
+    "copy": "In this sample, correct the final O to 0 and document the decision. Keep the original extraction.",
+    "seconds": 74.768
+  },
+  {
+    "n": "10",
+    "title": "Preserve the original & review history",
+    "copy": "Trace the original ID, manual correction and review history without silently replacing evidence.",
+    "seconds": 85.67
+  },
+  {
+    "n": "11",
+    "title": "Updated outcomes, visible remaining work",
+    "copy": "Return to all results. Confirmed items remain distinct from those still requiring manager review.",
+    "seconds": 92.343
+  },
+  {
+    "n": "12",
+    "title": "COLA · Traceable reconciliation",
+    "copy": "Locate evidence → inspect candidates → triage exceptions → review decisions → retain audit history.",
+    "seconds": 106.126
+  }
+]

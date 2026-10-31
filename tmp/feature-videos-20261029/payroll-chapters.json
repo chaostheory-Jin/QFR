@@ -1,0 +1,74 @@
+[
+  {
+    "n": "01",
+    "title": "PAYROLL · Financial overview",
+    "copy": "从工资总额、已入账成本，到员工实付与未付余额，一屏掌握。",
+    "seconds": 0
+  },
+  {
+    "n": "02",
+    "title": "Exception-led review",
+    "copy": "先处理缺失证据与低置信度事项；审核、入账、付款分别管理。",
+    "seconds": 10.624
+  },
+  {
+    "n": "03",
+    "title": "Keep unresolved evidence visible",
+    "copy": "加班审批缺失时标记 Needs changes，不把待办当作已批准。",
+    "seconds": 23.043
+  },
+  {
+    "n": "04",
+    "title": "Find the employee and pay period",
+    "copy": "按员工与月份筛选逐行工资记录，进入独立的 payslip 明细。",
+    "seconds": 31.292
+  },
+  {
+    "n": "05",
+    "title": "Payslip breakdown & saved approval",
+    "copy": "查看税前、扣缴、实付和雇主成本；填写审核意见后保存批准。",
+    "seconds": 49.084
+  },
+  {
+    "n": "06",
+    "title": "Post to the demo ledger",
+    "copy": "批准后才可入账；入账后的工资成本与负债联动到演示财务报表。",
+    "seconds": 60.43
+  },
+  {
+    "n": "07",
+    "title": "Simulated settlement",
+    "copy": "再模拟员工付款，生成结算与银行证据；不会触发真实转账。",
+    "seconds": 66.603
+  },
+  {
+    "n": "08",
+    "title": "Locate bank evidence",
+    "copy": "从银行流水候选中检查日期、编号和金额；金额相同不等于已确认。",
+    "seconds": 77.061
+  },
+  {
+    "n": "09",
+    "title": "Human-confirmed bank match",
+    "copy": "核对原始流水并留下说明，再确认付款与银行流水的对应关系。",
+    "seconds": 83.428
+  },
+  {
+    "n": "10",
+    "title": "Journal & audit trail",
+    "copy": "逐笔查看借贷分录，并保留审核、入账、付款和银行匹配的操作记录。",
+    "seconds": 91.326
+  },
+  {
+    "n": "11",
+    "title": "Exportable review evidence",
+    "copy": "导出审核记录，保留浏览器内的演示工作成果。",
+    "seconds": 105.124
+  },
+  {
+    "n": "12",
+    "title": "PAYROLL · End-to-end demo",
+    "copy": "总览 → 异常审核 → 入账 → 模拟付款 → 银行核对 → 审计导出。",
+    "seconds": 109.987
+  }
+]

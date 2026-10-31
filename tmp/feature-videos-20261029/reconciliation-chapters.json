@@ -1,0 +1,74 @@
+[
+  {
+    "n": "01",
+    "title": "COLA RECONCILIATION · Evidence first",
+    "copy": "左侧 Invoice，右侧 Statement；原始单据与匹配结果放在一起核对。",
+    "seconds": 0
+  },
+  {
+    "n": "02",
+    "title": "Run the built-in sample",
+    "copy": "以下使用内置样例动画与匹配逻辑演示，不发起实时 AI / OCR 请求。",
+    "seconds": 13.913
+  },
+  {
+    "n": "03",
+    "title": "Invoice ID & final payable amount",
+    "copy": "定位发票编号与最终应付金额，保留原始提取值，便于并排核对。",
+    "seconds": 21.444
+  },
+  {
+    "n": "04",
+    "title": "Search every statement line",
+    "copy": "在全部流水里寻找候选；点击建议后，自动定位并高亮原始目标行。",
+    "seconds": 31.927
+  },
+  {
+    "n": "05",
+    "title": "Suggestions are not approvals",
+    "copy": "相同金额可能对应多张发票；疑似 O / 0 识别错误仍需人工确认。",
+    "seconds": 41.797
+  },
+  {
+    "n": "06",
+    "title": "Exception queues",
+    "copy": "按金额差异、编号疑点、多候选、缺失记录与重复引用分组进入待办。",
+    "seconds": 48.94
+  },
+  {
+    "n": "07",
+    "title": "Open the invoice review",
+    "copy": "从对应待办直接进入审核，保留系统提取与人工决定两套记录。",
+    "seconds": 62.188
+  },
+  {
+    "n": "08",
+    "title": "Choose a candidate, then confirm",
+    "copy": "先选择主表第 2 行，查看定位；候选选择不会自动改写发票字段。",
+    "seconds": 68.874
+  },
+  {
+    "n": "09",
+    "title": "A documented manual decision",
+    "copy": "示例中人工将末位 O 校正为 0，并记录原因；原始提取值仍保留。",
+    "seconds": 74.757
+  },
+  {
+    "n": "10",
+    "title": "Preserve the original & review history",
+    "copy": "保存后仍能追溯原始编号、人工修订与审核记录，不静默覆盖证据。",
+    "seconds": 85.69
+  },
+  {
+    "n": "11",
+    "title": "Updated outcomes, visible remaining work",
+    "copy": "回到全部结果，已审核与仍待经理确认的项目分开显示。",
+    "seconds": 92.363
+  },
+  {
+    "n": "12",
+    "title": "COLA · Traceable reconciliation",
+    "copy": "证据定位 → 全量流水候选 → 异常分流 → 人工复核 → 保留审计记录。",
+    "seconds": 106.147
+  }
+]
